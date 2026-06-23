@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#030303] text-white antialiased selection:bg-[#ccff00] selection:text-black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Software Architect | Digital Systems</title>
+    <meta name="description" content="I build digital systems that feel alive. Full-stack developer and software architect portfolio.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@100;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: '#030303',
+                        surface: '#0a0a0a',
+                        surface2: '#111111',
+                        border: 'rgba(255, 255, 255, 0.08)',
+                        accent: {
+                            lime: '#ccff00',
+                            cyan: '#00f0ff',
+                            violet: '#7000ff'
+                        }
+                    },
+                    letterSpacing: {
+                        tighter: '-0.04em',
+                        widest: '0.2em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --cursor-size: 10px;
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+        }
+
+        /* Base & Reset */
+        body { margin: 0; overflow-x: hidden; cursor: none; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030303; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* Custom Cursor */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            opacity: 0; /* Hide initially to prevent 0,0 corner resting */
+        }
+        .cursor-dot {
+            width: var(--cursor-size);
+            height: var(--cursor-size);
+            background-color: white;
+            transition: width 0.2s, height 0.2s;
+        }
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        .cursor-hover .cursor-dot { width: 0; height: 0; }
+        .cursor-hover .cursor-outline {
+            width: 80px; height: 80px;
+            background-color: white;
+            border-color: transparent;
+            mix-blend-mode: difference;
+        }
+
+        /* Typography & Utilities */
+        .text-outline {
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+        }
+        .text-outline-hover:hover {
+            color: white;
+            -webkit-text-stroke: 1px transparent;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.0) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+        }
+        
+        /* Grid Background */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+        }
+
+        /* Spotlight Cards */
+        .spotlight-card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background-color: #0a0a0a;
+        }
+        .spotlight-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(
+                800px circle at var(--mouse-x) var(--mouse-y), 
+                rgba(255, 255, 255, 0.06),
+                transparent 40%
+            );
+            z-index: 1;
+            transition: opacity 0.3s;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .spotlight-card:hover::before { opacity: 1; }
+        .spotlight-content { position: relative; z-index: 2; }
+
+        /* Preloader */
+        #preloader {
+            position: fixed; inset: 0; z-index: 10000;
+            background: #030303; display: flex;
+            flex-direction: column; justify-content: flex-end; padding: 4vw;
+        }
+        .loader-text { font-family: 'Space Grotesk', sans-serif; font-size: 15vw; line-height: 0.8; letter-spacing: -0.05em; }
+
+        /* Text Split for GSAP */
+        .split-line { overflow: hidden; display: block; }
+        .split-word { display: inline-block; transform: translateY(110%); }
+
+        /* API Lines Animation */
+        .flow-line { stroke-dasharray: 10; stroke-dashoffset: 1000; animation: flow 20s linear infinite; }
+        @keyframes flow { to { stroke-dashoffset: 0; } }
+
+        /* Disable custom interactions on touch */
+        @media (hover: none) and (pointer: coarse) {
+            body { cursor: auto; }
+            .cursor-dot, .cursor-outline { display: none; }
+            .spotlight-card::before { display: none; }
+            .magnetic { transform: none !important; }
+        }
+        
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            .split-word { transform: none !important; }
+            * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+
+        /* Scroll Lock for Preloader */
+        .scroll-locked { 
+            overflow: hidden !important; 
+            height: 100dvh !important; /* Fix: แก้ขอบล่างแหว่งบน iOS Safari */
+            touch-action: none; 
+            overscroll-behavior: none; 
+        }
+
+        /* Accessibility: Keyboard Navigation Focus */
+        *:focus-visible {
+            outline: 2px solid var(--accent-lime);
+            outline-offset: 4px;
+            border-radius: 2px;
+            transition: outline-offset 0.2s ease;
+        }
+    </style>
+</head>
+<body class="scroll-locked">
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="flex justify-between items-end w-full mb-8 font-mono text-xs text-gray-500 uppercase tracking-widest">
+            <div>Booting System Architecture...</div>
+            <div id="loader-progress" class="text-accent-lime">0%</div>
+        </div>
+        <div class="w-full h-[1px] bg-border mb-8 overflow-hidden relative">
+            <div id="loader-bar" class="absolute top-0 left-0 h-full w-0 bg-white"></div>
+        </div>
+        <div class="loader-text text-white">SYSTEMS</div>
+        <div class="loader-text text-outline">ENGINEERED</div>
+    </div>
+
+    <!-- 3D Canvas Background -->
+    <canvas id="webgl-canvas" class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none opacity-60"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 px-6 py-6 flex justify-between items-center mix-blend-difference">
+        <a href="#" class="font-display font-bold text-xl tracking-tighter hover-trigger magnetic">SYS_ARCH<span class="text-accent-lime">.</span></a>
+        <div class="hidden md:flex gap-8 font-mono text-xs uppercase tracking-widest">
+            <a href="#work" class="hover-trigger hover:text-accent-lime transition-colors">Work</a>
+            <a href="#architecture" class="hover-trigger hover:text-accent-cyan transition-colors">Architecture</a>
+            <a href="#capabilities" class="hover-trigger hover:text-accent-violet transition-colors">Capabilities</a>
+        </div>
+        <button class="hover-trigger magnetic px-4 py-2 border border-white/20 rounded-full font-mono text-xs uppercase hover:bg-white hover:text-black transition-all">
+            Initialize Contact
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="smooth-wrapper">
+        <div id="smooth-content">
+
+            <!-- Hero Section -->
+            <section class="min-h-[100dvh] relative flex flex-col justify-center px-6 md:px-12 pt-20">
+                <div class="absolute inset-0 bg-grid -z-10 pointer-events-none"></div>
+                
+                <div class="max-w-7xl mx-auto w-full relative z-10">
+                    <div class="font-mono text-accent-lime text-xs uppercase tracking-widest mb-6 flex items-center gap-4">
+                        <span class="w-2 h-2 bg-accent-lime rounded-full animate-pulse"></span>
+                        Status: Online & Scaling
+                    </div>
+                    
+                    <h1 class="font-display text-[12vw] md:text-[8vw] leading-[0.85] font-bold tracking-tighter uppercase hero-title">
+                        <div class="overflow-hidden"><span class="inline-block hero-word">I Build</span></div>
+                        <div class="overflow-hidden"><span class="inline-block hero-word text-outline">Digital Systems</span></div>
+                        <div class="overflow-hidden"><span class="inline-block hero-word">That Feel <i class="text-accent-cyan not-italic">Alive.</i></span></div>
+                    </h1>
+
+                    <div class="mt-12 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="md:col-span-1 border-t border-border pt-6">
+                            <p class="font-mono text-xs text-gray-400 uppercase tracking-widest mb-2">Role</p>
+                            <p class="font-sans text-sm md:text-base leading-relaxed">Full-Stack Developer & Software Architect. From pixel to production, every layer is engineered.</p>
+                        </div>
+                        <div class="md:col-span-1 border-t border-border pt-6">
+                            <p class="font-mono text-xs text-gray-400 uppercase tracking-widest mb-2">Focus</p>
+                            <p class="font-sans text-sm md:text-base leading-relaxed">Interfaces, APIs, Databases, and Cloud Infrastructure operating as one seamless experience.</p>
+                        </div>
+                        <div class="md:col-span-1 flex items-start md:justify-end border-t border-border pt-6">
+                            <button class="hover-trigger magnetic group flex items-center justify-center w-32 h-32 rounded-full border border-white/20 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"></div>
+                                <span class="relative z-10 font-mono text-xs uppercase text-center group-hover:text-black transition-colors duration-500">Deploy<br>Interaction</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Scroll Indicator -->
+                <div class="absolute bottom-10 left-6 md:left-12 flex flex-col items-center gap-4">
+                    <div class="font-mono text-[10px] uppercase text-gray-500 rotate-90 origin-left translate-y-8">Scroll</div>
+                    <div class="w-[1px] h-16 bg-gradient-to-b from-white/50 to-transparent"></div>
+                </div>
+            </section>
+
+            <!-- Manifesto Section -->
+            <section class="py-32 md:py-64 px-6 md:px-12 relative">
+                <div class="max-w-5xl mx-auto">
+                    <h2 class="font-display text-3xl md:text-6xl leading-tight font-medium manifesto-text text-gray-500">
+                        I don't just write code. I architect complete digital ecosystems. Blending rigorous engineering with cinematic design to build enterprise-grade software that refuses to be boring.
+                    </h2>
+                </div>
+            </section>
+
+            <!-- Bento Projects Grid -->
+            <section id="work" class="py-24 px-6 md:px-12">
+                <div class="max-w-7xl mx-auto">
+                    <div class="flex justify-between items-end mb-16 border-b border-border pb-8">
+                        <h2 class="font-display text-4xl md:text-6xl uppercase tracking-tighter">Production<br><span class="text-outline">Deployments</span></h2>
+                        <span class="font-mono text-xs text-gray-500 hidden md:inline-block">DATA.NODES // 04</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[400px]">
+                        
+                        <!-- Project 1 (Large) -->
+                        <div class="spotlight-card rounded-2xl md:col-span-2 p-8 flex flex-col justify-between group cursor-pointer hover-trigger">
+                            <div class="spotlight-content h-full flex flex-col justify-between">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 border border-border rounded-full font-mono text-[10px] text-accent-lime">LIVE</span>
+                                        <span class="px-2 py-1 border border-border rounded-full font-mono text-[10px] text-gray-400">REACT + NODE + AWS</span>
+                                    </div>
+                                    <div class="w-10 h-10 rounded-full border border-border flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </div>
+                                <div class="relative w-full h-40 mt-8 rounded-lg border border-border bg-black/50 overflow-hidden">
+                                    <!-- Procedural UI Graphic -->
+                                    <div class="absolute inset-0 p-4 flex flex-col gap-2 opacity-50 group-hover:opacity-100 transition-opacity duration-700">
+                                        <div class="w-1/3 h-2 bg-gray-800 rounded"></div>
+                                        <div class="flex gap-2">
+                                            <div class="w-full h-12 border border-gray-800 rounded"></div>
+                                            <div class="w-full h-12 border border-gray-800 rounded"></div>
+                                        </div>
+                                        <div class="w-full h-full border border-gray-800 rounded flex items-center justify-center">
+                                            <div class="w-3/4 h-[1px] bg-accent-cyan/30 relative">
+                                                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-accent-cyan rounded-full shadow-[0_0_10px_#00f0ff]"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="font-display text-3xl mt-6 group-hover:text-accent-cyan transition-colors">Enterprise Command OS</h3>
+                                    <p class="font-sans text-sm text-gray-400 mt-2">Internal operations platform with role-based access, analytics, and workflow automation.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 2 -->
+                        <div class="spotlight-card rounded-2xl p-8 flex flex-col justify-between group cursor-pointer hover-trigger">
+                            <div class="spotlight-content h-full flex flex-col justify-between">
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 border border-border rounded-full font-mono text-[10px] text-gray-400">NEXT.JS + TRPC</span>
+                                </div>
+                                <div class="flex-grow flex items-center justify-center">
+                                    <!-- Procedural DB Graphic -->
+                                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" class="group-hover:stroke-accent-violet transition-colors duration-500">
+                                        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                                        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-display text-xl group-hover:text-accent-violet transition-colors">Data Intelligence Hub</h3>
+                                    <p class="font-sans text-sm text-gray-400 mt-2">ETL pipelines and interactive dashboards.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 3 -->
+                        <div class="spotlight-card rounded-2xl p-8 flex flex-col justify-between group cursor-pointer hover-trigger">
+                            <div class="spotlight-content h-full flex flex-col justify-between">
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 border border-border rounded-full font-mono text-[10px] text-gray-400">VUE + GO + POSTGRES</span>
+                                </div>
+                                <div class="flex-grow flex items-center justify-center">
+                                    <!-- Procedural API Graphic -->
+                                    <div class="flex items-center gap-1">
+                                        <div class="w-2 h-8 bg-white/10 group-hover:bg-accent-lime transition-all duration-300 delay-100"></div>
+                                        <div class="w-2 h-12 bg-white/20 group-hover:bg-accent-lime transition-all duration-300 delay-200"></div>
+                                        <div class="w-2 h-6 bg-white/10 group-hover:bg-accent-lime transition-all duration-300 delay-300"></div>
+                                        <div class="w-2 h-10 bg-white/30 group-hover:bg-accent-lime transition-all duration-300 delay-400"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="font-display text-xl group-hover:text-accent-lime transition-colors">Realtime Commerce</h3>
+                                    <p class="font-sans text-sm text-gray-400 mt-2">E-commerce engine with scalable inventory.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 4 (Large) -->
+                        <div class="spotlight-card rounded-2xl md:col-span-2 p-8 flex flex-col justify-between group cursor-pointer hover-trigger">
+                            <div class="spotlight-content h-full flex flex-col justify-between">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 border border-border rounded-full font-mono text-[10px] text-accent-cyan">BETA</span>
+                                        <span class="px-2 py-1 border border-border rounded-full font-mono text-[10px] text-gray-400">KUBERNETES + DOCKER</span>
+                                    </div>
+                                </div>
+                                <div class="relative w-full h-40 mt-8 rounded-lg border border-border bg-[#050505] overflow-hidden flex items-center justify-center">
+                                    <!-- Procedural Network Graphic -->
+                                    <svg class="absolute inset-0 w-full h-full opacity-30 group-hover:opacity-100 transition-opacity duration-700" xmlns="http://www.w3.org/2000/svg">
+                                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <rect width="20" height="20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                                        </pattern>
+                                        <rect width="100%" height="100%" fill="url(#grid)" />
+                                        <circle cx="20%" cy="50%" r="4" fill="#00f0ff" />
+                                        <circle cx="50%" cy="30%" r="4" fill="#00f0ff" />
+                                        <circle cx="50%" cy="70%" r="4" fill="#00f0ff" />
+                                        <circle cx="80%" cy="50%" r="4" fill="#00f0ff" />
+                                        <path d="M 20% 50% L 50% 30% L 80% 50% L 50% 70% Z" fill="none" stroke="rgba(0,240,255,0.5)" stroke-width="1" stroke-dasharray="4" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-display text-3xl mt-6 group-hover:text-accent-cyan transition-colors">Cloud Deployment Grid</h3>
+                                    <p class="font-sans text-sm text-gray-400 mt-2">DevOps platform with CI/CD, containerized services, and monitoring.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Architecture Section -->
+            <section id="architecture" class="py-32 px-6 md:px-12 relative border-t border-border bg-[#030303]">
+                <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-16">
+                    
+                    <!-- Sticky Diagram -->
+                    <div class="w-full md:w-1/2 md:sticky md:top-32 h-[500px] glass-panel rounded-2xl p-8 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-grid opacity-50 z-0"></div>
+                        <div class="relative z-10 w-full h-full flex flex-col justify-between font-mono text-xs">
+                            
+                            <!-- Client Node -->
+                            <div class="self-center border border-border bg-black px-6 py-3 rounded text-center relative arch-node">
+                                <span class="text-gray-400 block mb-1">Layer 01</span>
+                                <span class="text-white">Frontend Interface</span>
+                            </div>
+                            
+                            <div class="w-[1px] h-16 bg-border mx-auto relative arch-line"></div>
+                            
+                            <!-- API Gateway -->
+                            <div class="self-center border border-accent-lime/50 shadow-[0_0_15px_rgba(204,255,0,0.1)] bg-black px-8 py-4 rounded text-center relative arch-node">
+                                <span class="text-accent-lime block mb-1">API Gateway</span>
+                                <span class="text-white">GraphQL / REST Services</span>
+                                <div class="absolute -right-24 top-1/2 -translate-y-1/2 text-[9px] text-gray-500 text-left">
+                                    Latency: <span class="text-accent-lime">12ms</span><br>
+                                    Req/s: <span>4,200</span>
+                                </div>
+                            </div>
+                            
+                            <div class="w-[1px] h-16 bg-border mx-auto relative arch-line"></div>
+                            
+                            <!-- DB / Cloud -->
+                            <div class="flex justify-between w-full arch-node-bottom">
+                                <div class="w-[45%] border border-border bg-black px-4 py-4 rounded text-center">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" class="mx-auto mb-2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                                    <span class="text-gray-400 block mb-1">Layer 03</span>
+                                    <span class="text-white">PostgreSQL Cluster</span>
+                                </div>
+                                <div class="w-[45%] border border-accent-cyan/50 shadow-[0_0_15px_rgba(0,240,255,0.1)] bg-black px-4 py-4 rounded text-center">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(0,240,255,0.8)" stroke-width="1.5" class="mx-auto mb-2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                                    <span class="text-accent-cyan block mb-1">Infrastructure</span>
+                                    <span class="text-white">AWS / Kubernetes</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Animated flow lines -->
+                            <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" style="z-index: -1;">
+                                <path d="M 50% 15% L 50% 85%" stroke="rgba(204,255,0,0.3)" stroke-width="2" fill="none" class="flow-line" />
+                                <path d="M 50% 50% L 20% 85%" stroke="rgba(0,240,255,0.3)" stroke-width="2" fill="none" class="flow-line" style="animation-delay: -5s;" />
+                                <path d="M 50% 50% L 80% 85%" stroke="rgba(0,240,255,0.3)" stroke-width="2" fill="none" class="flow-line" style="animation-delay: -10s;" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Scroll Content -->
+                    <div class="w-full md:w-1/2 py-12 md:py-32">
+                        <div class="font-mono text-accent-cyan text-xs uppercase tracking-widest mb-6">System Architecture</div>
+                        <h2 class="font-display text-4xl md:text-5xl uppercase tracking-tighter mb-8">Engineering<br>The Full Stack.</h2>
+                        
+                        <div class="space-y-16">
+                            <div class="arch-text-block">
+                                <h3 class="text-xl font-display uppercase tracking-tight mb-4 flex items-center gap-3">
+                                    <span class="text-gray-500 font-mono text-sm">01</span> Frontend Interfaces
+                                </h3>
+                                <p class="text-gray-400 text-sm leading-relaxed">Developing immersive, performant user interfaces using React, Next.js, and WebGL. Focused on accessibility, micro-interactions, and rendering optimization to ensure 60fps across devices.</p>
+                            </div>
+                            
+                            <div class="arch-text-block">
+                                <h3 class="text-xl font-display uppercase tracking-tight mb-4 flex items-center gap-3">
+                                    <span class="text-gray-500 font-mono text-sm">02</span> API & Backend Systems
+                                </h3>
+                                <p class="text-gray-400 text-sm leading-relaxed">Designing robust REST and GraphQL APIs using Node.js, Go, or Python. Implementing secure authentication, rate limiting, and microservices architectures capable of handling high-throughput traffic.</p>
+                            </div>
+                            
+                            <div class="arch-text-block">
+                                <h3 class="text-xl font-display uppercase tracking-tight mb-4 flex items-center gap-3">
+                                    <span class="text-gray-500 font-mono text-sm">03</span> Database & Cloud
+                                </h3>
+                                <p class="text-gray-400 text-sm leading-relaxed">Architecting scalable data models with PostgreSQL, MongoDB, and Redis. Deploying containerized infrastructure via Docker and Kubernetes on AWS/GCP with automated CI/CD pipelines.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Tech Stack Marquee -->
+            <section class="py-12 border-y border-border overflow-hidden bg-[#050505] flex items-center">
+                <div class="flex whitespace-nowrap opacity-50 tech-marquee">
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">React</span>
+                    <span class="font-mono text-2xl uppercase mx-8">Next.js</span>
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">TypeScript</span>
+                    <span class="font-mono text-2xl uppercase mx-8">Node.js</span>
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">Go</span>
+                    <span class="font-mono text-2xl uppercase mx-8">PostgreSQL</span>
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">Redis</span>
+                    <span class="font-mono text-2xl uppercase mx-8">Docker</span>
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">Kubernetes</span>
+                    <span class="font-mono text-2xl uppercase mx-8">AWS</span>
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">Three.js</span>
+                    <span class="font-mono text-2xl uppercase mx-8">GSAP</span>
+                    
+                    <!-- Repeat for seamless loop -->
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">React</span>
+                    <span class="font-mono text-2xl uppercase mx-8">Next.js</span>
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">TypeScript</span>
+                    <span class="font-mono text-2xl uppercase mx-8">Node.js</span>
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">Go</span>
+                    <span class="font-mono text-2xl uppercase mx-8">PostgreSQL</span>
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">Redis</span>
+                    <span class="font-mono text-2xl uppercase mx-8">Docker</span>
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">Kubernetes</span>
+                    <span class="font-mono text-2xl uppercase mx-8">AWS</span>
+                    <span class="font-mono text-2xl uppercase mx-8 text-outline">Three.js</span>
+                    <span class="font-mono text-2xl uppercase mx-8">GSAP</span>
+                </div>
+            </section>
+
+            <!-- Capabilities Section -->
+            <section id="capabilities" class="py-32 px-6 md:px-12">
+                <div class="max-w-7xl mx-auto">
+                    <h2 class="font-display text-4xl md:text-6xl uppercase tracking-tighter mb-16 text-center">Core <span class="text-outline">Capabilities</span></h2>
+                    
+                    <div class="border-t border-border">
+                        <!-- Capability Item -->
+                        <div class="cap-item py-8 border-b border-border group hover-trigger cursor-pointer relative overflow-hidden">
+                            <div class="absolute inset-0 bg-white/5 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0"></div>
+                            <div class="relative z-10 flex flex-col md:flex-row justify-between md:items-center gap-4">
+                                <h3 class="font-display text-2xl md:text-4xl uppercase tracking-tight group-hover:text-accent-lime transition-colors">System Architecture</h3>
+                                <p class="font-sans text-sm text-gray-400 md:w-1/3">Designing scalable, high-availability software architectures mapping complex business logic to robust technical foundations.</p>
+                                <span class="font-mono text-xs text-gray-600 group-hover:text-white transition-colors">[ 01 ]</span>
+                            </div>
+                        </div>
+                        <!-- Capability Item -->
+                        <div class="cap-item py-8 border-b border-border group hover-trigger cursor-pointer relative overflow-hidden">
+                            <div class="absolute inset-0 bg-white/5 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0"></div>
+                            <div class="relative z-10 flex flex-col md:flex-row justify-between md:items-center gap-4">
+                                <h3 class="font-display text-2xl md:text-4xl uppercase tracking-tight group-hover:text-accent-cyan transition-colors">API & Backend Design</h3>
+                                <p class="font-sans text-sm text-gray-400 md:w-1/3">Building secure, performant RESTful and GraphQL APIs with optimized database queries and microservices routing.</p>
+                                <span class="font-mono text-xs text-gray-600 group-hover:text-white transition-colors">[ 02 ]</span>
+                            </div>
+                        </div>
+                        <!-- Capability Item -->
+                        <div class="cap-item py-8 border-b border-border group hover-trigger cursor-pointer relative overflow-hidden">
+                            <div class="absolute inset-0 bg-white/5 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0"></div>
+                            <div class="relative z-10 flex flex-col md:flex-row justify-between md:items-center gap-4">
+                                <h3 class="font-display text-2xl md:text-4xl uppercase tracking-tight group-hover:text-accent-violet transition-colors">Creative Engineering</h3>
+                                <p class="font-sans text-sm text-gray-400 md:w-1/3">Bridging the gap between design and logic. Creating immersive WebGL experiences and fluid UI animations.</p>
+                                <span class="font-mono text-xs text-gray-600 group-hover:text-white transition-colors">[ 03 ]</span>
+                            </div>
+                        </div>
+                        <!-- Capability Item -->
+                        <div class="cap-item py-8 border-b border-border group hover-trigger cursor-pointer relative overflow-hidden">
+                            <div class="absolute inset-0 bg-white/5 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0"></div>
+                            <div class="relative z-10 flex flex-col md:flex-row justify-between md:items-center gap-4">
+                                <h3 class="font-display text-2xl md:text-4xl uppercase tracking-tight group-hover:text-white transition-colors">DevOps & Cloud</h3>
+                                <p class="font-sans text-sm text-gray-400 md:w-1/3">Automating deployments via CI/CD, managing containerized clusters, and monitoring cloud infrastructure health.</p>
+                                <span class="font-mono text-xs text-gray-600 group-hover:text-white transition-colors">[ 04 ]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About / Editorial Section -->
+            <section class="py-32 px-6 md:px-12 relative">
+                <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 items-center">
+                    
+                    <div class="w-full md:w-1/2">
+                        <div class="aspect-square w-full max-w-[500px] mx-auto border border-border rounded-full relative flex items-center justify-center p-8">
+                            <!-- Procedural Abstract Shape instead of Image -->
+                            <div class="absolute inset-0 rounded-full border border-dashed border-gray-700 animate-[spin_60s_linear_infinite]"></div>
+                            <div class="absolute inset-4 rounded-full border border-gray-800 animate-[spin_40s_linear_infinite_reverse]"></div>
+                            <div class="w-full h-full rounded-full bg-gradient-to-br from-[#111] to-black flex items-center justify-center overflow-hidden relative spotlight-card group">
+                                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMDAwIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMzMzMiLz4KPC9zdmc+')] opacity-50 mix-blend-screen"></div>
+                                <div class="text-center relative z-10">
+                                    <div class="font-mono text-4xl text-white tracking-widest uppercase mb-2">SYS</div>
+                                    <div class="font-display text-xs text-gray-500 uppercase tracking-widest">Architect</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/2">
+                        <h2 class="font-display text-3xl md:text-5xl uppercase tracking-tighter mb-8 leading-tight">
+                            Engineering is not just writing code.<br>
+                            <span class="text-outline">It's solving problems at scale.</span>
+                        </h2>
+                        <div class="space-y-6 text-gray-400 font-sans text-sm md:text-base leading-relaxed">
+                            <p>With over a decade of experience bridging the gap between high-fidelity design and complex backend architecture, I view software development as a holistic discipline.</p>
+                            <p>A beautiful interface is useless if the API takes three seconds to respond. A scalable database is invisible if the frontend feels sluggish. I build full-stack systems where every layer is engineered to work in perfect harmony.</p>
+                            <p>Based in the digital ether. Currently available for fractional architecture roles and enterprise-level full-stack development.</p>
+                        </div>
+                        
+                        <div class="mt-12 flex gap-4">
+                            <div class="px-6 py-3 border border-border rounded-full font-mono text-xs text-white">10+ Years Exp</div>
+                            <div class="px-6 py-3 border border-border rounded-full font-mono text-xs text-white">40+ Systems Deployed</div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Contact / Footer -->
+            <footer class="py-32 px-6 md:px-12 relative border-t border-border overflow-hidden">
+                <div class="absolute inset-0 bg-grid opacity-30 pointer-events-none"></div>
+                <div class="max-w-7xl mx-auto text-center relative z-10">
+                    <p class="font-mono text-accent-lime text-xs uppercase tracking-widest mb-6">System ready for new inputs</p>
+                    <h2 class="font-display text-[12vw] md:text-[10vw] leading-none uppercase tracking-tighter font-bold hover-trigger magnetic cursor-pointer mb-12 group inline-block">
+                        Initiate<br><span class="text-outline group-hover:text-white group-hover:text-shadow transition-all duration-300">Sequence</span>
+                    </h2>
+                    
+                    <div class="flex flex-col md:flex-row justify-between items-center mt-24 border-t border-border pt-8 text-xs font-mono text-gray-500 uppercase">
+                        <div>&copy; 2026 Systems Engineered.</div>
+                        <div class="flex gap-6 mt-4 md:mt-0">
+                            <a href="#" class="hover:text-white transition-colors hover-trigger">Github</a>
+                            <a href="#" class="hover:text-white transition-colors hover-trigger">LinkedIn</a>
+                            <a href="#" class="hover:text-white transition-colors hover-trigger">Twitter</a>
+                        </div>
+                        <div class="mt-4 md:mt-0">SYS.STATE: <span class="text-accent-cyan">ONLINE</span></div>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+
+    <script>
+        // Check capabilities
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Register GSAP
+        gsap.registerPlugin(ScrollTrigger);
+
+        /* =========================================
+           Utility: Text Splitter (Vanilla JS)
+           ========================================= */
+        function splitText(selector) {
+            document.querySelectorAll(selector).forEach(el => {
+                const text = el.innerText;
+                el.setAttribute('aria-label', text); // A11y Fix: Screen reader support
+                const words = text.split(' ');
+                el.innerHTML = '';
+                words.forEach(word => {
+                    if (!word.trim()) return; // Prevent empty nodes
+                    const wordWrap = document.createElement('span');
+                    wordWrap.className = 'split-line inline-block';
+                    wordWrap.setAttribute('aria-hidden', 'true'); // A11y Fix: Hide fragmented text
+                    const innerWord = document.createElement('span');
+                    innerWord.className = 'split-word inline-block';
+                    innerWord.innerText = word;
+                    wordWrap.appendChild(innerWord);
+                    el.appendChild(wordWrap);
+                    el.appendChild(document.createTextNode(' ')); // Allows natural line wrapping on resize
+                });
+            });
+        }
+
+        /* =========================================
+           Three.js Background Network
+           ========================================= */
+        function initThreeJS() {
+            if (prefersReducedMotion) return;
+
+            const canvas = document.getElementById('webgl-canvas');
+            const scene = new THREE.Scene();
+            
+            // Camera setup
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 100;
+
+            // Renderer setup
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            // Cap pixel ratio for performance
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+            // Particles logic
+            const particleCount = isTouchDevice ? 60 : 150;
+            const maxDistance = 25;
+            
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const velocities = [];
+
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 200;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 200;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
+                
+                velocities.push({
+                    x: (Math.random() - 0.5) * 0.1,
+                    y: (Math.random() - 0.5) * 0.1,
+                    z: (Math.random() - 0.5) * 0.1
+                });
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            
+            // Node Material
+            const material = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 1.5,
+                transparent: true,
+                opacity: 0.4
+            });
+
+            const particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            // Line Material setup
+            const lineMaterial = new THREE.LineBasicMaterial({
+                color: 0x00f0ff,
+                transparent: true,
+                opacity: 0.15
+            });
+
+            // Dynamic Lines Buffer Setup (Zero Garbage Collection Fix)
+            const maxLines = (particleCount * (particleCount - 1)) / 2;
+            const linePositions = new Float32Array(maxLines * 6);
+            const lineGeometry = new THREE.BufferGeometry();
+            lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3).setUsage(THREE.DynamicDrawUsage));
+            const linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
+            scene.add(linesMesh);
+
+            // Mouse interaction
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
+            if (!isTouchDevice) {
+                document.addEventListener('mousemove', (event) => {
+                    mouseX = (event.clientX - window.innerWidth / 2);
+                    mouseY = (event.clientY - window.innerHeight / 2);
+                });
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                targetX = mouseX * 0.05;
+                targetY = mouseY * 0.05;
+
+                // Subtle parallax camera rotation
+                camera.position.x += (targetX - camera.position.x) * 0.02;
+                camera.position.y += (-targetY - camera.position.y) * 0.02;
+                camera.lookAt(scene.position);
+
+                const positions = particles.geometry.attributes.position.array;
+                let vertexPos = 0;
+                let numConnected = 0;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    // Move particles
+                    positions[i * 3] += velocities[i].x;
+                    positions[i * 3 + 1] += velocities[i].y;
+                    positions[i * 3 + 2] += velocities[i].z;
+
+                    // Bounce off boundaries & clamp to prevent getting trapped
+                    if (Math.abs(positions[i * 3]) > 100) {
+                        velocities[i].x *= -1;
+                        positions[i * 3] = Math.sign(positions[i * 3]) * 100;
+                    }
+                    if (Math.abs(positions[i * 3 + 1]) > 100) {
+                        velocities[i].y *= -1;
+                        positions[i * 3 + 1] = Math.sign(positions[i * 3 + 1]) * 100;
+                    }
+                    if (Math.abs(positions[i * 3 + 2]) > 50) {
+                        velocities[i].z *= -1;
+                        positions[i * 3 + 2] = Math.sign(positions[i * 3 + 2]) * 50;
+                    }
+
+                    // Check distances for lines
+                    for (let j = i + 1; j < particleCount; j++) {
+                        const dx = positions[i * 3] - positions[j * 3];
+                        const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                        const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                        const distSq = dx * dx + dy * dy + dz * dz;
+
+                        if (distSq < maxDistance * maxDistance) {
+                            linePositions[vertexPos++] = positions[i * 3];
+                            linePositions[vertexPos++] = positions[i * 3 + 1];
+                            linePositions[vertexPos++] = positions[i * 3 + 2];
+                            linePositions[vertexPos++] = positions[j * 3];
+                            linePositions[vertexPos++] = positions[j * 3 + 1];
+                            linePositions[vertexPos++] = positions[j * 3 + 2];
+                            numConnected++;
+                        }
+                    }
+                }
+
+                particles.geometry.attributes.position.needsUpdate = true;
+
+                // Update Lines dynamically without instantiating new memory
+                linesMesh.geometry.setDrawRange(0, numConnected * 2);
+                linesMesh.geometry.attributes.position.needsUpdate = true;
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // Resize handler with ScrollTrigger Refresh & Mobile Jitter Fix
+            let resizeTimeout;
+            let windowWidth = window.innerWidth; // เก็บค่าความกว้างเริ่มต้น
+
+            window.addEventListener('resize', () => {
+                // Fix: ป้องกันการกระตุกบนมือถือเวลาแถบ URL ซ่อน/แสดง (สนใจเฉพาะการเปลี่ยนความกว้าง)
+                if (isTouchDevice && window.innerWidth === windowWidth) return;
+                windowWidth = window.innerWidth;
+
+                // Update Three.js camera & renderer
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+
+                // Debounce ScrollTrigger refresh to recalculate animation triggers
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    ScrollTrigger.refresh();
+                }, 250);
+            });
+        }
+
+        /* =========================================
+           Custom Cursor & Magnetic Effects
+           ========================================= */
+        function initCursorAndMagnetic() {
+            if (isTouchDevice) return;
+
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorOutline = document.querySelector('.cursor-outline');
+            
+            // Set initial centering
+            gsap.set([cursorDot, cursorOutline], { xPercent: -50, yPercent: -50 });
+
+            // Use gsap.quickTo for massive performance gain over WAAPI and style.left/top
+            const xToDot = gsap.quickTo(cursorDot, "x", {duration: 0.1, ease: "power3"});
+            const yToDot = gsap.quickTo(cursorDot, "y", {duration: 0.1, ease: "power3"});
+            const xToOutline = gsap.quickTo(cursorOutline, "x", {duration: 0.5, ease: "power3"});
+            const yToOutline = gsap.quickTo(cursorOutline, "y", {duration: 0.5, ease: "power3"});
+            
+            // Cursor move
+            let cursorVisible = false;
+            window.addEventListener('mousemove', (e) => {
+                if (!cursorVisible) {
+                    gsap.to([cursorDot, cursorOutline], { opacity: 1, duration: 0.3 });
+                    cursorVisible = true;
+                }
+                xToDot(e.clientX);
+                yToDot(e.clientY);
+                xToOutline(e.clientX);
+                yToOutline(e.clientY);
+            });
+
+            // Viewport Escape - Hide cursor when leaving browser
+            document.addEventListener('mouseleave', () => {
+                if (cursorVisible) {
+                    gsap.to([cursorDot, cursorOutline], { opacity: 0, duration: 0.3 });
+                    cursorVisible = false;
+                }
+            });
+
+            // Hover effects
+            const hoverElements = document.querySelectorAll('.hover-trigger');
+            hoverElements.forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+            });
+
+            // Magnetic Buttons
+            const magneticEls = document.querySelectorAll('.magnetic');
+            magneticEls.forEach(el => {
+                el.addEventListener('mousemove', (e) => {
+                    const rect = el.getBoundingClientRect();
+                    const currentX = gsap.getProperty(el, "x");
+                    const currentY = gsap.getProperty(el, "y");
+                    
+                    // True center calculation independent of GSAP transforms
+                    const centerX = (rect.left - currentX) + (rect.width / 2);
+                    const centerY = (rect.top - currentY) + (rect.height / 2);
+                    
+                    const x = e.clientX - centerX;
+                    const y = e.clientY - centerY;
+                    
+                    gsap.to(el, {
+                        x: x * 0.3,
+                        y: y * 0.3,
+                        duration: 0.5,
+                        ease: "power2.out",
+                        overwrite: "auto" // Prevent tween queue conflicts
+                    });
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)", overwrite: "auto" });
+                });
+            });
+        }
+
+        /* =========================================
+           Spotlight Cards Interaction
+           ========================================= */
+        function initSpotlight() {
+            if (isTouchDevice) return;
+            const cards = document.querySelectorAll('.spotlight-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect(); // Safe live read (modifying CSS vars doesn't trigger layout)
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        }
+
+        /* =========================================
+           Preloader & Main Animations Setup
+           ========================================= */
+        function initAnimations() {
+            // Split texts for reveal
+            splitText('.manifesto-text');
+
+            const tl = gsap.timeline();
+
+            // Preloader logic
+            let progress = 0;
+            const progressEl = document.getElementById('loader-progress');
+            const barEl = document.getElementById('loader-bar');
+            
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 10) + 2;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    startIntroSequence();
+                }
+                progressEl.innerText = `${progress}%`;
+                barEl.style.width = `${progress}%`;
+            }, 50);
+
+            function startIntroSequence() {
+                // Hide Preloader
+                tl.to('#preloader', {
+                    yPercent: -100,
+                    duration: 1.2,
+                    ease: "power4.inOut",
+                    delay: 0.2
+                })
+                // Hero Text Reveal
+                .fromTo('.hero-word', 
+                    { y: '110%' },
+                    { y: '0%', duration: 1, stagger: 0.1, ease: "power4.out" },
+                    "-=0.5"
+                )
+                // Fade in hero details
+                .fromTo('nav, .hero-title + div',
+                    { opacity: 0, y: 20 },
+                    { opacity: 1, y: 0, duration: 1, ease: "power2.out", onComplete: () => {
+                        document.body.classList.remove('scroll-locked');
+                        document.getElementById('preloader').style.display = 'none'; // Fix: เคลียร์ขยะใน DOM คืน Memory
+                    }},
+                    "-=0.5"
+                );
+
+                initScrollAnimations();
+            }
+        }
+
+        /* =========================================
+           Lenis Smooth Scroll Setup
+           ========================================= */
+        let lenis; // ดึงมาเป็น Global เพื่อให้ใช้งานในฟังก์ชันอื่นได้
+
+        function initSmoothScroll() {
+            if (prefersReducedMotion || isTouchDevice) return; // Keep native scroll on mobile for better UX
+            
+            lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                direction: 'vertical',
+                gestureDirection: 'vertical',
+                smooth: true,
+            });
+
+            lenis.on('scroll', ScrollTrigger.update);
+
+            gsap.ticker.add((time) => {
+                lenis.raf(time * 1000);
+            });
+
+            gsap.ticker.lagSmoothing(0);
+
+            // Fix: ดักการคลิกลิงก์เมนู (Anchor Links) เพื่อใช้ Smooth Scroll ของ Lenis แทนการกระโดดวาร์ป
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (lenis) {
+                        // เลื่อนแบบนุ่มนวล และเผื่อระยะขอบบน (offset) ไว้กันเมนูบัง
+                        lenis.scrollTo(this.getAttribute('href'), { offset: -50, duration: 1.5, ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+                    } else {
+                        // Fallback สำหรับมือถือที่ไม่มี Lenis
+                        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        }
+
+        /* =========================================
+           ScrollTrigger Animations
+           ========================================= */
+        function initScrollAnimations() {
+            if (prefersReducedMotion) return;
+
+            // Manifesto reveal
+            gsap.to('.manifesto-text .split-word', {
+                scrollTrigger: {
+                    trigger: '.manifesto-text',
+                    start: "top 80%",
+                    end: "bottom 50%",
+                    scrub: 0.5,
+                },
+                y: '0%',
+                color: '#ffffff',
+                stagger: 0.05,
+                ease: "none"
+            });
+
+            // Architecture Section - Sticky elements & Nodes reveal
+            const archNodes = document.querySelectorAll('.arch-node');
+            const archLines = document.querySelectorAll('.arch-line');
+            
+            archNodes.forEach((node, i) => {
+                gsap.from(node, {
+                    scrollTrigger: {
+                        trigger: '#architecture',
+                        start: "top 60%",
+                    },
+                    y: 30,
+                    opacity: 0,
+                    duration: 0.8,
+                    delay: i * 0.2,
+                    ease: "power3.out"
+                });
+            });
+
+            // Text blocks stagger
+            gsap.from('.arch-text-block', {
+                scrollTrigger: {
+                    trigger: '#architecture',
+                    start: "top 50%",
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+
+            // Marquee Animation
+            gsap.to('.tech-marquee', {
+                xPercent: -50,
+                ease: "none",
+                duration: 20,
+                repeat: -1
+            });
+
+            // Capabilities fade up
+            gsap.from('.cap-item', {
+                scrollTrigger: {
+                    trigger: '#capabilities',
+                    start: "top 70%",
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "power2.out"
+            });
+        }
+
+        /* =========================================
+           Boot Application with Safe Fallback
+           ========================================= */
+        let isBooted = false;
+
+        function bootApp() {
+            if (isBooted) return;
+            isBooted = true;
+            
+            initSmoothScroll();
+            initThreeJS();
+            initCursorAndMagnetic();
+            initSpotlight();
+            initAnimations();
+            
+            // Scroll to top on load
+            window.scrollTo(0,0);
+        }
+
+        // Normal boot sequence
+        window.onload = bootApp;
+
+        // Failsafe: Force boot if external assets hang (CDN issues)
+        setTimeout(() => {
+            if (!isBooted && (document.readyState === 'complete' || document.readyState === 'interactive')) {
+                console.warn('System boot delayed. Forcing initialization.');
+                bootApp();
+            }
+        }, 3500);
+
+    </script>
+</body>
+</html>
