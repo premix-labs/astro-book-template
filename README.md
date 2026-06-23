@@ -13,16 +13,17 @@ The ultimate template for authoring high-end, award-winning technical books and 
 
 All commands are run from the root of the project, from a terminal:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
+| Command         | Action                                      |
+| :-------------- | :------------------------------------------ |
+| `npm install`   | Installs dependencies                       |
+| `npm run dev`   | Starts local dev server at `localhost:4321` |
+| `npm run build` | Build your production site to `./dist/`     |
 
 ## 📖 Content Authoring
 
-All chapters are stored in `src/content/chapters/`. 
+All chapters are stored in `src/content/chapters/`.
 To add a new chapter:
+
 1. Create a new `.mdx` file.
 2. Register it in the `chapters` array inside `src/pages/[slug].astro` and `src/layouts/BookLayout.astro` for sidebar navigation.
 

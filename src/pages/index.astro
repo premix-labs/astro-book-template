@@ -5,9 +5,9 @@ import '@fontsource/jetbrains-mono/latin.css';
 import '@fontsource/space-grotesk/500.css';
 import '@fontsource/space-grotesk/700.css';
 import '../styles/global.css';
-import { 
-  BookOpen, Settings, Package, LayoutDashboard, FileText, Rocket, Moon, Sun
-} from '@lucide/astro';
+import { ClientRouter } from 'astro:transitions';
+import SearchModal from '../components/SearchModal.astro';
+import { BookOpen, Settings, Package, LayoutDashboard, FileText, Rocket, Moon, Sun, Search } from '@lucide/astro';
 
 const iconMap = {
   intro: BookOpen,
@@ -17,437 +17,598 @@ const iconMap = {
 };
 
 const mdxFiles = Object.values(import.meta.glob<Record<string, any>>('../content/chapters/*.mdx', { eager: true }));
-const chapters = mdxFiles.map((file: any) => file.frontmatter).sort((a: any, b: any) => a.chapter - b.chapter).map((ch: any) => ({
-  num: ch.chapter.toString().padStart(2, '0'),
-  href: `/${ch.slug}`,
-  icon: ch.icon || 'intro',
-  level: ch.chapter === 0 ? 'Introduction' : 'Core',
-  title: ch.title,
-  desc: ch.description,
-  tags: [] // Simplification
-}));
+const chapters = mdxFiles
+  .map((file: any) => file.frontmatter)
+  .sort((a: any, b: any) => a.chapter - b.chapter)
+  .map((ch: any) => ({
+    num: ch.chapter.toString().padStart(2, '0'),
+    href: `/${ch.slug}`,
+    icon: ch.icon || 'intro',
+    level: ch.chapter === 0 ? 'Introduction' : 'Core',
+    title: ch.title,
+    desc: ch.description,
+    tags: [], // Simplification
+  }));
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A premium UX/UI book template built with Vanilla CSS and Astro." />
-  <title>Premium UX/UI Masterclass</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A premium UX/UI book template built with Vanilla CSS and Astro." />
+    <title>Premium UX/UI Masterclass</title>
 
-  <script is:inline>
-    (function () {
-      const savedTheme = localStorage.getItem('site-theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    })();
-  </script>
+    <!-- Open Graph -->
+    <meta property="og:title" content="Premium UX/UI Masterclass" />
+    <meta property="og:description" content="A premium UX/UI book template built with Vanilla CSS and Astro." />
+    <meta property="og:type" content="website" />
 
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      (function () {
+        const savedTheme = localStorage.getItem('site-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      })();
+    </script>
 
-</head>
-<body>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ClientRouter />
+  </head>
+  <body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
-  <!-- Custom Cursor -->
-  <div class="cursor-dot"></div>
-  <div class="cursor-outline"></div>
-
-  <!-- 3D Canvas Background -->
-  <canvas id="webgl-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-10; pointer-events:none; opacity:0.3;"></canvas>
-  <div class="bg-grid" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-10; pointer-events:none; opacity:0.15;"></div>
-
-  <!-- ═══ HEADER ══════════════════════════════════ -->
-  <header class="header" style="position: sticky; top: 0; z-index: 100;">
-    <div class="header__logo-icon" aria-hidden="true" style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;">
-      <BookOpen style="width: 20px; height: 20px;" />
-    </div>
-    <div class="header__logo-text" style="display:flex;flex-direction:column;line-height:1.2;">
-      <span style="font-size:0.95rem;font-weight:700;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">UX/UI Masterclass</span>
-      <span style="font-size:0.7rem;color:var(--text-muted);">Premium Edition</span>
-    </div>
-    <div style="flex:1"></div>
-
-    <!-- 🌓 THEME SWITCHER BUTTON ══════════════════ -->
-    <button
-      class="header__theme-btn"
-      id="theme-switcher-btn"
-      aria-label="Toggle Theme"
-      style="cursor:pointer;padding:8px 12px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.82rem;display:flex;align-items:center;gap:6px;transition:all 0.2s var(--ease-smooth);margin-right:12px;"
+    <!-- 3D Canvas Background -->
+    <canvas
+      id="webgl-canvas"
+      style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-10; pointer-events:none; opacity:0.3;"
+    ></canvas>
+    <div
+      class="bg-grid"
+      style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-10; pointer-events:none; opacity:0.15;"
     >
-      <span class="theme-icon" id="theme-btn-icon" style="display:flex;align-items:center;">
-        <Moon id="theme-icon-moon" style="width:16px;height:16px;display:block;" />
-        <Sun id="theme-icon-sun" style="width:16px;height:16px;display:none;" />
-      </span>
-      <span class="theme-label" id="theme-btn-label">Dark Mode</span>
-    </button>
-
-    <a href="/intro" class="btn-primary" style="padding:10px 20px;font-size:0.9rem;display:inline-flex;align-items:center;gap:6px;">
-      <Rocket style="width:14px;height:14px;" />
-      <span>Start Reading</span>
-    </a>
-  </header>
-
-  <!-- ═══ HERO ══════════════════════════════════ -->
-  <section class="hero" aria-labelledby="hero-title">
-    <!-- Floating Orbs -->
-    <div class="hero-orb hero-orb--1" aria-hidden="true"></div>
-    <div class="hero-orb hero-orb--2" aria-hidden="true"></div>
-    <div class="hero-orb hero-orb--3" aria-hidden="true"></div>
-
-    <div class="hero-eyebrow" aria-label="Category">
-      <span aria-hidden="true" style="display:flex;align-items:center;justify-content:center;"><BookOpen style="width:14px;height:14px;" /></span>
-      <span>Design · Engineering · Masterclass</span>
     </div>
 
-    <h1 class="hero-title" id="hero-title">
-      Premium <span>UX/UI</span><br/>
-      Book Template
-    </h1>
+    <!-- ═══ HEADER ══════════════════════════════════ -->
+    <header class="header" style="position: sticky; top: 0; z-index: 100;">
+      <div
+        class="header__logo-icon"
+        aria-hidden="true"
+        style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;"
+      >
+        <BookOpen style="width: 20px; height: 20px;" />
+      </div>
+      <div class="header__logo-text" style="display:flex;flex-direction:column;line-height:1.2;">
+        <span
+          style="font-size:0.95rem;font-weight:700;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;"
+          >UX/UI Masterclass</span
+        >
+        <span style="font-size:0.7rem;color:var(--text-muted);">Premium Edition</span>
+      </div>
+      <div style="flex:1"></div>
 
-    <p class="hero-subtitle" id="hero-subtitle">
-      <span id="typewriter-target"></span><span id="typewriter-cursor" style="border-right:2px solid var(--primary-400);animation:fadeIn 0.8s ease-in-out infinite alternate;margin-left:2px;">&nbsp;</span>
-    </p>
+      <!-- 🔍 SEARCH BUTTON ════════════════════════════ -->
+      <button
+        class="header__theme-btn open-search-btn hover-trigger"
+        aria-label="Search Book"
+        style="cursor:pointer;padding:8px 12px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.82rem;display:flex;align-items:center;gap:6px;transition:all 0.2s var(--ease-smooth);margin-right:12px;"
+      >
+        <Search style="width:16px;height:16px;" />
+        <span
+          >Search <kbd
+            style="font-family:var(--font-code);font-size:0.7rem;background:var(--bg-card);padding:2px 4px;border-radius:4px;border:1px solid var(--border-subtle);margin-left:4px;"
+            >Ctrl+K</kbd
+          ></span
+        >
+      </button>
 
-    <div class="hero-cta">
-      <a href="/intro" class="btn-primary" id="start-reading-btn" style="display:inline-flex;align-items:center;gap:8px;">
-        <FileText style="width:16px;height:16px;" />
+      <!-- 🌓 THEME SWITCHER BUTTON ══════════════════ -->
+      <button
+        class="header__theme-btn"
+        id="theme-switcher-btn"
+        aria-label="Toggle Theme"
+        style="cursor:pointer;padding:8px 12px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.82rem;display:flex;align-items:center;gap:6px;transition:all 0.2s var(--ease-smooth);margin-right:12px;"
+      >
+        <span class="theme-icon" id="theme-btn-icon" style="display:flex;align-items:center;">
+          <Moon id="theme-icon-moon" style="width:16px;height:16px;display:block;" />
+          <Sun id="theme-icon-sun" style="width:16px;height:16px;display:none;" />
+        </span>
+        <span class="theme-label" id="theme-btn-label">Dark Mode</span>
+      </button>
+
+      <a
+        href="/intro"
+        class="btn-primary"
+        style="padding:10px 20px;font-size:0.9rem;display:inline-flex;align-items:center;gap:6px;"
+      >
+        <Rocket style="width:14px;height:14px;" />
         <span>Start Reading</span>
       </a>
-      <a href="#chapters" class="btn-secondary" id="view-chapters-btn" style="display:inline-flex;align-items:center;gap:8px;">
-        <LayoutDashboard style="width:16px;height:16px;" />
-        <span>Table of Contents</span>
-      </a>
-    </div>
+    </header>
 
-    <div class="hero-stats" aria-label="Book Stats">
-      <div>
-        <div class="hero-stat-num">4</div>
-        <div class="hero-stat-label">Chapters</div>
+    <!-- ═══ HERO ══════════════════════════════════ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <!-- Floating Orbs -->
+      <div class="hero-orb hero-orb--1" aria-hidden="true"></div>
+      <div class="hero-orb hero-orb--2" aria-hidden="true"></div>
+      <div class="hero-orb hero-orb--3" aria-hidden="true"></div>
+
+      <div class="hero-eyebrow" aria-label="Category">
+        <span aria-hidden="true" style="display:flex;align-items:center;justify-content:center;"
+          ><BookOpen style="width:14px;height:14px;" /></span
+        >
+        <span>Design · Engineering · Masterclass</span>
       </div>
-      <div>
-        <div class="hero-stat-num">100%</div>
-        <div class="hero-stat-label">Vanilla CSS</div>
-      </div>
-      <div>
-        <div class="hero-stat-num">Zero</div>
-        <div class="hero-stat-label">Dependencies</div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ═══ FEATURES STRIP ══════════════════════════ -->
-  <section style="padding:32px;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);background:var(--bg-secondary);">
-    <div style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px;text-align:center;">
-      {[
-        { icon: 'api', title: 'World-Class Typography', desc: 'Optimized line-heights and Inter font pairings' },
-        { icon: 'intro', title: 'Vanilla CSS', desc: 'No heavy frameworks, ultimate performance' },
-        { icon: 'test', title: 'Micro-interactions', desc: 'Smooth spring animations and hover states' },
-        { icon: 'package', title: 'Production Ready', desc: 'Built on top of Astro for blazing fast speeds' },
-      ].map(f => (
-        <div>
-          <div style="font-size:2rem;margin-bottom:8px; display:flex; align-items:center; justify-content:center; color:var(--accent-300);">
-            {(() => {
-              const IconComponent = iconMap[f.icon as keyof typeof iconMap] || BookOpen;
-              return <IconComponent class="feather-icon" style="width:32px;height:32px;" />;
-            })()}
-          </div>
-          <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">{f.title}</div>
-          <div style="font-size:0.85rem;color:var(--text-muted);">{f.desc}</div>
-        </div>
-      ))}
-    </div>
-  </section>
+      <h1 class="hero-title" id="hero-title">
+        Premium <span>UX/UI</span><br />
+        Book Template
+      </h1>
 
-  <!-- ═══ CHAPTERS GRID ════════════════════════════ -->
-  <section id="chapters" aria-labelledby="chapters-title">
-    <div style="text-align:center;padding:64px 32px 0;">
-      <h2 id="chapters-title" style="font-size:2rem;font-weight:800;color:var(--text-primary);margin-bottom:12px;">Table of Contents</h2>
-      <p style="color:var(--text-muted);font-size:1rem;">Everything you need to master design.</p>
-    </div>
+      <p class="hero-subtitle" id="hero-subtitle">
+        <span id="typewriter-target"></span><span
+          id="typewriter-cursor"
+          style="border-right:2px solid var(--primary-400);animation:fadeIn 0.8s ease-in-out infinite alternate;margin-left:2px;"
+          >&nbsp;</span
+        >
+      </p>
 
-    <div class="chapters-grid">
-      {chapters.map((ch: any) => (
-        <a href={ch.href} class="chapter-card spotlight-card" id={`chapter-${ch.num}`}>
-          <div class="spotlight-content">
-            <div class="chapter-card-badge">
-              <span class="chapter-card-num">Chapter {ch.num}</span>
-              <span class="chapter-card-level">{ch.level}</span>
-            </div>
-            <div class="chapter-card-icon" aria-hidden="true">
-              {(() => {
-                const IconComponent = iconMap[ch.icon as keyof typeof iconMap] || BookOpen;
-                return <IconComponent class="feather-icon" />;
-              })()}
-            </div>
-            <div class="chapter-card-title">{ch.title}</div>
-            <div class="chapter-card-desc">{ch.desc}</div>
-            <div class="chapter-card-tags">
-              {ch.tags.map((tag: any) => (
-                <span class="chapter-card-tag">{tag}</span>
-              ))}
-            </div>
-          </div>
+      <div class="hero-cta">
+        <a
+          href="/intro"
+          class="btn-primary magnetic-btn"
+          id="start-reading-btn"
+          style="display:inline-flex;align-items:center;gap:8px;"
+        >
+          <FileText style="width:16px;height:16px;" />
+          <span>Start Reading</span>
         </a>
-      ))}
-    </div>
-  </section>
+        <a
+          href="#chapters"
+          class="btn-secondary magnetic-btn"
+          id="view-chapters-btn"
+          style="display:inline-flex;align-items:center;gap:8px;"
+        >
+          <LayoutDashboard style="width:16px;height:16px;" />
+          <span>Table of Contents</span>
+        </a>
+      </div>
 
-  <!-- ═══ FOOTER ══════════════════════════════════ -->
-  <footer style="text-align:center;padding:48px 32px;border-top:1px solid var(--border-subtle);color:var(--text-muted);font-size:0.85rem;">
-    <div style="margin-bottom:8px;font-size:1.5rem; display:flex; align-items:center; justify-content:center; color:var(--accent-300);">
-      <BookOpen style="width:22px;height:22px;" />
-    </div>
-    <div>Built with <a href="https://astro.build" style="color:var(--accent-300);text-decoration:none;">Astro</a> · Open Source</div>
-    <div style="margin-top:8px;opacity:0.6;">Premium UX/UI Masterclass — 2024</div>
-  </footer>
+      <div class="hero-stats" aria-label="Book Stats">
+        <div>
+          <div class="hero-stat-num">4</div>
+          <div class="hero-stat-label">Chapters</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">100%</div>
+          <div class="hero-stat-label">Vanilla CSS</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">Zero</div>
+          <div class="hero-stat-label">Dependencies</div>
+        </div>
+      </div>
+    </section>
 
-  <script>
-    import Lenis from 'lenis';
-    import { gsap } from 'gsap';
-    import { ScrollTrigger } from 'gsap/ScrollTrigger';
-    import * as THREE from 'three';
-    
-    gsap.registerPlugin(ScrollTrigger);
-
-    document.addEventListener('DOMContentLoaded', () => {
-      // ─── SMOOTH SCROLL (Lenis) ───
-      const lenis = new Lenis({ autoRaf: true });
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-      gsap.ticker.lagSmoothing(0);
-
-      // ─── CUSTOM CURSOR & SPOTLIGHT TRACKING ───
-      const cursorDot = document.querySelector('.cursor-dot') as HTMLElement;
-      const cursorOutline = document.querySelector('.cursor-outline') as HTMLElement;
-      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-      if (!isTouchDevice && cursorDot && cursorOutline) {
-        window.addEventListener('mousemove', (e) => {
-          const posX = e.clientX;
-          const posY = e.clientY;
-          
-          cursorDot.style.opacity = '1';
-          cursorOutline.style.opacity = '1';
-          cursorDot.style.left = `${posX - 5}px`;
-          cursorDot.style.top = `${posY - 5}px`;
-          
-          // Smooth outline trailing
-          cursorOutline.animate({
-            left: `${posX - 20}px`,
-            top: `${posY - 20}px`
-          }, { duration: 500, fill: "forwards" });
-
-          // Update spotlight variables for cards
-          document.querySelectorAll('.spotlight-card').forEach((el) => {
-            const card = el as HTMLElement;
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
-          });
-        });
-
-        // Add hover effects to interactable elements
-        const interactables = document.querySelectorAll('a, button, .hover-trigger');
-        interactables.forEach(el => {
-          el.addEventListener('mouseenter', () => {
-            document.body.classList.add('cursor-hover');
-          });
-          el.addEventListener('mouseleave', () => {
-            document.body.classList.remove('cursor-hover');
-          });
-        });
-      }
-
-      // ─── THREE.JS BACKGROUND ───
-      const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement;
-      if (canvas && !isTouchDevice && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 100;
-        
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-
-        const particleCount = 120;
-        const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
-        const velocities: {x: number, y: number}[] = [];
-
-        for (let i = 0; i < particleCount; i++) {
-          positions[i * 3] = (Math.random() - 0.5) * 200;
-          positions[i * 3 + 1] = (Math.random() - 0.5) * 200;
-          positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
-          velocities.push({
-            x: (Math.random() - 0.5) * 0.2,
-            y: (Math.random() - 0.5) * 0.2
-          });
+    <!-- ═══ FEATURES STRIP ══════════════════════════ -->
+    <section
+      style="padding:32px;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);background:var(--bg-secondary);"
+    >
+      <div
+        style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px;text-align:center;"
+      >
+        {
+          [
+            { icon: 'api', title: 'World-Class Typography', desc: 'Optimized line-heights and Inter font pairings' },
+            { icon: 'intro', title: 'Vanilla CSS', desc: 'No heavy frameworks, ultimate performance' },
+            { icon: 'test', title: 'Micro-interactions', desc: 'Smooth spring animations and hover states' },
+            { icon: 'package', title: 'Production Ready', desc: 'Built on top of Astro for blazing fast speeds' },
+          ].map((f) => (
+            <div>
+              <div style="font-size:2rem;margin-bottom:8px; display:flex; align-items:center; justify-content:center; color:var(--accent-300);">
+                {(() => {
+                  const IconComponent = iconMap[f.icon as keyof typeof iconMap] || BookOpen;
+                  return <IconComponent class="feather-icon" style="width:32px;height:32px;" />;
+                })()}
+              </div>
+              <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">{f.title}</div>
+              <div style="font-size:0.85rem;color:var(--text-muted);">{f.desc}</div>
+            </div>
+          ))
         }
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      </div>
+    </section>
 
-        const material = new THREE.PointsMaterial({
-          color: 0xccff00,
-          size: 1.5,
-          transparent: true,
-          opacity: 0.5
-        });
-        const particles = new THREE.Points(geometry, material);
-        scene.add(particles);
+    <!-- ═══ CHAPTERS GRID ════════════════════════════ -->
+    <section id="chapters" aria-labelledby="chapters-title">
+      <div style="text-align:center;padding:64px 32px 0;">
+        <h2 id="chapters-title" style="font-size:2rem;font-weight:800;color:var(--text-primary);margin-bottom:12px;">
+          Table of Contents
+        </h2>
+        <p style="color:var(--text-muted);font-size:1rem;">Everything you need to master design.</p>
+      </div>
 
-        const lineMaterial = new THREE.LineBasicMaterial({
-          color: 0x00f0ff,
-          transparent: true,
-          opacity: 0.15
-        });
-        const linesGeometry = new THREE.BufferGeometry();
-        const linesMesh = new THREE.LineSegments(linesGeometry, lineMaterial);
-        scene.add(linesMesh);
-
-        let mouseX = 0;
-        let mouseY = 0;
-        window.addEventListener('mousemove', (e) => {
-          mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-          mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-        });
-
-        function animate() {
-          requestAnimationFrame(animate);
-          
-          const positions = particles.geometry.attributes.position.array as Float32Array;
-          let linePositions = [];
-
-          for (let i = 0; i < particleCount; i++) {
-            positions[i * 3] += velocities[i].x;
-            positions[i * 3 + 1] += velocities[i].y;
-
-            if (Math.abs(positions[i * 3]) > 100) velocities[i].x *= -1;
-            if (Math.abs(positions[i * 3 + 1]) > 100) velocities[i].y *= -1;
-
-            // Connect nearby particles
-            for (let j = i + 1; j < particleCount; j++) {
-              const dx = positions[i * 3] - positions[j * 3];
-              const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
-              const dist = Math.sqrt(dx * dx + dy * dy);
-
-              if (dist < 20) {
-                linePositions.push(
-                  positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2],
-                  positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]
-                );
-              }
-            }
-          }
-          
-          linesMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-          particles.geometry.attributes.position.needsUpdate = true;
-
-          // Mouse interaction (camera shift)
-          camera.position.x += (mouseX * 10 - camera.position.x) * 0.05;
-          camera.position.y += (mouseY * 10 - camera.position.y) * 0.05;
-          camera.lookAt(scene.position);
-
-          renderer.render(scene, camera);
+      <div class="chapters-grid">
+        {
+          chapters.map((ch: any) => (
+            <a href={ch.href} class="chapter-card spotlight-card" id={`chapter-${ch.num}`}>
+              <div class="spotlight-content">
+                <div class="chapter-card-badge">
+                  <span class="chapter-card-num">Chapter {ch.num}</span>
+                  <span class="chapter-card-level">{ch.level}</span>
+                </div>
+                <div class="chapter-card-icon" aria-hidden="true">
+                  {(() => {
+                    const IconComponent = iconMap[ch.icon as keyof typeof iconMap] || BookOpen;
+                    return <IconComponent class="feather-icon" />;
+                  })()}
+                </div>
+                <div class="chapter-card-title">{ch.title}</div>
+                <div class="chapter-card-desc">{ch.desc}</div>
+                <div class="chapter-card-tags">
+                  {ch.tags.map((tag: any) => (
+                    <span class="chapter-card-tag">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </a>
+          ))
         }
-        animate();
+      </div>
+    </section>
 
-        window.addEventListener('resize', () => {
-          camera.aspect = window.innerWidth / window.innerHeight;
-          camera.updateProjectionMatrix();
-          renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-      }
+    <!-- ═══ FOOTER ══════════════════════════════════ -->
+    <footer
+      style="text-align:center;padding:48px 32px;border-top:1px solid var(--border-subtle);color:var(--text-muted);font-size:0.85rem;"
+    >
+      <div
+        style="margin-bottom:8px;font-size:1.5rem; display:flex; align-items:center; justify-content:center; color:var(--accent-300);"
+      >
+        <BookOpen style="width:22px;height:22px;" />
+      </div>
+      <div>
+        Built with <a href="https://astro.build" style="color:var(--accent-300);text-decoration:none;">Astro</a> · Open Source
+      </div>
+      <div style="margin-top:8px;opacity:0.6;">Premium UX/UI Masterclass — 2024</div>
+    </footer>
 
-      // ─── SCROLL REVEAL (GSAP) ───
-      const chapterCards = document.querySelectorAll('.chapter-card');
-      if (chapterCards.length > 0) {
-        gsap.fromTo(chapterCards,
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: ".chapters-grid",
-              start: "top 85%",
-              toggleActions: "play none none none"
-            }
-          }
-        );
-      }
-      const themeBtn = document.querySelector('#theme-switcher-btn') as HTMLElement | null;
-      const themeLabel = document.querySelector('#theme-btn-label');
-      const themeIconMoon = document.querySelector('#theme-icon-moon') as HTMLElement | null;
-      const themeIconSun = document.querySelector('#theme-icon-sun') as HTMLElement | null;
+    <script>
+      import Lenis from 'lenis';
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+      import * as THREE from 'three';
 
-      if (themeBtn) {
-        const themes = ['dark', 'light'];
+      gsap.registerPlugin(ScrollTrigger);
 
-        const updateThemeButton = (currentTheme: string) => {
-          if (themeLabel) themeLabel.textContent = currentTheme === 'dark' ? 'Dark Mode' : 'Light Mode';
-          if (themeIconMoon && themeIconSun) {
-            themeIconMoon.style.display = currentTheme === 'dark' ? 'block' : 'none';
-            themeIconSun.style.display = currentTheme === 'light' ? 'block' : 'none';
-          }
+      document.addEventListener('astro:page-load', () => {
+        // Ensure this script only runs on the landing page
+        if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') return;
+
+        // @ts-ignore
+        if (window.__indexLenisCleanup) window.__indexLenisCleanup();
+        // @ts-ignore
+        if (window.__indexThreeCleanup) window.__indexThreeCleanup();
+        // @ts-ignore
+        if (window.__indexListenersCleanup) window.__indexListenersCleanup();
+
+        let cleanupListeners: (() => void)[] = [];
+
+        // ─── SMOOTH SCROLL (Lenis) ───
+        const lenis = new Lenis({ autoRaf: true });
+        lenis.on('scroll', ScrollTrigger.update);
+        const ticker = (time: number) => {
+          lenis.raf(time * 1000);
+        };
+        gsap.ticker.add(ticker);
+        gsap.ticker.lagSmoothing(0);
+
+        // @ts-ignore
+        window.__indexLenisCleanup = () => {
+          lenis.destroy();
+          gsap.ticker.remove(ticker);
+          ScrollTrigger.getAll().forEach((t) => t.kill());
         };
 
-        let currentTheme = localStorage.getItem('site-theme') || 'dark';
-        updateThemeButton(currentTheme);
+        // ─── CUSTOM CURSOR & SPOTLIGHT TRACKING ───
+        const cursorDot = document.querySelector('.cursor-dot') as HTMLElement;
+        const cursorOutline = document.querySelector('.cursor-outline') as HTMLElement;
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-        themeBtn.addEventListener('click', () => {
-          let currentIndex = themes.indexOf(currentTheme);
-          let nextIndex = (currentIndex + 1) % themes.length;
-          let nextTheme = themes[nextIndex];
+        if (!isTouchDevice && cursorDot && cursorOutline) {
+          const onCursorMove = (e: MouseEvent) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
 
-          document.documentElement.setAttribute('data-theme', nextTheme);
-          localStorage.setItem('site-theme', nextTheme);
-          currentTheme = nextTheme;
-          
-          updateThemeButton(nextTheme);
+            cursorDot.style.opacity = '1';
+            cursorOutline.style.opacity = '1';
+            cursorDot.style.left = `${posX - 5}px`;
+            cursorDot.style.top = `${posY - 5}px`;
 
-          // Animate the icon
-          const iconWrapper = document.querySelector('#theme-btn-icon') as HTMLElement | null;
-          if (iconWrapper) {
-            iconWrapper.classList.remove('theme-icon-animate');
-            void iconWrapper.offsetWidth; // Force reflow to restart animation
-            iconWrapper.classList.add('theme-icon-animate');
-          }
-        });
+            cursorOutline.animate(
+              {
+                left: `${posX - 20}px`,
+                top: `${posY - 20}px`,
+              },
+              { duration: 500, fill: 'forwards' }
+            );
 
-        themeBtn.addEventListener('mouseenter', () => {
-          themeBtn.style.transform = 'translateY(-1px)';
-          themeBtn.style.borderColor = 'var(--border-strong)';
-          themeBtn.style.background = 'var(--bg-hover)';
-        });
-        themeBtn.addEventListener('mouseleave', () => {
-          themeBtn.style.transform = '';
-          themeBtn.style.borderColor = '';
-          themeBtn.style.background = 'var(--bg-elevated)';
-        });
-      }
+            document.querySelectorAll('.spotlight-card').forEach((el) => {
+              const card = el as HTMLElement;
+              const rect = card.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+              card.style.setProperty('--mouse-x', `${x}px`);
+              card.style.setProperty('--mouse-y', `${y}px`);
+            });
+          };
+          window.addEventListener('mousemove', onCursorMove);
+          cleanupListeners.push(() => window.removeEventListener('mousemove', onCursorMove));
 
-      // Typewriter Effect
-      const typewriterTarget = document.getElementById('typewriter-target');
-      const typewriterCursor = document.getElementById('typewriter-cursor');
-      if (typewriterTarget) {
-        const text = 'The ultimate template for technical books. Beautiful typography, low-contrast dark mode, and silky smooth micro-interactions built entirely with Vanilla CSS.';
-        let i = 0;
-        const speed = 30;
-        function typeWriter() {
-          if (i < text.length) {
-            typewriterTarget!.textContent += text.charAt(i);
-            i++;
-            setTimeout(typeWriter, speed);
-          } else {
-            // Remove cursor after typing is done
-            if (typewriterCursor) typewriterCursor.style.display = 'none';
-          }
+          // Add hover effects to interactable elements
+          const interactables = document.querySelectorAll('a, button, .hover-trigger');
+          interactables.forEach((el) => {
+            el.addEventListener('mouseenter', () => {
+              document.body.classList.add('cursor-hover');
+            });
+            el.addEventListener('mouseleave', () => {
+              document.body.classList.remove('cursor-hover');
+            });
+          });
+
+          // ─── MAGNETIC BUTTONS ───
+          const magneticBtns = document.querySelectorAll('.magnetic-btn');
+          magneticBtns.forEach((btn) => {
+            const el = btn as HTMLElement;
+            el.addEventListener('mousemove', (e) => {
+              const rect = el.getBoundingClientRect();
+              const x = e.clientX - rect.left - rect.width / 2;
+              const y = e.clientY - rect.top - rect.height / 2;
+              gsap.to(el, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: 'power2.out' });
+            });
+            el.addEventListener('mouseleave', () => {
+              gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.3)' });
+            });
+          });
         }
-        setTimeout(typeWriter, 800); // Delay start for dramatic effect
-      }
-    });
-  </script>
-</body>
+
+        // ─── THREE.JS BACKGROUND ───
+        const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement;
+        if (canvas && !isTouchDevice && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          const scene = new THREE.Scene();
+          const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+          camera.position.z = 100;
+
+          const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
+          renderer.setSize(window.innerWidth, window.innerHeight);
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+          const particleCount = 120;
+          const geometry = new THREE.BufferGeometry();
+          const positions = new Float32Array(particleCount * 3);
+          const velocities: { x: number; y: number }[] = [];
+
+          for (let i = 0; i < particleCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 200;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 200;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+            velocities.push({
+              x: (Math.random() - 0.5) * 0.2,
+              y: (Math.random() - 0.5) * 0.2,
+            });
+          }
+          geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+          const material = new THREE.PointsMaterial({
+            color: 0xccff00,
+            size: 1.5,
+            transparent: true,
+            opacity: 0.5,
+          });
+          const particles = new THREE.Points(geometry, material);
+          scene.add(particles);
+
+          const lineMaterial = new THREE.LineBasicMaterial({
+            color: 0x00f0ff,
+            transparent: true,
+            opacity: 0.15,
+          });
+          const linesGeometry = new THREE.BufferGeometry();
+          const linesMesh = new THREE.LineSegments(linesGeometry, lineMaterial);
+          scene.add(linesMesh);
+
+          let mouseX = 0;
+          let mouseY = 0;
+          const onThreeMove = (e: MouseEvent) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+          };
+          window.addEventListener('mousemove', onThreeMove);
+          cleanupListeners.push(() => window.removeEventListener('mousemove', onThreeMove));
+
+          let animationId: number;
+          function animate() {
+            if (!document.getElementById('webgl-canvas')) {
+              cancelAnimationFrame(animationId);
+              return;
+            }
+            animationId = requestAnimationFrame(animate);
+
+            const positions = particles.geometry.attributes.position.array as Float32Array;
+            let linePositions = [];
+
+            for (let i = 0; i < particleCount; i++) {
+              positions[i * 3] += velocities[i].x;
+              positions[i * 3 + 1] += velocities[i].y;
+
+              if (Math.abs(positions[i * 3]) > 100) velocities[i].x *= -1;
+              if (Math.abs(positions[i * 3 + 1]) > 100) velocities[i].y *= -1;
+
+              for (let j = i + 1; j < particleCount; j++) {
+                const dx = positions[i * 3] - positions[j * 3];
+                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 20) {
+                  linePositions.push(
+                    positions[i * 3],
+                    positions[i * 3 + 1],
+                    positions[i * 3 + 2],
+                    positions[j * 3],
+                    positions[j * 3 + 1],
+                    positions[j * 3 + 2]
+                  );
+                }
+              }
+            }
+
+            linesMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+            particles.geometry.attributes.position.needsUpdate = true;
+
+            camera.position.x += (mouseX * 10 - camera.position.x) * 0.05;
+            camera.position.y += (mouseY * 10 - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+          }
+          animate();
+
+          const onThreeResize = () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+          };
+          window.addEventListener('resize', onThreeResize);
+          cleanupListeners.push(() => window.removeEventListener('resize', onThreeResize));
+
+          // @ts-ignore
+          window.__indexThreeCleanup = () => {
+            renderer.dispose();
+            geometry.dispose();
+            material.dispose();
+            linesGeometry.dispose();
+            lineMaterial.dispose();
+          };
+        }
+
+        // @ts-ignore
+        window.__indexListenersCleanup = () => {
+          cleanupListeners.forEach((fn) => fn());
+        };
+
+        // ─── SCROLL REVEAL (GSAP) ───
+        const chapterCards = document.querySelectorAll('.chapter-card');
+        if (chapterCards.length > 0) {
+          gsap.fromTo(
+            chapterCards,
+            { y: 50, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.8,
+              stagger: 0.1,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: '.chapters-grid',
+                start: 'top 85%',
+                toggleActions: 'play none none none',
+              },
+            }
+          );
+        }
+        const themeBtn = document.querySelector('#theme-switcher-btn') as HTMLElement | null;
+        const themeLabel = document.querySelector('#theme-btn-label');
+        const themeIconMoon = document.querySelector('#theme-icon-moon') as HTMLElement | null;
+        const themeIconSun = document.querySelector('#theme-icon-sun') as HTMLElement | null;
+
+        if (themeBtn) {
+          const themes = ['dark', 'light'];
+
+          const updateThemeButton = (currentTheme: string) => {
+            if (themeLabel) themeLabel.textContent = currentTheme === 'dark' ? 'Dark Mode' : 'Light Mode';
+            if (themeIconMoon && themeIconSun) {
+              themeIconMoon.style.display = currentTheme === 'dark' ? 'block' : 'none';
+              themeIconSun.style.display = currentTheme === 'light' ? 'block' : 'none';
+            }
+          };
+
+          let currentTheme = localStorage.getItem('site-theme') || 'dark';
+          updateThemeButton(currentTheme);
+
+          themeBtn.addEventListener('click', () => {
+            let currentIndex = themes.indexOf(currentTheme);
+            let nextIndex = (currentIndex + 1) % themes.length;
+            let nextTheme = themes[nextIndex];
+
+            document.documentElement.setAttribute('data-theme', nextTheme);
+            localStorage.setItem('site-theme', nextTheme);
+            currentTheme = nextTheme;
+
+            updateThemeButton(nextTheme);
+
+            // Animate the icon
+            const iconWrapper = document.querySelector('#theme-btn-icon') as HTMLElement | null;
+            if (iconWrapper) {
+              iconWrapper.classList.remove('theme-icon-animate');
+              void iconWrapper.offsetWidth; // Force reflow to restart animation
+              iconWrapper.classList.add('theme-icon-animate');
+            }
+          });
+
+          themeBtn.addEventListener('mouseenter', () => {
+            themeBtn.style.transform = 'translateY(-1px)';
+            themeBtn.style.borderColor = 'var(--border-strong)';
+            themeBtn.style.background = 'var(--bg-hover)';
+          });
+          themeBtn.addEventListener('mouseleave', () => {
+            themeBtn.style.transform = '';
+            themeBtn.style.borderColor = '';
+            themeBtn.style.background = 'var(--bg-elevated)';
+          });
+        }
+
+        // Typewriter Effect
+        const typewriterTarget = document.getElementById('typewriter-target');
+        const typewriterCursor = document.getElementById('typewriter-cursor');
+        if (typewriterTarget) {
+          // Clear any existing text from previous navigation (View Transitions)
+          typewriterTarget.textContent = '';
+          if (typewriterCursor) typewriterCursor.style.display = '';
+
+          const text =
+            'The ultimate template for technical books. Beautiful typography, low-contrast dark mode, and silky smooth micro-interactions built entirely with Vanilla CSS.';
+          let i = 0;
+          const speed = 30;
+          function typeWriter() {
+            if (i < text.length) {
+              typewriterTarget!.textContent += text.charAt(i);
+              i++;
+              setTimeout(typeWriter, speed);
+            } else {
+              // Remove cursor after typing is done
+              if (typewriterCursor) typewriterCursor.style.display = 'none';
+            }
+          }
+          setTimeout(typeWriter, 800); // Delay start for dramatic effect
+        }
+      });
+
+      document.addEventListener('astro:before-swap', () => {
+        const win = window as any;
+        if (win.__indexLenisCleanup) {
+          win.__indexLenisCleanup();
+          win.__indexLenisCleanup = null;
+        }
+        if (win.__indexThreeCleanup) {
+          win.__indexThreeCleanup();
+          win.__indexThreeCleanup = null;
+        }
+        if (win.__indexListenersCleanup) {
+          win.__indexListenersCleanup();
+          win.__indexListenersCleanup = null;
+        }
+      });
+    </script>
+    <SearchModal />
+  </body>
 </html>

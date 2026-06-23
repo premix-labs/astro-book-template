@@ -7,10 +7,7 @@ interface Props {
   title?: string;
 }
 
-const {
-  type = 'info',
-  title,
-} = Astro.props;
+const { type = 'info', title } = Astro.props;
 
 const defaultTitles: Record<string, string> = {
   info: 'Note',

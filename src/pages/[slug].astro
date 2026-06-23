@@ -4,25 +4,23 @@ import BookLayout from '../layouts/BookLayout.astro';
 
 export async function getStaticPaths() {
   const mdxFiles = Object.values(import.meta.glob<Record<string, any>>('../content/chapters/*.mdx', { eager: true }));
-  
+
   // Map frontmatter into a clean chapters array and sort by chapter number
   const chapters = mdxFiles.map((file: any) => file.frontmatter).sort((a: any, b: any) => a.chapter - b.chapter);
 
   return chapters.map((ch: any, index: number) => {
     const prev = index > 0 ? { href: `/${chapters[index - 1].slug}`, title: chapters[index - 1].title } : undefined;
-    const next = index < chapters.length - 1 ? { href: `/${chapters[index + 1].slug}`, title: chapters[index + 1].title } : undefined;
-    
-    // Fix href for root intro if you want it to be /intro, which it is since slug is 'intro'
-    // Actually, slug is 'intro', so href is '/intro'.
-    if (prev && prev.href === '/intro') prev.href = '/intro'; // Redundant but explicit
-    if (next && next.href === '/intro') next.href = '/intro';
+    const next =
+      index < chapters.length - 1
+        ? { href: `/${chapters[index + 1].slug}`, title: chapters[index + 1].title }
+        : undefined;
 
     return {
       params: { slug: ch.slug },
       props: {
         ...ch,
         prev,
-        next
+        next,
       },
     };
   });
@@ -36,13 +34,6 @@ const mod = modules[`../content/chapters/${slug}.mdx`];
 const { Content } = mod ? await mod() : { Content: null };
 ---
 
-<BookLayout
-  title={title}
-  chapter={chapter}
-  description={description}
-  readingTime={readingTime}
-  prev={prev}
-  next={next}
->
+<BookLayout title={title} chapter={chapter} description={description} readingTime={readingTime} prev={prev} next={next}>
   {Content ? <Content /> : <p>Content coming soon...</p>}
 </BookLayout>
