@@ -1,0 +1,267 @@
+---
+// index.astro — Landing Page
+import '@fontsource/inter/latin.css';
+import '@fontsource/jetbrains-mono/latin.css';
+import '../styles/global.css';
+import { 
+  BookOpen, Settings, Package, LayoutDashboard, FileText, Rocket, Moon, Sun
+} from '@lucide/astro';
+
+const iconMap = {
+  intro: BookOpen,
+  setup: Settings,
+  package: Package,
+  api: LayoutDashboard,
+};
+
+const mdxFiles = Object.values(import.meta.glob<Record<string, any>>('../content/chapters/*.mdx', { eager: true }));
+const chapters = mdxFiles.map((file: any) => file.frontmatter).sort((a: any, b: any) => a.chapter - b.chapter).map((ch: any) => ({
+  num: ch.chapter.toString().padStart(2, '0'),
+  href: `/${ch.slug}`,
+  icon: ch.icon || 'intro',
+  level: ch.chapter === 0 ? 'Introduction' : 'Core',
+  title: ch.title,
+  desc: ch.description,
+  tags: [] // Simplification
+}));
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A premium UX/UI book template built with Vanilla CSS and Astro." />
+  <title>Premium UX/UI Masterclass</title>
+
+  <script is:inline>
+    (function () {
+      const savedTheme = localStorage.getItem('site-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+</head>
+<body>
+
+  <!-- ═══ HEADER ══════════════════════════════════ -->
+  <header class="header" style="position: sticky; top: 0; z-index: 100;">
+    <div class="header__logo-icon" aria-hidden="true" style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;">
+      <BookOpen style="width: 20px; height: 20px;" />
+    </div>
+    <div class="header__logo-text" style="display:flex;flex-direction:column;line-height:1.2;">
+      <span style="font-size:0.95rem;font-weight:700;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">UX/UI Masterclass</span>
+      <span style="font-size:0.7rem;color:var(--text-muted);">Premium Edition</span>
+    </div>
+    <div style="flex:1"></div>
+
+    <!-- 🌓 THEME SWITCHER BUTTON ══════════════════ -->
+    <button
+      class="header__theme-btn"
+      id="theme-switcher-btn"
+      aria-label="Toggle Theme"
+      style="cursor:pointer;padding:8px 12px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.82rem;display:flex;align-items:center;gap:6px;transition:all 0.2s var(--ease-smooth);margin-right:12px;"
+    >
+      <span class="theme-icon" id="theme-btn-icon" style="display:flex;align-items:center;">
+        <Moon id="theme-icon-moon" style="width:16px;height:16px;display:block;" />
+        <Sun id="theme-icon-sun" style="width:16px;height:16px;display:none;" />
+      </span>
+      <span class="theme-label" id="theme-btn-label">Dark Mode</span>
+    </button>
+
+    <a href="/intro" class="btn-primary" style="padding:10px 20px;font-size:0.9rem;display:inline-flex;align-items:center;gap:6px;">
+      <Rocket style="width:14px;height:14px;" />
+      <span>Start Reading</span>
+    </a>
+  </header>
+
+  <!-- ═══ HERO ══════════════════════════════════ -->
+  <section class="hero" aria-labelledby="hero-title">
+    <!-- Floating Orbs -->
+    <div class="hero-orb hero-orb--1" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb--2" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb--3" aria-hidden="true"></div>
+
+    <div class="hero-eyebrow" aria-label="Category">
+      <span aria-hidden="true" style="display:flex;align-items:center;justify-content:center;"><BookOpen style="width:14px;height:14px;" /></span>
+      <span>Design · Engineering · Masterclass</span>
+    </div>
+
+    <h1 class="hero-title" id="hero-title">
+      Premium <span>UX/UI</span><br/>
+      Book Template
+    </h1>
+
+    <p class="hero-subtitle" id="hero-subtitle">
+      <span id="typewriter-target"></span><span id="typewriter-cursor" style="border-right:2px solid var(--primary-400);animation:fadeIn 0.8s ease-in-out infinite alternate;margin-left:2px;">&nbsp;</span>
+    </p>
+
+    <div class="hero-cta">
+      <a href="/intro" class="btn-primary" id="start-reading-btn" style="display:inline-flex;align-items:center;gap:8px;">
+        <FileText style="width:16px;height:16px;" />
+        <span>Start Reading</span>
+      </a>
+      <a href="#chapters" class="btn-secondary" id="view-chapters-btn" style="display:inline-flex;align-items:center;gap:8px;">
+        <LayoutDashboard style="width:16px;height:16px;" />
+        <span>Table of Contents</span>
+      </a>
+    </div>
+
+    <div class="hero-stats" aria-label="Book Stats">
+      <div>
+        <div class="hero-stat-num">4</div>
+        <div class="hero-stat-label">Chapters</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">100%</div>
+        <div class="hero-stat-label">Vanilla CSS</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">Zero</div>
+        <div class="hero-stat-label">Dependencies</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FEATURES STRIP ══════════════════════════ -->
+  <section style="padding:32px;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);background:var(--bg-secondary);">
+    <div style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px;text-align:center;">
+      {[
+        { icon: 'api', title: 'World-Class Typography', desc: 'Optimized line-heights and Inter font pairings' },
+        { icon: 'intro', title: 'Vanilla CSS', desc: 'No heavy frameworks, ultimate performance' },
+        { icon: 'test', title: 'Micro-interactions', desc: 'Smooth spring animations and hover states' },
+        { icon: 'package', title: 'Production Ready', desc: 'Built on top of Astro for blazing fast speeds' },
+      ].map(f => (
+        <div>
+          <div style="font-size:2rem;margin-bottom:8px; display:flex; align-items:center; justify-content:center; color:var(--accent-300);">
+            {(() => {
+              const IconComponent = iconMap[f.icon as keyof typeof iconMap] || BookOpen;
+              return <IconComponent class="feather-icon" style="width:32px;height:32px;" />;
+            })()}
+          </div>
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">{f.title}</div>
+          <div style="font-size:0.85rem;color:var(--text-muted);">{f.desc}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ═══ CHAPTERS GRID ════════════════════════════ -->
+  <section id="chapters" aria-labelledby="chapters-title">
+    <div style="text-align:center;padding:64px 32px 0;">
+      <h2 id="chapters-title" style="font-size:2rem;font-weight:800;color:var(--text-primary);margin-bottom:12px;">Table of Contents</h2>
+      <p style="color:var(--text-muted);font-size:1rem;">Everything you need to master design.</p>
+    </div>
+
+    <div class="chapters-grid">
+      {chapters.map((ch: any) => (
+        <a href={ch.href} class="chapter-card" id={`chapter-${ch.num}`}>
+          <div class="chapter-card-badge">
+            <span class="chapter-card-num">Chapter {ch.num}</span>
+            <span class="chapter-card-level">{ch.level}</span>
+          </div>
+          <div class="chapter-card-icon" aria-hidden="true">
+            {(() => {
+              const IconComponent = iconMap[ch.icon as keyof typeof iconMap] || BookOpen;
+              return <IconComponent class="feather-icon" />;
+            })()}
+          </div>
+          <div class="chapter-card-title">{ch.title}</div>
+          <div class="chapter-card-desc">{ch.desc}</div>
+          <div class="chapter-card-tags">
+            {ch.tags.map((tag: any) => (
+              <span class="chapter-card-tag">{tag}</span>
+            ))}
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ══════════════════════════════════ -->
+  <footer style="text-align:center;padding:48px 32px;border-top:1px solid var(--border-subtle);color:var(--text-muted);font-size:0.85rem;">
+    <div style="margin-bottom:8px;font-size:1.5rem; display:flex; align-items:center; justify-content:center; color:var(--accent-300);">
+      <BookOpen style="width:22px;height:22px;" />
+    </div>
+    <div>Built with <a href="https://astro.build" style="color:var(--accent-300);text-decoration:none;">Astro</a> · Open Source</div>
+    <div style="margin-top:8px;opacity:0.6;">Premium UX/UI Masterclass — 2024</div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeBtn = document.querySelector('#theme-switcher-btn') as HTMLElement | null;
+      const themeIcon = document.querySelector('#theme-btn-icon');
+      const themeLabel = document.querySelector('#theme-btn-label');
+      const themeIconMoon = document.querySelector('#theme-icon-moon') as HTMLElement | null;
+      const themeIconSun = document.querySelector('#theme-icon-sun') as HTMLElement | null;
+
+      if (themeBtn) {
+        const themes = ['dark', 'light'];
+
+        const updateThemeButton = (currentTheme: string) => {
+          if (themeLabel) themeLabel.textContent = currentTheme === 'dark' ? 'Dark Mode' : 'Light Mode';
+          if (themeIconMoon && themeIconSun) {
+            themeIconMoon.style.display = currentTheme === 'dark' ? 'block' : 'none';
+            themeIconSun.style.display = currentTheme === 'light' ? 'block' : 'none';
+          }
+        };
+
+        let currentTheme = localStorage.getItem('site-theme') || 'dark';
+        updateThemeButton(currentTheme);
+
+        themeBtn.addEventListener('click', () => {
+          let currentIndex = themes.indexOf(currentTheme);
+          let nextIndex = (currentIndex + 1) % themes.length;
+          let nextTheme = themes[nextIndex];
+
+          document.documentElement.setAttribute('data-theme', nextTheme);
+          localStorage.setItem('site-theme', nextTheme);
+          currentTheme = nextTheme;
+          
+          updateThemeButton(nextTheme);
+
+          // Animate the icon
+          const iconWrapper = document.querySelector('#theme-btn-icon') as HTMLElement | null;
+          if (iconWrapper) {
+            iconWrapper.classList.remove('theme-icon-animate');
+            void iconWrapper.offsetWidth; // Force reflow to restart animation
+            iconWrapper.classList.add('theme-icon-animate');
+          }
+        });
+
+        themeBtn.addEventListener('mouseenter', () => {
+          themeBtn.style.transform = 'translateY(-1px)';
+          themeBtn.style.borderColor = 'var(--border-strong)';
+          themeBtn.style.background = 'var(--bg-hover)';
+        });
+        themeBtn.addEventListener('mouseleave', () => {
+          themeBtn.style.transform = '';
+          themeBtn.style.borderColor = '';
+          themeBtn.style.background = 'var(--bg-elevated)';
+        });
+      }
+
+      // Typewriter Effect
+      const typewriterTarget = document.getElementById('typewriter-target');
+      const typewriterCursor = document.getElementById('typewriter-cursor');
+      if (typewriterTarget) {
+        const text = 'The ultimate template for technical books. Beautiful typography, low-contrast dark mode, and silky smooth micro-interactions built entirely with Vanilla CSS.';
+        let i = 0;
+        const speed = 30;
+        function typeWriter() {
+          if (i < text.length) {
+            typewriterTarget!.textContent += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+          } else {
+            // Remove cursor after typing is done
+            if (typewriterCursor) typewriterCursor.style.display = 'none';
+          }
+        }
+        setTimeout(typeWriter, 800); // Delay start for dramatic effect
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,481 @@
+---
+// BookLayout.astro — Main layout for all chapter pages
+import '@fontsource/inter/latin.css';
+import '@fontsource/playfair-display/latin.css';
+import '@fontsource/jetbrains-mono/latin.css';
+import '../styles/global.css';
+import { 
+  BookOpen, Clock, Languages, Settings, Package, LayoutDashboard, Menu, X, Moon, Sun
+} from '@lucide/astro';
+
+interface Props {
+  title: string;
+  chapter?: number;
+  description?: string;
+  readingTime?: string;
+  prev?: { href: string; title: string };
+  next?: { href: string; title: string };
+}
+
+const {
+  title,
+  chapter,
+  description = '',
+  readingTime = '10 min',
+  prev,
+  next,
+} = Astro.props;
+
+const mdxFiles = Object.values(import.meta.glob<Record<string, any>>('../content/chapters/*.mdx', { eager: true }));
+const chapters = mdxFiles.map((file: any) => file.frontmatter).sort((a: any, b: any) => a.chapter - b.chapter).map((ch: any) => ({
+  num: ch.chapter,
+  title: ch.title,
+  href: `/${ch.slug}`,
+  icon: ch.icon || 'intro'
+}));
+
+const iconMap = {
+  intro: BookOpen,
+  setup: Settings,
+  package: Package,
+  api: LayoutDashboard,
+};
+
+const currentPath = Astro.url.pathname;
+const totalChapters = chapters.length;
+const currentIndex = chapters.findIndex((c: any) => c.href === currentPath.replace(/\/$/, '')) + 1;
+const progress = Math.round((currentIndex / totalChapters) * 100);
+
+const isDev = import.meta.env.DEV;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description || `${title} — Premium UX/UI Book Template`} />
+  <title>{title} — World Class UX/UI</title>
+
+  <!-- Theme initialization script (prevents flash) -->
+  <script is:inline>
+    (function () {
+      const savedTheme = localStorage.getItem('site-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="article" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+
+</head>
+<body>
+  <a href="#article-content" class="skip-link">Skip to Content</a>
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+  <div class="layout">
+
+    <!-- ═══ HEADER ═══════════════════════════════ -->
+    <header class="layout__header header">
+      <a href="/" class="header__logo" aria-label="Back to Home">
+        <div class="header__logo-icon" aria-hidden="true" style="color:white; display:flex; align-items:center; justify-content:center;">
+          <BookOpen style="width: 20px; height: 20px;" />
+        </div>
+        <div class="header__logo-text">
+          <span class="header__logo-title">UX/UI Masterclass</span>
+          <span class="header__logo-subtitle">Premium Edition</span>
+        </div>
+      </a>
+
+      <div class="header__spacer"></div>
+
+      <div class="header__badge" role="status">
+        <BookOpen style="width: 14px; height: 14px; color: var(--accent-300);" />
+        <span>Premium Template</span>
+      </div>
+
+      <!-- 🌓 THEME SWITCHER BUTTON ══════════════════ -->
+      <button
+        class="header__theme-btn"
+        id="theme-switcher-btn"
+        aria-label="Toggle Theme"
+        style="cursor:pointer;padding:8px 12px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.82rem;display:flex;align-items:center;gap:6px;transition:all 0.2s var(--ease-smooth);"
+      >
+        <span class="theme-icon" id="theme-btn-icon" style="display:flex;align-items:center;">
+          <Moon id="theme-icon-moon" style="width:16px;height:16px;display:block;" />
+          <Sun id="theme-icon-sun" style="width:16px;height:16px;display:none;" />
+        </span>
+        <span class="theme-label" id="theme-btn-label">Dark Mode</span>
+      </button>
+
+      <div id="search-container" class="search-container"></div>
+        <a 
+          href="https://github.com" 
+          class="header__btn header__btn--icon"
+          aria-label="GitHub Repository"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+        </a>
+
+        <button id="mobile-menu-btn" class="hamburger-btn" aria-label="Menu">
+          <Menu id="menu-icon" />
+        </button>
+
+        <!-- Pagefind Search Integration -->
+        {!isDev && (
+          <>
+            <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+            <script src="/pagefind/pagefind-ui.js" is:inline></script>
+            <script is:inline>
+              window.addEventListener('DOMContentLoaded', (event) => {
+                if (typeof PagefindUI !== 'undefined') {
+                  new PagefindUI({ element: "#search-container", showSubResults: true, showImages: false });
+                }
+              });
+            </script>
+          </>
+        )}
+    </header>
+
+    <!-- ═══ MOBILE OVERLAY MENU ════════════════════ -->
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay">
+      <button id="mobile-close-btn" class="hamburger-btn" aria-label="Close Menu" style="position:absolute; top:24px; right:24px; background:var(--bg-elevated); border:1px solid var(--border-default); border-radius:var(--radius-md); padding:8px; cursor:pointer; color:var(--text-secondary); display:flex; align-items:center; justify-content:center; z-index:210;">
+        <X style="width:20px;height:20px;" />
+      </button>
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Table of Contents</div>
+        {chapters.map((ch: any) => (
+          <a
+            href={ch.href}
+            class={`sidebar__item ${currentPath === ch.href || currentPath === ch.href + '/' ? 'active' : ''}`}
+            aria-current={currentPath === ch.href ? 'page' : undefined}
+          >
+            <span class="sidebar__item-num" aria-hidden="true">
+              {String(ch.num).padStart(2, '0')}
+            </span>
+            <span style="display: flex; align-items: center; gap: 8px;">
+              {(() => {
+                const IconComponent = iconMap[ch.icon as keyof typeof iconMap] || BookOpen;
+                return <IconComponent class="feather-icon" />;
+              })()}
+              <span>{ch.title}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- ═══ SIDEBAR ════════════════════════════════ -->
+    <nav class="layout__sidebar sidebar" aria-label="Table of Contents">
+      <div class="sidebar__progress">
+        <div class="sidebar__progress-label">
+          Progress · {currentIndex}/{totalChapters} Chapters
+        </div>
+        <div class="sidebar__progress-bar" role="progressbar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">
+          <div class="sidebar__progress-fill" style={`width: ${progress}%`}></div>
+        </div>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Table of Contents</div>
+        {chapters.map((ch: any) => (
+          <a
+            href={ch.href}
+            class={`sidebar__item ${currentPath === ch.href || currentPath === ch.href + '/' ? 'active' : ''}`}
+            aria-current={currentPath === ch.href ? 'page' : undefined}
+          >
+            <span class="sidebar__item-num" aria-hidden="true">
+              {String(ch.num).padStart(2, '0')}
+            </span>
+            <span style="display: flex; align-items: center; gap: 8px;">
+              {(() => {
+                const IconComponent = iconMap[ch.icon as keyof typeof iconMap] || BookOpen;
+                return <IconComponent class="feather-icon" />;
+              })()}
+              <span>{ch.title}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </nav>
+
+    <!-- ═══ MAIN CONTENT ═══════════════════════════ -->
+    <main class="layout__content" id="main-content">
+      <div class="content-wrapper">
+
+        <!-- Chapter Header -->
+        <div class="chapter-header">
+          {chapter !== undefined && (
+            <div class="chapter-tag">
+              <span>Chapter {String(chapter).padStart(2, '0')}</span>
+            </div>
+          )}
+          <h1>{title}</h1>
+          {description && <p class="lead">{description}</p>}
+          <div class="chapter-meta">
+            <span class="chapter-meta-item">
+              <Clock style="width: 14px; height: 14px; color: var(--accent-300);" />
+              <span>Reading time {readingTime}</span>
+            </span>
+            <span class="chapter-meta-item">
+              <Languages style="width: 14px; height: 14px; color: var(--accent-300);" />
+              <span>English</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Article Content -->
+        <article class="prose" id="article-content">
+          <slot />
+        </article>
+
+        <!-- Chapter Navigation -->
+        {(prev || next) && (
+          <nav class="chapter-nav" aria-label="Chapter Navigation">
+            {prev ? (
+              <a href={prev.href} class="chapter-nav-link chapter-nav-link--prev">
+                <span class="chapter-nav-label">← Previous Chapter</span>
+                <span class="chapter-nav-title">{prev.title}</span>
+              </a>
+            ) : <div></div>}
+            {next ? (
+              <a href={next.href} class="chapter-nav-link chapter-nav-link--next">
+                <span class="chapter-nav-label">Next Chapter →</span>
+                <span class="chapter-nav-title">{next.title}</span>
+              </a>
+            ) : <div></div>}
+          </nav>
+        )}
+      </div>
+    </main>
+
+    <!-- ═══ RIGHT TOC COLUMN ════════════════════════ -->
+    <aside class="toc-column" aria-label="Table of Contents">
+      <div class="toc-container">
+        <div class="toc-title">On this page</div>
+        <nav class="toc-list" id="toc-list">
+          <!-- Generate TOC dynamically via script below -->
+        </nav>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Copy code button, Dynamic TOC & ScrollSpy script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // ─── 1. COPY CODE BUTTONS ───
+      document.querySelectorAll('pre').forEach((pre) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper';
+
+        const lang = pre.querySelector('code')?.className.match(/language-(\w+)/)?.[1] ?? 'code';
+
+        const header = document.createElement('div');
+        header.className = 'code-block-header';
+        header.innerHTML = `
+          <div class="code-block-lang">
+            <span class="code-block-lang-dot"></span>
+            <span>${lang}</span>
+          </div>
+          <button class="code-copy-btn" aria-label="Copy code">Copy</button>
+        `;
+
+        pre.parentNode?.insertBefore(wrapper, pre);
+        wrapper.appendChild(header);
+        wrapper.appendChild(pre);
+
+        const btn = header.querySelector('.code-copy-btn') as HTMLElement | null;
+        btn?.addEventListener('click', async () => {
+          const code = pre.textContent ?? '';
+          await navigator.clipboard.writeText(code);
+          if (btn) {
+            btn.textContent = '✓ Copied';
+            btn.style.color = '#4ade80';
+            setTimeout(() => {
+              btn.textContent = 'Copy';
+              btn.style.color = '';
+            }, 2000);
+          }
+        });
+      });
+
+      // ─── 2. DYNAMIC TOC & SCROLLSPY ───
+      const article = document.querySelector('#article-content');
+      const tocList = document.querySelector('#toc-list');
+      
+      if (article && tocList) {
+        const headings = article.querySelectorAll('h2, h3');
+        
+        // If article has no headings, hide the right TOC column
+        if (headings.length === 0) {
+          const tocCol = document.querySelector('.toc-column') as HTMLElement | null;
+          if (tocCol) tocCol.style.display = 'none';
+        } else {
+          const observerOptions = {
+            root: null,
+            rootMargin: '-80px 0px -60% 0px',
+            threshold: 0
+          };
+
+          // Observe to highlight menu based on current scroll position
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                document.querySelectorAll('.toc-item').forEach((item) => {
+                  item.classList.remove('active');
+                });
+                const activeItem = document.querySelector(`.toc-item[href="#${id}"]`);
+                if (activeItem) activeItem.classList.add('active');
+              }
+            });
+          }, observerOptions);
+
+          headings.forEach((heading, index) => {
+            // Create ID for Anchor if heading doesn't have one
+            let id = heading.getAttribute('id');
+            if (!id) {
+              id = `heading-${index}`;
+              heading.setAttribute('id', id);
+            }
+
+            // Register Observer
+            observer.observe(heading);
+
+            // Create Navigation Link
+            const link = document.createElement('a');
+            link.href = `#${id}`;
+            link.textContent = heading.textContent;
+            link.className = `toc-item ${heading.tagName === 'H3' ? 'toc-item--h3' : ''}`;
+            
+            // Smooth scroll on navigation click
+            link.addEventListener('click', (e) => {
+               e.preventDefault();
+               heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+               history.pushState(null, '', `#${id}`);
+            });
+
+            tocList.appendChild(link);
+          });
+        }
+      }
+
+      // ─── 3. THEME SWITCHER ACTION ───
+      const themeBtn = document.querySelector('#theme-switcher-btn') as HTMLElement | null;
+      const themeIcon = document.querySelector('#theme-btn-icon');
+      const themeLabel = document.querySelector('#theme-btn-label');
+      const themeIconMoon = document.querySelector('#theme-icon-moon') as HTMLElement | null;
+      const themeIconSun = document.querySelector('#theme-icon-sun') as HTMLElement | null;
+
+      if (themeBtn) {
+        const themes = ['dark', 'light'];
+
+        const updateThemeButton = (currentTheme: string) => {
+          if (themeLabel) themeLabel.textContent = currentTheme === 'dark' ? 'Dark Mode' : 'Light Mode';
+          if (themeIconMoon && themeIconSun) {
+            themeIconMoon.style.display = currentTheme === 'dark' ? 'block' : 'none';
+            themeIconSun.style.display = currentTheme === 'light' ? 'block' : 'none';
+          }
+        };
+
+        let currentTheme = localStorage.getItem('site-theme') || 'dark';
+        updateThemeButton(currentTheme);
+
+        themeBtn.addEventListener('click', () => {
+          let currentIndex = themes.indexOf(currentTheme);
+          let nextIndex = (currentIndex + 1) % themes.length;
+          let nextTheme = themes[nextIndex];
+
+          document.documentElement.setAttribute('data-theme', nextTheme);
+          localStorage.setItem('site-theme', nextTheme);
+          currentTheme = nextTheme;
+          
+          updateThemeButton(nextTheme);
+
+          // Animate the icon
+          const iconWrapper = document.querySelector('#theme-btn-icon') as HTMLElement | null;
+          if (iconWrapper) {
+            iconWrapper.classList.remove('theme-icon-animate');
+            void iconWrapper.offsetWidth; // Force reflow
+            iconWrapper.classList.add('theme-icon-animate');
+          }
+        });
+
+        themeBtn.addEventListener('mouseenter', () => {
+          themeBtn.style.transform = 'translateY(-1px)';
+          themeBtn.style.borderColor = 'var(--border-strong)';
+          themeBtn.style.background = 'var(--bg-hover)';
+        });
+        themeBtn.addEventListener('mouseleave', () => {
+          themeBtn.style.transform = '';
+          themeBtn.style.borderColor = '';
+          themeBtn.style.background = 'var(--bg-elevated)';
+        });
+      }
+
+      // ─── 4. MOBILE MENU OVERLAY ───
+      const menuBtn = document.getElementById('mobile-menu-btn');
+      const mobileCloseBtn = document.getElementById('mobile-close-btn');
+      const menuOverlay = document.getElementById('mobile-menu-overlay');
+
+      if (menuBtn && menuOverlay && mobileCloseBtn) {
+        menuBtn.addEventListener('click', () => {
+          document.body.classList.add('menu-open');
+          menuOverlay.classList.add('active');
+        });
+
+        mobileCloseBtn.addEventListener('click', () => {
+          document.body.classList.remove('menu-open');
+          menuOverlay.classList.remove('active');
+        });
+        
+        // Close menu when clicking a link
+        menuOverlay.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            document.body.classList.remove('menu-open');
+            menuOverlay.classList.remove('active');
+          });
+        });
+      }
+
+      // ─── 5. SCROLL REVEAL ANIMATION (Staggered) ───
+      const revealElements = document.querySelectorAll('#article-content p, #article-content h2, #article-content h3, #article-content pre, .chapter-nav');
+      revealElements.forEach((el, index) => {
+        el.classList.add('reveal');
+        (el as HTMLElement).style.transitionDelay = `${index * 60}ms`;
+      });
+
+      if (revealElements.length > 0) {
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObserver.unobserve(entry.target); // Reveal only once
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+      }
+
+      // ─── 6. READING PROGRESS BAR ───
+      const progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        window.addEventListener('scroll', () => {
+          const scrollTop = window.scrollY;
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+          progressBar.style.width = `${Math.min(progress, 100)}%`;
+        }, { passive: true });
+      }
+
+    });
+  </script>
+</body>
+</html>
