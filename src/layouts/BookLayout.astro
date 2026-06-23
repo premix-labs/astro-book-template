@@ -66,10 +66,12 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
 
     <!-- Theme initialization script (prevents flash) -->
     <script is:inline>
-      (function () {
+      const applyTheme = () => {
         const savedTheme = localStorage.getItem('site-theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
-      })();
+      };
+      applyTheme();
+      document.addEventListener('astro:after-swap', applyTheme);
     </script>
 
     <!-- Open Graph -->

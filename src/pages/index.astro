@@ -45,10 +45,12 @@ const chapters = mdxFiles
     <meta property="og:type" content="website" />
 
     <script is:inline>
-      (function () {
+      const applyTheme = () => {
         const savedTheme = localStorage.getItem('site-theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
-      })();
+      };
+      applyTheme();
+      document.addEventListener('astro:after-swap', applyTheme);
     </script>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
