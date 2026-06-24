@@ -62,44 +62,34 @@ const chapters = mdxFiles
     <div class="cursor-outline"></div>
 
     <!-- 3D Canvas Background -->
-    <canvas
-      id="webgl-canvas"
-      style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-10; pointer-events:none; opacity:0.3;"
-    ></canvas>
-    <div
-      class="bg-grid"
-      style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-10; pointer-events:none; opacity:0.15;"
-    >
-    </div>
+    <canvas id="webgl-canvas" class="fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-30"></canvas>
+    <div class="bg-grid fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-15"></div>
 
     <!-- ═══ HEADER ══════════════════════════════════ -->
-    <header class="header" style="position: sticky; top: 0; z-index: 100;">
+    <header class="header sticky top-0 z-[100]">
       <div
-        class="header__logo-icon"
+        class="header__logo-icon w-9 h-9 rounded-[10px] flex items-center justify-center text-white bg-gradient-to-br from-[#6366f1] to-[#8b5cf6]"
         aria-hidden="true"
-        style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;"
       >
-        <BookOpen style="width: 20px; height: 20px;" />
+        <BookOpen class="w-5 h-5" />
       </div>
-      <div class="header__logo-text" style="display:flex;flex-direction:column;line-height:1.2;">
+      <div class="header__logo-text flex flex-col leading-tight">
         <span
-          style="font-size:0.95rem;font-weight:700;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;"
+          class="text-[0.95rem] font-bold bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] bg-clip-text text-transparent"
           >UX/UI Masterclass</span
         >
-        <span style="font-size:0.7rem;color:var(--text-muted);">Premium Edition</span>
+        <span class="text-[0.7rem] text-content-mut">Premium Edition</span>
       </div>
-      <div style="flex:1"></div>
+      <div class="flex-1"></div>
 
       <!-- 🔍 SEARCH BUTTON ════════════════════════════ -->
       <button
-        class="header__theme-btn open-search-btn hover-trigger"
+        class="header__theme-btn open-search-btn hover-trigger cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 mr-3"
         aria-label="Search Book"
-        style="cursor:pointer;padding:8px 12px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.82rem;display:flex;align-items:center;gap:6px;transition:all 0.2s var(--ease-smooth);margin-right:12px;"
       >
-        <Search style="width:16px;height:16px;" />
+        <Search class="w-4 h-4" />
         <span
-          >Search <kbd
-            style="font-family:var(--font-code);font-size:0.7rem;background:var(--bg-card);padding:2px 4px;border-radius:4px;border:1px solid var(--border-subtle);margin-left:4px;"
+          >Search <kbd class="font-code text-[0.7rem] bg-surface-card px-1 py-0.5 rounded border border-line-sub ml-1"
             >Ctrl+K</kbd
           ></span
         >
@@ -107,24 +97,19 @@ const chapters = mdxFiles
 
       <!-- 🌓 THEME SWITCHER BUTTON ══════════════════ -->
       <button
-        class="header__theme-btn"
+        class="header__theme-btn cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 mr-3"
         id="theme-switcher-btn"
         aria-label="Toggle Theme"
-        style="cursor:pointer;padding:8px 12px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.82rem;display:flex;align-items:center;gap:6px;transition:all 0.2s var(--ease-smooth);margin-right:12px;"
       >
-        <span class="theme-icon" id="theme-btn-icon" style="display:flex;align-items:center;">
-          <Moon id="theme-icon-moon" style="width:16px;height:16px;display:block;" />
-          <Sun id="theme-icon-sun" style="width:16px;height:16px;display:none;" />
+        <span class="theme-icon flex items-center" id="theme-btn-icon">
+          <Moon id="theme-icon-moon" class="w-4 h-4 block" />
+          <Sun id="theme-icon-sun" class="w-4 h-4 hidden" />
         </span>
         <span class="theme-label" id="theme-btn-label">Dark Mode</span>
       </button>
 
-      <a
-        href="/intro"
-        class="btn-primary"
-        style="padding:10px 20px;font-size:0.9rem;display:inline-flex;align-items:center;gap:6px;"
-      >
-        <Rocket style="width:14px;height:14px;" />
+      <a href="/intro" class="btn-primary px-5 py-2.5 text-[0.9rem] inline-flex items-center gap-[6px]">
+        <Rocket class="w-[14px] h-[14px]" />
         <span>Start Reading</span>
       </a>
     </header>
@@ -137,9 +122,7 @@ const chapters = mdxFiles
       <div class="hero-orb hero-orb--3" aria-hidden="true"></div>
 
       <div class="hero-eyebrow" aria-label="Category">
-        <span aria-hidden="true" style="display:flex;align-items:center;justify-content:center;"
-          ><BookOpen style="width:14px;height:14px;" /></span
-        >
+        <span aria-hidden="true" class="flex items-center justify-center"><BookOpen class="w-[14px] h-[14px]" /></span>
         <span>Design · Engineering · Masterclass</span>
       </div>
 
@@ -166,13 +149,8 @@ const chapters = mdxFiles
           <FileText style="width:16px;height:16px;" />
           <span>Start Reading</span>
         </a>
-        <a
-          href="#chapters"
-          class="btn-secondary magnetic-btn"
-          id="view-chapters-btn"
-          style="display:inline-flex;align-items:center;gap:8px;"
-        >
-          <LayoutDashboard style="width:16px;height:16px;" />
+        <a href="#chapters" class="btn-secondary magnetic-btn inline-flex items-center gap-2" id="view-chapters-btn">
+          <LayoutDashboard class="w-4 h-4" />
           <span>Table of Contents</span>
         </a>
       </div>
@@ -194,12 +172,8 @@ const chapters = mdxFiles
     </section>
 
     <!-- ═══ FEATURES STRIP ══════════════════════════ -->
-    <section
-      style="padding:32px;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);background:var(--bg-secondary);"
-    >
-      <div
-        style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px;text-align:center;"
-      >
+    <section class="p-8 border-y border-line-sub bg-surface-sec">
+      <div class="max-w-[1000px] mx-auto grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 text-center">
         {
           [
             { icon: 'api', title: 'World-Class Typography', desc: 'Optimized line-heights and Inter font pairings' },
@@ -208,14 +182,14 @@ const chapters = mdxFiles
             { icon: 'package', title: 'Production Ready', desc: 'Built on top of Astro for blazing fast speeds' },
           ].map((f) => (
             <div>
-              <div style="font-size:2rem;margin-bottom:8px; display:flex; align-items:center; justify-content:center; color:var(--accent-300);">
+              <div class="text-[2rem] mb-2 flex items-center justify-center text-[#a5b4fc]">
                 {(() => {
                   const IconComponent = iconMap[f.icon as keyof typeof iconMap] || BookOpen;
-                  return <IconComponent class="feather-icon" style="width:32px;height:32px;" />;
+                  return <IconComponent class="feather-icon w-8 h-8" />;
                 })()}
               </div>
-              <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">{f.title}</div>
-              <div style="font-size:0.85rem;color:var(--text-muted);">{f.desc}</div>
+              <div class="font-bold text-content-main mb-1">{f.title}</div>
+              <div class="text-[0.85rem] text-content-mut">{f.desc}</div>
             </div>
           ))
         }
@@ -224,11 +198,9 @@ const chapters = mdxFiles
 
     <!-- ═══ CHAPTERS GRID ════════════════════════════ -->
     <section id="chapters" aria-labelledby="chapters-title">
-      <div style="text-align:center;padding:64px 32px 0;">
-        <h2 id="chapters-title" style="font-size:2rem;font-weight:800;color:var(--text-primary);margin-bottom:12px;">
-          Table of Contents
-        </h2>
-        <p style="color:var(--text-muted);font-size:1rem;">Everything you need to master design.</p>
+      <div class="text-center pt-16 px-8 pb-0">
+        <h2 id="chapters-title" class="text-[2rem] font-extrabold text-content-main mb-3">Table of Contents</h2>
+        <p class="text-content-mut text-base">Everything you need to master design.</p>
       </div>
 
       <div class="chapters-grid">
@@ -261,18 +233,14 @@ const chapters = mdxFiles
     </section>
 
     <!-- ═══ FOOTER ══════════════════════════════════ -->
-    <footer
-      style="text-align:center;padding:48px 32px;border-top:1px solid var(--border-subtle);color:var(--text-muted);font-size:0.85rem;"
-    >
-      <div
-        style="margin-bottom:8px;font-size:1.5rem; display:flex; align-items:center; justify-content:center; color:var(--accent-300);"
-      >
-        <BookOpen style="width:22px;height:22px;" />
+    <footer class="text-center py-12 px-8 border-t border-line-sub text-content-mut text-[0.85rem]">
+      <div class="mb-2 text-[1.5rem] flex items-center justify-center text-[#a5b4fc]">
+        <BookOpen class="w-[22px] h-[22px]" />
       </div>
       <div>
-        Built with <a href="https://astro.build" style="color:var(--accent-300);text-decoration:none;">Astro</a> · Open Source
+        Built with <a href="https://astro.build" class="text-[#a5b4fc] no-underline">Astro</a> · Open Source
       </div>
-      <div style="margin-top:8px;opacity:0.6;">Premium UX/UI Masterclass — 2024</div>
+      <div class="mt-2 opacity-60">Premium UX/UI Masterclass — 2024</div>
     </footer>
 
     <script>

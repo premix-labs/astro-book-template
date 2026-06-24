@@ -9,15 +9,12 @@ const isProd = import.meta.env.PROD;
     <div id="search-ui">
       {
         !isProd && (
-          <div style="padding: 32px; text-align: center; color: var(--text-muted);">
-            <div style="font-size: 2rem; margin-bottom: 16px;">🔍</div>
+          <div class="p-8 text-center text-content-mut">
+            <div class="text-[2rem] mb-4">🔍</div>
             <p>Search is disabled in Development mode.</p>
-            <p style="font-size: 0.85rem; margin-top: 8px;">
-              Run{' '}
-              <code style="background: var(--bg-elevated); padding: 2px 6px; border-radius: 4px;">npm run build</code>{' '}
-              and{' '}
-              <code style="background: var(--bg-elevated); padding: 2px 6px; border-radius: 4px;">npm run preview</code>{' '}
-              to test search.
+            <p class="text-[0.85rem] mt-2">
+              Run <code class="bg-surface-elev px-1.5 py-0.5 rounded font-code">npm run build</code> and{' '}
+              <code class="bg-surface-elev px-1.5 py-0.5 rounded font-code">npm run preview</code> to test search.
             </p>
           </div>
         )

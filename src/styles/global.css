@@ -1,3 +1,35 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-surface-base: var(--bg-primary);
+  --color-surface-sec: var(--bg-secondary);
+  --color-surface-card: var(--bg-card);
+  --color-surface-elev: var(--bg-elevated);
+  --color-surface-hover: var(--bg-hover);
+
+  --color-content-main: var(--text-primary);
+  --color-content-sec: var(--text-secondary);
+  --color-content-mut: var(--text-muted);
+  --color-content-acc: var(--text-accent);
+
+  --color-line-sub: var(--border-subtle);
+  --color-line-def: var(--border-default);
+  --color-line-str: var(--border-strong);
+
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-code: var(--font-code);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+}
+
 /* ============================================
    UX/UI MASTERCLASS — Global Design System
    ============================================ */

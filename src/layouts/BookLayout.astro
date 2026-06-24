@@ -84,26 +84,15 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
     <ClientRouter />
   </head>
   <body>
-    <div
-      class="bg-grid"
-      style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-10; pointer-events:none; opacity:0.1;"
-    >
-    </div>
+    <div class="bg-grid fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-10"></div>
     <a href="#article-content" class="skip-link">Skip to Content</a>
     <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
     <div class="layout">
       <!-- ═══ HEADER ═══════════════════════════════ -->
-      <header
-        class="layout__header header glass-panel"
-        style="backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);"
-      >
+      <header class="layout__header header glass-panel backdrop-blur-[20px]">
         <a href="/" class="header__logo" aria-label="Back to Home">
-          <div
-            class="header__logo-icon"
-            aria-hidden="true"
-            style="color:white; display:flex; align-items:center; justify-content:center;"
-          >
-            <BookOpen style="width: 20px; height: 20px;" />
+          <div class="header__logo-icon text-white flex items-center justify-center" aria-hidden="true">
+            <BookOpen class="w-5 h-5" />
           </div>
           <div class="header__logo-text">
             <span class="header__logo-title">UX/UI Masterclass</span>
@@ -114,34 +103,31 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
         <div class="header__spacer"></div>
 
         <div class="header__badge" role="status">
-          <BookOpen style="width: 14px; height: 14px; color: var(--accent-300);" />
+          <BookOpen class="w-3.5 h-3.5 text-[#a5b4fc]" />
           <span>Premium Template</span>
         </div>
 
         <!-- 🌓 THEME SWITCHER BUTTON ══════════════════ -->
         <button
-          class="header__theme-btn"
+          class="header__theme-btn cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200"
           id="theme-switcher-btn"
           aria-label="Toggle Theme"
-          style="cursor:pointer;padding:8px 12px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.82rem;display:flex;align-items:center;gap:6px;transition:all 0.2s var(--ease-smooth);"
         >
-          <span class="theme-icon" id="theme-btn-icon" style="display:flex;align-items:center;">
-            <Moon id="theme-icon-moon" style="width:16px;height:16px;display:block;" />
-            <Sun id="theme-icon-sun" style="width:16px;height:16px;display:none;" />
+          <span class="theme-icon flex items-center" id="theme-btn-icon">
+            <Moon id="theme-icon-moon" class="w-4 h-4 block" />
+            <Sun id="theme-icon-sun" class="w-4 h-4 hidden" />
           </span>
           <span class="theme-label" id="theme-btn-label">Dark Mode</span>
         </button>
 
         <!-- 🔍 SEARCH BUTTON ════════════════════════════ -->
         <button
-          class="header__theme-btn open-search-btn hover-trigger"
+          class="header__theme-btn open-search-btn hover-trigger cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 mr-3"
           aria-label="Search Book"
-          style="cursor:pointer;padding:8px 12px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-secondary);font-size:0.82rem;display:flex;align-items:center;gap:6px;transition:all 0.2s var(--ease-smooth);margin-right:12px;"
         >
-          <Search style="width:16px;height:16px;" />
+          <Search class="w-4 h-4" />
           <span class="desktop-only"
-            >Search <kbd
-              style="font-family:var(--font-code);font-size:0.7rem;background:var(--bg-card);padding:2px 4px;border-radius:4px;border:1px solid var(--border-subtle);margin-left:4px;"
+            >Search <kbd class="font-code text-[0.7rem] bg-surface-card px-1 py-0.5 rounded border border-line-sub ml-1"
               >Ctrl+K</kbd
             ></span
           >
@@ -173,11 +159,10 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
       <div id="mobile-menu-overlay" class="mobile-menu-overlay">
         <button
           id="mobile-close-btn"
-          class="hamburger-btn"
+          class="hamburger-btn absolute top-6 right-6 bg-surface-elev border border-line-def rounded-md p-2 cursor-pointer text-content-sec flex items-center justify-center z-[210]"
           aria-label="Close Menu"
-          style="position:absolute; top:24px; right:24px; background:var(--bg-elevated); border:1px solid var(--border-default); border-radius:var(--radius-md); padding:8px; cursor:pointer; color:var(--text-secondary); display:flex; align-items:center; justify-content:center; z-index:210;"
         >
-          <X style="width:20px;height:20px;" />
+          <X class="w-5 h-5" />
         </button>
         <div class="sidebar__section">
           <div class="sidebar__section-title">Table of Contents</div>
@@ -191,7 +176,7 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
                 <span class="sidebar__item-num" aria-hidden="true">
                   {String(ch.num).padStart(2, '0')}
                 </span>
-                <span style="display: flex; align-items: center; gap: 8px;">
+                <span class="flex items-center gap-2">
                   {(() => {
                     const IconComponent = iconMap[ch.icon as keyof typeof iconMap] || BookOpen;
                     return <IconComponent class="feather-icon" />;
@@ -205,12 +190,7 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
       </div>
 
       <!-- ═══ SIDEBAR ══════════════════════════════ -->
-      <aside
-        class="layout__sidebar sidebar glass-panel"
-        id="sidebar"
-        aria-label="Book Navigation"
-        style="background: transparent;"
-      >
+      <aside class="layout__sidebar sidebar glass-panel bg-transparent" id="sidebar" aria-label="Book Navigation">
         <div class="sidebar__progress">
           <div class="sidebar__progress-label">
             Progress · {currentIndex}/{totalChapters} Chapters
@@ -238,7 +218,7 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
                 <span class="sidebar__item-num" aria-hidden="true">
                   {String(ch.num).padStart(2, '0')}
                 </span>
-                <span style="display: flex; align-items: center; gap: 8px;">
+                <span class="flex items-center gap-2">
                   {(() => {
                     const IconComponent = iconMap[ch.icon as keyof typeof iconMap] || BookOpen;
                     return <IconComponent class="feather-icon" />;
@@ -267,11 +247,11 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
             {description && <p class="lead">{description}</p>}
             <div class="chapter-meta">
               <span class="chapter-meta-item">
-                <Clock style="width: 14px; height: 14px; color: var(--accent-300);" />
+                <Clock class="w-3.5 h-3.5 text-[#a5b4fc]" />
                 <span>Reading time {readingTime}</span>
               </span>
               <span class="chapter-meta-item">
-                <Languages style="width: 14px; height: 14px; color: var(--accent-300);" />
+                <Languages class="w-3.5 h-3.5 text-[#a5b4fc]" />
                 <span>English</span>
               </span>
             </div>
