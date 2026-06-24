@@ -36,12 +36,12 @@ const chapters = mdxFiles
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="A premium UX/UI book template built with Vanilla CSS and Astro." />
+    <meta name="description" content="A premium UX/UI book template built with Tailwind 4 and Astro." />
     <title>Premium UX/UI Masterclass</title>
 
     <!-- Open Graph -->
     <meta property="og:title" content="Premium UX/UI Masterclass" />
-    <meta property="og:description" content="A premium UX/UI book template built with Vanilla CSS and Astro." />
+    <meta property="og:description" content="A premium UX/UI book template built with Tailwind 4 and Astro." />
     <meta property="og:type" content="website" />
 
     <script is:inline>
@@ -66,25 +66,21 @@ const chapters = mdxFiles
     <div class="bg-grid fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-15"></div>
 
     <!-- ═══ HEADER ══════════════════════════════════ -->
-    <header class="header sticky top-0 z-[100]">
-      <div
-        class="header__logo-icon w-9 h-9 rounded-[10px] flex items-center justify-center text-white bg-gradient-to-br from-[#6366f1] to-[#8b5cf6]"
-        aria-hidden="true"
-      >
-        <BookOpen class="w-5 h-5" />
-      </div>
-      <div class="header__logo-text flex flex-col leading-tight">
-        <span
-          class="text-[0.95rem] font-bold bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] bg-clip-text text-transparent"
-          >UX/UI Masterclass</span
-        >
-        <span class="text-[0.7rem] text-content-mut">Premium Edition</span>
-      </div>
+    <header class="bg-transparent border-none fixed w-full top-0 z-50 h-[var(--header-height)] flex items-center px-4 lg:px-6 gap-4">
+      <a href="/" class="flex items-center gap-2.5 no-underline text-content-main font-bold text-[1.1rem] shrink-0" aria-label="Back to Home">
+        <div class="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[var(--radius-md)] flex items-center justify-center text-[1.2rem] shadow-[var(--glow-primary)] shrink-0 text-white" aria-hidden="true">
+          <BookOpen class="w-5 h-5" />
+        </div>
+        <div class="flex flex-col leading-[1.2]">
+          <span class="text-[0.95rem] font-bold bg-gradient-to-br from-indigo-500 to-purple-600 text-transparent bg-clip-text">UX/UI Masterclass</span>
+          <span class="text-[0.7rem] text-content-mut">Premium Edition</span>
+        </div>
+      </a>
       <div class="flex-1"></div>
 
       <!-- 🔍 SEARCH BUTTON ════════════════════════════ -->
       <button
-        class="header__theme-btn open-search-btn hover-trigger cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 mr-3"
+        class="open-search-btn cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 hover:bg-surface-hover hover:border-line-str hover:text-content-main mr-3"
         aria-label="Search Book"
       >
         <Search class="w-4 h-4" />
@@ -97,7 +93,7 @@ const chapters = mdxFiles
 
       <!-- 🌓 THEME SWITCHER BUTTON ══════════════════ -->
       <button
-        class="header__theme-btn cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 mr-3"
+        class="cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 mr-3 hover:bg-surface-hover hover:border-line-str hover:text-content-main"
         id="theme-switcher-btn"
         aria-label="Toggle Theme"
       >
@@ -108,65 +104,66 @@ const chapters = mdxFiles
         <span class="theme-label" id="theme-btn-label">Dark Mode</span>
       </button>
 
-      <a href="/intro" class="btn-primary px-5 py-2.5 text-[0.9rem] inline-flex items-center gap-[6px]">
+      <a href="/intro" class="inline-flex items-center gap-[6px] px-5 py-2.5 text-[0.9rem] font-bold text-white no-underline bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-[0_4px_16px_rgba(99,102,241,0.4)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(99,102,241,0.5)]">
         <Rocket class="w-[14px] h-[14px]" />
         <span>Start Reading</span>
       </a>
     </header>
 
     <!-- ═══ HERO ══════════════════════════════════ -->
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="min-h-screen flex flex-col items-center justify-center py-20 px-8 text-center relative overflow-hidden before:absolute before:inset-0 before:pointer-events-none before:bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(99,102,241,0.25)_0%,transparent_60%),radial-gradient(ellipse_60%_40%_at_80%_80%,rgba(139,92,246,0.1)_0%,transparent_50%)]" aria-label="Introduction">
       <!-- Floating Orbs -->
       <div class="hero-orb hero-orb--1" aria-hidden="true"></div>
       <div class="hero-orb hero-orb--2" aria-hidden="true"></div>
       <div class="hero-orb hero-orb--3" aria-hidden="true"></div>
 
-      <div class="hero-eyebrow" aria-label="Category">
-        <span aria-hidden="true" class="flex items-center justify-center"><BookOpen class="w-[14px] h-[14px]" /></span>
-        <span>Design · Engineering · Masterclass</span>
+      <div class="max-w-[800px] w-full relative z-10 flex flex-col items-center justify-center mx-auto">
+        <div class="inline-flex items-center gap-2 py-1.5 px-4 bg-indigo-500/10 border border-indigo-500/30 rounded-full text-[0.82rem] font-semibold text-content-acc mb-8 tracking-wider uppercase" style="animation: fadeInDown 0.6s var(--ease-smooth) both;" aria-label="Category">
+          <span aria-hidden="true" class="flex items-center justify-center"><BookOpen class="w-[14px] h-[14px]" /></span>
+          <span>Design · Engineering · Masterclass</span>
+        </div>
+
+        <h1 class="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight text-content-main mb-6" style="animation: fadeInDown 0.6s var(--ease-smooth) 0.1s both;" id="hero-title">
+          Premium <span class="bg-clip-text text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500" style="animation: gradientShift 6s ease-in-out infinite; background-size: 300% 300%;">UX/UI</span><br />
+          Book Template
+        </h1>
+
+        <p class="text-[1.2rem] text-content-sec leading-[1.8] max-w-[600px] mx-auto mb-12" style="animation: fadeInDown 0.6s var(--ease-smooth) 0.2s both;" id="hero-subtitle">
+          <span id="typewriter-target"></span><span
+            id="typewriter-cursor"
+            style="border-right:2px solid var(--primary-400);animation:fadeIn 0.8s ease-in-out infinite alternate;margin-left:2px;"
+            >&nbsp;</span
+          >
+        </p>
+
+        <div class="flex gap-4 justify-center flex-wrap" style="animation: fadeInDown 0.6s var(--ease-smooth) 0.3s both;">
+          <a
+            href="/intro"
+            class="inline-flex items-center gap-2 py-3.5 px-7 bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-base rounded-[var(--radius-lg)] no-underline transition-all duration-200 ease-out shadow-[0_4px_16px_rgba(99,102,241,0.4)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(99,102,241,0.5)] magnetic-btn"
+            id="start-reading-btn"
+          >
+            <FileText style="width:16px;height:16px;" />
+            <span>Start Reading</span>
+          </a>
+          <a href="#chapters" class="inline-flex items-center gap-2 py-3.5 px-7 bg-surface-elev border border-line-def text-content-sec font-semibold text-base rounded-[var(--radius-lg)] no-underline transition-all duration-200 ease-out hover:bg-surface-hover hover:border-line-str hover:text-content-main hover:-translate-y-0.5 magnetic-btn" id="view-chapters-btn">
+            <LayoutDashboard class="w-4 h-4" />
+            <span>Table of Contents</span>
+          </a>
+        </div>
       </div>
 
-      <h1 class="hero-title" id="hero-title">
-        Premium <span>UX/UI</span><br />
-        Book Template
-      </h1>
-
-      <p class="hero-subtitle" id="hero-subtitle">
-        <span id="typewriter-target"></span><span
-          id="typewriter-cursor"
-          style="border-right:2px solid var(--primary-400);animation:fadeIn 0.8s ease-in-out infinite alternate;margin-left:2px;"
-          >&nbsp;</span
-        >
-      </p>
-
-      <div class="hero-cta">
-        <a
-          href="/intro"
-          class="btn-primary magnetic-btn"
-          id="start-reading-btn"
-          style="display:inline-flex;align-items:center;gap:8px;"
-        >
-          <FileText style="width:16px;height:16px;" />
-          <span>Start Reading</span>
-        </a>
-        <a href="#chapters" class="btn-secondary magnetic-btn inline-flex items-center gap-2" id="view-chapters-btn">
-          <LayoutDashboard class="w-4 h-4" />
-          <span>Table of Contents</span>
-        </a>
-      </div>
-
-      <div class="hero-stats" aria-label="Book Stats">
+      <div class="flex gap-6 lg:gap-12 justify-center mt-16" style="animation: fadeInDown 0.6s var(--ease-smooth) 0.4s both;" aria-label="Book Stats">
         <div>
-          <div class="hero-stat-num">4</div>
-          <div class="hero-stat-label">Chapters</div>
+          <div class="text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 to-purple-600">4</div>
+          <div class="text-[0.82rem] font-semibold uppercase tracking-wider text-content-mut mt-1.5">Chapters</div>
         </div>
         <div>
-          <div class="hero-stat-num">100%</div>
-          <div class="hero-stat-label">Vanilla CSS</div>
+          <div class="text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 to-purple-600">100%</div>
+          <div class="text-[0.82rem] font-semibold uppercase tracking-wider text-content-mut mt-1.5">Tailwind 4</div>
         </div>
         <div>
-          <div class="hero-stat-num">Zero</div>
-          <div class="hero-stat-label">Dependencies</div>
+          <div class="text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 to-purple-600">Zero</div>
+          <div class="text-[0.82rem] font-semibold uppercase tracking-wider text-content-mut mt-1.5">Dependencies</div>
         </div>
       </div>
     </section>
@@ -177,12 +174,12 @@ const chapters = mdxFiles
         {
           [
             { icon: 'api', title: 'World-Class Typography', desc: 'Optimized line-heights and Inter font pairings' },
-            { icon: 'intro', title: 'Vanilla CSS', desc: 'No heavy frameworks, ultimate performance' },
+            { icon: 'intro', title: 'Tailwind 4', desc: 'Modern utility-first styling for ultimate performance' },
             { icon: 'test', title: 'Micro-interactions', desc: 'Smooth spring animations and hover states' },
             { icon: 'package', title: 'Production Ready', desc: 'Built on top of Astro for blazing fast speeds' },
           ].map((f) => (
             <div>
-              <div class="text-[2rem] mb-2 flex items-center justify-center text-[#a5b4fc]">
+              <div class="text-[2rem] mb-2 flex items-center justify-center text-content-acc">
                 {(() => {
                   const IconComponent = iconMap[f.icon as keyof typeof iconMap] || BookOpen;
                   return <IconComponent class="feather-icon w-8 h-8" />;
@@ -203,26 +200,26 @@ const chapters = mdxFiles
         <p class="text-content-mut text-base">Everything you need to master design.</p>
       </div>
 
-      <div class="chapters-grid">
+      <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-5 py-12 px-8 max-w-[1200px] mx-auto chapters-grid">
         {
           chapters.map((ch: any) => (
-            <a href={ch.href} class="chapter-card spotlight-card" id={`chapter-${ch.num}`}>
+            <a href={ch.href} class="group bg-surface-card border border-line-def rounded-xl p-7 flex flex-col gap-3 transition-all duration-300 relative overflow-hidden no-underline hover:bg-surface-elev hover:border-indigo-500/35 hover:-translate-y-1 hover:[box-shadow:0_12px_40px_rgba(0,0,0,0.4),var(--glow-primary)] chapter-card spotlight-card" id={`chapter-${ch.num}`}>
               <div class="spotlight-content">
-                <div class="chapter-card-badge">
-                  <span class="chapter-card-num">Chapter {ch.num}</span>
-                  <span class="chapter-card-level">{ch.level}</span>
+                <div class="flex items-center justify-between mb-5">
+                  <span class="font-code text-[0.78rem] font-bold text-content-acc bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-1 rounded-full">Chapter {ch.num}</span>
+                  <span class="text-[0.72rem] font-semibold text-content-mut uppercase tracking-wider">{ch.level}</span>
                 </div>
-                <div class="chapter-card-icon" aria-hidden="true">
+                <div class="w-11 h-11 flex items-center justify-center bg-indigo-500/10 rounded-md text-content-acc mb-2 border border-indigo-500/15 transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-indigo-500 group-hover:to-purple-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] group-hover:scale-110 chapter-card-icon" aria-hidden="true">
                   {(() => {
                     const IconComponent = iconMap[ch.icon as keyof typeof iconMap] || BookOpen;
-                    return <IconComponent class="feather-icon" />;
+                    return <IconComponent class="w-[22px] h-[22px]" />;
                   })()}
                 </div>
-                <div class="chapter-card-title">{ch.title}</div>
-                <div class="chapter-card-desc">{ch.desc}</div>
-                <div class="chapter-card-tags">
+                <div class="font-display text-[1.4rem] font-bold text-content-main leading-tight mb-1">{ch.title}</div>
+                <div class="text-[0.95rem] text-content-sec leading-relaxed">{ch.desc}</div>
+                <div class="flex flex-wrap gap-2 mt-4">
                   {ch.tags.map((tag: any) => (
-                    <span class="chapter-card-tag">{tag}</span>
+                    <span class="text-[0.7rem] px-2 py-0.5 rounded font-medium text-content-mut border border-line-sub transition-colors duration-200">{tag}</span>
                   ))}
                 </div>
               </div>
@@ -234,11 +231,11 @@ const chapters = mdxFiles
 
     <!-- ═══ FOOTER ══════════════════════════════════ -->
     <footer class="text-center py-12 px-8 border-t border-line-sub text-content-mut text-[0.85rem]">
-      <div class="mb-2 text-[1.5rem] flex items-center justify-center text-[#a5b4fc]">
+      <div class="mb-2 text-[1.5rem] flex items-center justify-center text-content-acc">
         <BookOpen class="w-[22px] h-[22px]" />
       </div>
       <div>
-        Built with <a href="https://astro.build" class="text-[#a5b4fc] no-underline">Astro</a> · Open Source
+        Built with <a href="https://astro.build" class="text-content-acc no-underline">Astro</a> · Open Source
       </div>
       <div class="mt-2 opacity-60">Premium UX/UI Masterclass — 2024</div>
     </footer>
@@ -471,16 +468,15 @@ const chapters = mdxFiles
         if (chapterCards.length > 0) {
           gsap.fromTo(
             chapterCards,
-            { y: 50, opacity: 0 },
+            { y: 50 },
             {
               y: 0,
-              opacity: 1,
               duration: 0.8,
               stagger: 0.1,
               ease: 'power3.out',
               scrollTrigger: {
                 trigger: '.chapters-grid',
-                start: 'top 85%',
+                start: 'top bottom', // Trigger as soon as the grid enters the viewport
                 toggleActions: 'play none none none',
               },
             }
@@ -525,16 +521,6 @@ const chapters = mdxFiles
             }
           });
 
-          themeBtn.addEventListener('mouseenter', () => {
-            themeBtn.style.transform = 'translateY(-1px)';
-            themeBtn.style.borderColor = 'var(--border-strong)';
-            themeBtn.style.background = 'var(--bg-hover)';
-          });
-          themeBtn.addEventListener('mouseleave', () => {
-            themeBtn.style.transform = '';
-            themeBtn.style.borderColor = '';
-            themeBtn.style.background = 'var(--bg-elevated)';
-          });
         }
 
         // Typewriter Effect

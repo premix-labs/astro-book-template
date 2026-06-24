@@ -3,9 +3,13 @@
 const isProd = import.meta.env.PROD;
 ---
 
-<div id="search-modal" class="search-modal glass-panel" aria-hidden="true">
-  <div class="search-modal-backdrop" id="search-modal-close-area"></div>
-  <div class="search-modal-content">
+<div
+  id="search-modal"
+  class="fixed inset-0 z-[9999] flex items-start justify-center pt-[10vh] opacity-0 pointer-events-none transition-opacity duration-300 ease-in [&.active]:opacity-100 [&.active]:pointer-events-auto"
+  aria-hidden="true"
+>
+  <div class="absolute inset-0 bg-black/60 -z-10" id="search-modal-close-area"></div>
+  <div class="w-full max-w-[600px] bg-surface-card border border-line-def rounded-lg overflow-hidden shadow-lg mx-4">
     <div id="search-ui">
       {
         !isProd && (
@@ -20,67 +24,15 @@ const isProd = import.meta.env.PROD;
         )
       }
     </div>
-    <div class="search-modal-footer">
-      <span><kbd>Esc</kbd> to close</span>
+    <div class="py-3 px-5 text-[0.75rem] text-content-mut border-t border-line-sub flex justify-end">
+      <span
+        ><kbd class="bg-surface-elev border border-line-sub rounded-md py-[2px] px-1.5 mr-1 font-code">Esc</kbd> to close</span
+      >
     </div>
   </div>
 </div>
 
 <style is:global>
-  .search-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 10vh;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-  .search-modal.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .search-modal-backdrop {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: -1;
-  }
-  .search-modal-content {
-    width: 100%;
-    max-width: 600px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-  }
-  .search-modal-footer {
-    padding: 12px 20px;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    border-top: 1px solid var(--border-subtle);
-    display: flex;
-    justify-content: flex-end;
-  }
-  .search-modal-footer kbd {
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
-    border-radius: 4px;
-    padding: 2px 6px;
-    margin-right: 4px;
-    font-family: var(--font-code);
-  }
-
   /* Override Pagefind Default Styles for Dark Mode */
   .pagefind-ui {
     --pagefind-ui-scale: 0.9;

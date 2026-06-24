@@ -87,29 +87,29 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
     <div class="bg-grid fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-10"></div>
     <a href="#article-content" class="skip-link">Skip to Content</a>
     <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
-    <div class="layout">
+    <div class="layout grid grid-cols-1 lg:grid-cols-[280px_1fr] xl:grid-cols-[280px_1fr_240px] grid-rows-[var(--header-height)_1fr] min-h-screen">
       <!-- ═══ HEADER ═══════════════════════════════ -->
-      <header class="layout__header header glass-panel backdrop-blur-[20px]">
-        <a href="/" class="header__logo" aria-label="Back to Home">
-          <div class="header__logo-icon text-white flex items-center justify-center" aria-hidden="true">
+      <header class="col-span-full sticky top-0 z-[100] bg-surface-base/85 backdrop-blur-xl border-b border-line-sub h-[var(--header-height)] flex items-center px-4 lg:px-6 gap-4">
+        <a href="/" class="flex items-center gap-3 no-underline shrink-0" aria-label="Back to Home">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center shrink-0" aria-hidden="true">
             <BookOpen class="w-5 h-5" />
           </div>
-          <div class="header__logo-text">
-            <span class="header__logo-title">UX/UI Masterclass</span>
-            <span class="header__logo-subtitle">Premium Edition</span>
+          <div class="flex flex-col">
+            <span class="text-[0.95rem] font-bold bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text whitespace-nowrap">UX/UI Masterclass</span>
+            <span class="text-[0.7rem] text-content-mut font-normal hidden lg:block">Premium Edition</span>
           </div>
         </a>
 
-        <div class="header__spacer"></div>
+        <div class="flex-1"></div>
 
-        <div class="header__badge" role="status">
-          <BookOpen class="w-3.5 h-3.5 text-[#a5b4fc]" />
+        <div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[0.7rem] font-bold text-content-acc uppercase tracking-wider" role="status">
+          <BookOpen class="w-3.5 h-3.5 text-content-acc" />
           <span>Premium Template</span>
         </div>
 
         <!-- 🌓 THEME SWITCHER BUTTON ══════════════════ -->
         <button
-          class="header__theme-btn cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200"
+          class="cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 hover:bg-surface-hover hover:border-line-str hover:text-content-main"
           id="theme-switcher-btn"
           aria-label="Toggle Theme"
         >
@@ -122,7 +122,7 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
 
         <!-- 🔍 SEARCH BUTTON ════════════════════════════ -->
         <button
-          class="header__theme-btn open-search-btn hover-trigger cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 mr-3"
+          class="open-search-btn cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 hover:bg-surface-hover hover:border-line-str hover:text-content-main mr-3"
           aria-label="Search Book"
         >
           <Search class="w-4 h-4" />
@@ -133,7 +133,7 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
           >
         </button>
 
-        <a href="https://github.com" class="header__btn header__btn--icon hover-trigger" aria-label="GitHub Repository">
+        <a href="https://github.com" class="flex items-center justify-center w-9 h-9 rounded-md bg-surface-elev border border-line-def text-content-sec transition-all duration-200 hover:bg-surface-hover hover:text-content-main hover:-translate-y-0.5" aria-label="GitHub Repository">
           <svg
             viewBox="0 0 24 24"
             width="18"
@@ -156,7 +156,7 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
       </header>
 
       <!-- ═══ MOBILE OVERLAY MENU ════════════════════ -->
-      <div id="mobile-menu-overlay" class="mobile-menu-overlay">
+      <div id="mobile-menu-overlay" class="mobile-menu-overlay fixed inset-0 bg-surface-base/95 backdrop-blur-xl z-[200] opacity-0 pointer-events-none transition-all duration-300 flex flex-col justify-center px-8 lg:hidden">
         <button
           id="mobile-close-btn"
           class="hamburger-btn absolute top-6 right-6 bg-surface-elev border border-line-def rounded-md p-2 cursor-pointer text-content-sec flex items-center justify-center z-[210]"
@@ -164,22 +164,22 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
         >
           <X class="w-5 h-5" />
         </button>
-        <div class="sidebar__section">
-          <div class="sidebar__section-title">Table of Contents</div>
+        <div class="mb-6">
+          <div class="text-[0.7rem] font-bold uppercase tracking-wider text-content-mut mb-3 px-6">Table of Contents</div>
           {
             chapters.map((ch: any) => (
               <a
                 href={ch.href}
-                class={`sidebar__item ${currentPath === ch.href || currentPath === ch.href + '/' ? 'active' : ''}`}
+                class={`flex items-center gap-4 py-2 px-6 text-[0.88rem] no-underline transition-all duration-200 border-l-[3px] hover:bg-surface-elev hover:text-content-main ${currentPath === ch.href || currentPath === ch.href + '/' ? 'bg-indigo-500/10 border-indigo-500 text-content-acc font-semibold' : 'border-transparent text-content-sec'}`}
                 aria-current={currentPath === ch.href ? 'page' : undefined}
               >
-                <span class="sidebar__item-num" aria-hidden="true">
+                <span class="font-code text-[0.7rem] opacity-50" aria-hidden="true">
                   {String(ch.num).padStart(2, '0')}
                 </span>
                 <span class="flex items-center gap-2">
                   {(() => {
                     const IconComponent = iconMap[ch.icon as keyof typeof iconMap] || BookOpen;
-                    return <IconComponent class="feather-icon" />;
+                    return <IconComponent class="w-4 h-4 shrink-0 text-[currentColor]" />;
                   })()}
                   <span>{ch.title}</span>
                 </span>
@@ -190,38 +190,39 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
       </div>
 
       <!-- ═══ SIDEBAR ══════════════════════════════ -->
-      <aside class="layout__sidebar sidebar glass-panel bg-transparent" id="sidebar" aria-label="Book Navigation">
-        <div class="sidebar__progress">
-          <div class="sidebar__progress-label">
-            Progress · {currentIndex}/{totalChapters} Chapters
+      <aside class="hidden lg:flex flex-col col-start-1 row-start-2 sticky top-[var(--header-height)] h-[calc(100vh-var(--header-height))] overflow-y-auto border-r border-line-sub bg-surface-base py-6" id="sidebar" aria-label="Book Navigation">
+        <div class="px-6 mb-6">
+          <div class="text-[0.65rem] font-bold uppercase tracking-wider text-content-mut mb-2 flex justify-between">
+            <span>Progress</span>
+            <span>{currentIndex}/{totalChapters}</span>
           </div>
           <div
-            class="sidebar__progress-bar"
+            class="h-1 bg-surface-elev rounded-full overflow-hidden"
             role="progressbar"
             aria-valuenow={progress}
             aria-valuemin="0"
             aria-valuemax="100"
           >
-            <div class="sidebar__progress-fill" style={`width: ${progress}%`}></div>
+            <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500 ease-out" style={`width: ${progress}%`}></div>
           </div>
         </div>
 
-        <div class="sidebar__section">
-          <div class="sidebar__section-title">Table of Contents</div>
+        <div class="mb-6">
+          <div class="text-[0.7rem] font-bold uppercase tracking-wider text-content-mut mb-3 px-6">Table of Contents</div>
           {
             chapters.map((ch: any) => (
               <a
                 href={ch.href}
-                class={`sidebar__item ${currentPath === ch.href || currentPath === ch.href + '/' ? 'active' : ''}`}
+                class={`flex items-center gap-4 py-2 px-6 text-[0.88rem] no-underline transition-all duration-200 border-l-[3px] hover:bg-surface-elev hover:text-content-main ${currentPath === ch.href || currentPath === ch.href + '/' ? 'bg-indigo-500/10 border-indigo-500 text-content-acc font-semibold' : 'border-transparent text-content-sec'}`}
                 aria-current={currentPath === ch.href ? 'page' : undefined}
               >
-                <span class="sidebar__item-num" aria-hidden="true">
+                <span class="font-code text-[0.7rem] opacity-50" aria-hidden="true">
                   {String(ch.num).padStart(2, '0')}
                 </span>
                 <span class="flex items-center gap-2">
                   {(() => {
                     const IconComponent = iconMap[ch.icon as keyof typeof iconMap] || BookOpen;
-                    return <IconComponent class="feather-icon" />;
+                    return <IconComponent class="w-4 h-4 shrink-0 text-[currentColor]" />;
                   })()}
                   <span>{ch.title}</span>
                 </span>
@@ -232,55 +233,50 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
       </aside>
 
       <!-- ═══ MAIN CONTENT ═══════════════════════════ -->
-      <main class="layout__content" id="main-content">
-        <div class="content-wrapper">
+      <main class="col-start-1 lg:col-start-2 row-start-2 min-w-0 max-w-[100vw] overflow-x-hidden" id="main-content" data-pagefind-body>
+        <div class="max-w-[800px] mx-auto px-6 py-12 lg:px-12 lg:py-16">
           <!-- Chapter Header -->
-          <div class="chapter-header">
+          <div class="mb-10">
             {
               chapter !== undefined && (
-                <div class="chapter-tag">
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-md text-[0.7rem] font-bold text-content-acc uppercase tracking-wider mb-4">
                   <span>Chapter {String(chapter).padStart(2, '0')}</span>
                 </div>
               )
             }
-            <h1>{title}</h1>
-            {description && <p class="lead">{description}</p>}
-            <div class="chapter-meta">
-              <span class="chapter-meta-item">
-                <Clock class="w-3.5 h-3.5 text-[#a5b4fc]" />
-                <span>Reading time {readingTime}</span>
+            {description && <p class="text-xl text-content-sec leading-relaxed max-w-[700px] mb-6">{description}</p>}
+            <div class="flex flex-wrap items-center gap-4 text-[0.85rem] text-content-mut font-medium">
+              <span class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-elev rounded-md border border-line-sub">
+                <Clock class="w-3.5 h-3.5 text-content-acc" />
+                <span>{readingTime}</span>
               </span>
-              <span class="chapter-meta-item">
-                <Languages class="w-3.5 h-3.5 text-[#a5b4fc]" />
+              <span class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-elev rounded-md border border-line-sub">
+                <Languages class="w-3.5 h-3.5 text-content-acc" />
                 <span>English</span>
               </span>
             </div>
           </div>
 
           <!-- Article Content -->
-          <article class="prose" id="article-content">
+          <article class="prose dark:prose-invert prose-indigo max-w-none" id="article-content">
             <slot />
           </article>
 
           <!-- Chapter Navigation -->
           {
             (prev || next) && (
-              <nav class="chapter-nav" aria-label="Chapter Navigation">
-                {prev ? (
-                  <a href={prev.href} class="chapter-nav-link chapter-nav-link--prev">
-                    <span class="chapter-nav-label">← Previous Chapter</span>
-                    <span class="chapter-nav-title">{prev.title}</span>
+              <nav class={`grid gap-4 mt-16 pt-8 border-t border-line-sub ${prev && next ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`} aria-label="Chapter Navigation">
+                {prev && (
+                  <a href={prev.href} class="flex flex-col p-5 bg-surface-elev border border-line-def rounded-xl no-underline transition-all duration-200 hover:bg-surface-hover hover:border-indigo-500/30 hover:-translate-y-0.5 group">
+                    <span class="text-[0.75rem] font-bold uppercase tracking-wider text-content-mut mb-1 transition-colors group-hover:text-content-acc">← Previous</span>
+                    <span class="font-semibold text-content-main text-lg transition-colors">{prev.title}</span>
                   </a>
-                ) : (
-                  <div />
                 )}
-                {next ? (
-                  <a href={next.href} class="chapter-nav-link chapter-nav-link--next">
-                    <span class="chapter-nav-label">Next Chapter →</span>
-                    <span class="chapter-nav-title">{next.title}</span>
+                {next && (
+                  <a href={next.href} class={`flex flex-col p-5 bg-surface-elev border border-line-def rounded-xl no-underline transition-all duration-200 hover:bg-surface-hover hover:border-indigo-500/30 hover:-translate-y-0.5 group ${!prev ? 'items-end text-right' : 'items-end text-right'}`}>
+                    <span class="text-[0.75rem] font-bold uppercase tracking-wider text-content-mut mb-1 transition-colors group-hover:text-content-acc">Next →</span>
+                    <span class="font-semibold text-content-main text-lg transition-colors">{next.title}</span>
                   </a>
-                ) : (
-                  <div />
                 )}
               </nav>
             )
@@ -289,10 +285,10 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
       </main>
 
       <!-- ═══ RIGHT TOC COLUMN ════════════════════════ -->
-      <aside class="toc-column" aria-label="Table of Contents">
-        <div class="toc-container">
-          <div class="toc-title">On this page</div>
-          <nav class="toc-list" id="toc-list">
+      <aside class="hidden xl:flex flex-col col-start-3 row-start-2 pt-12 pr-6 pb-12 sticky top-[var(--header-height)] h-[calc(100vh-var(--header-height))] overflow-y-auto" aria-label="Table of Contents">
+        <div class="px-4">
+          <div class="text-[0.75rem] font-bold uppercase tracking-wider text-content-mut mb-4">On this page</div>
+          <nav class="flex flex-col gap-2 border-l border-line-sub pl-4 text-[0.85rem]" id="toc-list">
             <!-- Generate TOC dynamically via script below -->
           </nav>
         </div>
@@ -308,9 +304,6 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
       gsap.registerPlugin(ScrollTrigger);
 
       document.addEventListener('astro:page-load', () => {
-        // Ensure this script only runs on chapter pages
-        if (!document.querySelector('.layout')) return;
-
         // ─── 1. COPY CODE BUTTONS ───
         document.querySelectorAll('pre').forEach((pre) => {
           const wrapper = document.createElement('div');
@@ -449,16 +442,6 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
             }
           });
 
-          themeBtn.addEventListener('mouseenter', () => {
-            themeBtn.style.transform = 'translateY(-1px)';
-            themeBtn.style.borderColor = 'var(--border-strong)';
-            themeBtn.style.background = 'var(--bg-hover)';
-          });
-          themeBtn.addEventListener('mouseleave', () => {
-            themeBtn.style.transform = '';
-            themeBtn.style.borderColor = '';
-            themeBtn.style.background = 'var(--bg-elevated)';
-          });
         }
 
         // ─── 4. MOBILE MENU OVERLAY ───
