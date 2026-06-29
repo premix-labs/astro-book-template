@@ -297,11 +297,6 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
 
     <!-- Copy code button, Dynamic TOC & ScrollSpy script -->
     <script>
-      import Lenis from 'lenis';
-      import { gsap } from 'gsap';
-      import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-      gsap.registerPlugin(ScrollTrigger);
 
       document.addEventListener('astro:page-load', () => {
         // ─── 1. COPY CODE BUTTONS ───
@@ -469,48 +464,28 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
           });
         }
 
-        // ─── 5. SMOOTH SCROLL & SCROLL REVEAL (Lenis + GSAP) ───
-        // @ts-ignore
-        if (window.__lenisCleanup) window.__lenisCleanup();
-
-        const lenis = new Lenis({
-          autoRaf: true,
-        });
-
-        lenis.on('scroll', ScrollTrigger.update);
-        const ticker = (time: number) => {
-          lenis.raf(time * 1000);
-        };
-        gsap.ticker.add(ticker);
-        gsap.ticker.lagSmoothing(0);
-
-        // @ts-ignore
-        window.__lenisCleanup = () => {
-          lenis.destroy();
-          gsap.ticker.remove(ticker);
-          ScrollTrigger.getAll().forEach((t) => t.kill());
-        };
-
+        // ─── 5. SMOOTH SCROLL REVEAL (Intersection Observer) ───
         const revealElements = document.querySelectorAll(
           '#article-content p, #article-content h2, #article-content h3, #article-content pre, .chapter-nav'
         );
 
+        // Define the observer
+        const revealObserver = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('reveal-active');
+                observer.unobserve(entry.target); // Only animate once
+              }
+            });
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0 }
+        );
+
+        // Apply initial classes and observe
         revealElements.forEach((el) => {
-          gsap.fromTo(
-            el,
-            { y: 30, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                toggleActions: 'play none none none',
-              },
-            }
-          );
+          el.classList.add('reveal-item');
+          revealObserver.observe(el);
         });
 
         // ─── 6. READING PROGRESS BAR ───
@@ -536,10 +511,6 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
 
       document.addEventListener('astro:before-swap', () => {
         const win = window as any;
-        if (win.__lenisCleanup) {
-          win.__lenisCleanup();
-          win.__lenisCleanup = null;
-        }
         if (win.__progressScrollHandler) {
           window.removeEventListener('scroll', win.__progressScrollHandler);
           win.__progressScrollHandler = null;
