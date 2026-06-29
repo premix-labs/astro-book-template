@@ -204,7 +204,8 @@
 }
 
 html {
-  font-size: 16px;
+  /* Fluid Typography: Scales smoothly from 14px (mobile) to 18px (desktop) */
+  font-size: clamp(14px, 0.4vw + 13px, 18px);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -212,7 +213,6 @@ body {
   font-family: var(--font-sans);
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-size: 16px;
   line-height: 1.5;
   min-height: 100vh;
   overflow-x: hidden;

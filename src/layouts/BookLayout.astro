@@ -5,6 +5,7 @@ import '@fontsource/jetbrains-mono/latin.css';
 import '@fontsource/space-grotesk/500.css';
 import '@fontsource/space-grotesk/700.css';
 import '../styles/global.css';
+import { calculateReadingTime } from '../utils/readingTime';
 import { ClientRouter } from 'astro:transitions';
 import SearchModal from '../components/SearchModal.astro';
 import {
@@ -54,6 +55,10 @@ const currentPath = Astro.url.pathname;
 const totalChapters = chapters.length;
 const currentIndex = chapters.findIndex((c: any) => c.href === currentPath.replace(/\/$/, '')) + 1;
 const progress = Math.round((currentIndex / totalChapters) * 100);
+
+const htmlContent = Astro.slots.has('default') ? await Astro.slots.render('default') : '';
+const plainText = htmlContent.replace(/<[^>]*>?/gm, ' ');
+const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculateReadingTime(plainText)} min`;
 ---
 
 <!doctype html>
@@ -248,7 +253,7 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
             <div class="flex flex-wrap items-center gap-4 text-[0.85rem] text-content-mut font-medium">
               <span class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-elev rounded-md border border-line-sub">
                 <Clock class="w-3.5 h-3.5 text-content-acc" />
-                <span>{readingTime}</span>
+                <span>{computedReadingTime} read</span>
               </span>
               <span class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-elev rounded-md border border-line-sub">
                 <Languages class="w-3.5 h-3.5 text-content-acc" />
@@ -267,14 +272,18 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
             (prev || next) && (
               <nav class={`grid gap-4 mt-16 pt-8 border-t border-line-sub ${prev && next ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`} aria-label="Chapter Navigation">
                 {prev && (
-                  <a href={prev.href} class="flex flex-col p-5 bg-surface-elev border border-line-def rounded-xl no-underline transition-all duration-200 hover:bg-surface-hover hover:border-indigo-500/30 hover:-translate-y-0.5 group">
-                    <span class="text-[0.75rem] font-bold uppercase tracking-wider text-content-mut mb-1 transition-colors group-hover:text-content-acc">← Previous</span>
+                  <a href={prev.href} id="nav-prev-link" class="flex flex-col p-5 bg-surface-elev border border-line-def rounded-xl no-underline transition-all duration-200 hover:bg-surface-hover hover:border-indigo-500/30 hover:-translate-y-0.5 group">
+                    <span class="text-[0.75rem] font-bold uppercase tracking-wider text-content-mut mb-1 transition-colors group-hover:text-content-acc flex items-center gap-1">
+                      <kbd class="font-code text-[0.6rem] px-1 py-0.5 border border-line-str rounded bg-surface-base text-content-mut hidden lg:inline-block">←</kbd> Previous
+                    </span>
                     <span class="font-semibold text-content-main text-lg transition-colors">{prev.title}</span>
                   </a>
                 )}
                 {next && (
-                  <a href={next.href} class={`flex flex-col p-5 bg-surface-elev border border-line-def rounded-xl no-underline transition-all duration-200 hover:bg-surface-hover hover:border-indigo-500/30 hover:-translate-y-0.5 group ${!prev ? 'items-end text-right' : 'items-end text-right'}`}>
-                    <span class="text-[0.75rem] font-bold uppercase tracking-wider text-content-mut mb-1 transition-colors group-hover:text-content-acc">Next →</span>
+                  <a href={next.href} id="nav-next-link" class={`flex flex-col p-5 bg-surface-elev border border-line-def rounded-xl no-underline transition-all duration-200 hover:bg-surface-hover hover:border-indigo-500/30 hover:-translate-y-0.5 group ${!prev ? 'items-end text-right' : 'items-end text-right'}`}>
+                    <span class="text-[0.75rem] font-bold uppercase tracking-wider text-content-mut mb-1 transition-colors group-hover:text-content-acc flex items-center gap-1">
+                      Next <kbd class="font-code text-[0.6rem] px-1 py-0.5 border border-line-str rounded bg-surface-base text-content-mut hidden lg:inline-block">→</kbd>
+                    </span>
                     <span class="font-semibold text-content-main text-lg transition-colors">{next.title}</span>
                   </a>
                 )}
@@ -507,6 +516,29 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
           // @ts-ignore
           window.addEventListener('scroll', window.__progressScrollHandler, { passive: true });
         }
+
+        // ─── 7. KEYBOARD NAVIGATION ───
+        // @ts-ignore
+        if (window.__keyboardNavHandler) {
+          // @ts-ignore
+          document.removeEventListener('keydown', window.__keyboardNavHandler);
+        }
+
+        // @ts-ignore
+        window.__keyboardNavHandler = (e: KeyboardEvent) => {
+          // Don't trigger if user is typing in an input or textarea
+          if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
+          
+          if (e.key === 'ArrowRight') {
+            const nextLink = document.getElementById('nav-next-link') as HTMLAnchorElement;
+            if (nextLink) nextLink.click();
+          } else if (e.key === 'ArrowLeft') {
+            const prevLink = document.getElementById('nav-prev-link') as HTMLAnchorElement;
+            if (prevLink) prevLink.click();
+          }
+        };
+        // @ts-ignore
+        document.addEventListener('keydown', window.__keyboardNavHandler);
       });
 
       document.addEventListener('astro:before-swap', () => {
@@ -514,6 +546,10 @@ const progress = Math.round((currentIndex / totalChapters) * 100);
         if (win.__progressScrollHandler) {
           window.removeEventListener('scroll', win.__progressScrollHandler);
           win.__progressScrollHandler = null;
+        }
+        if (win.__keyboardNavHandler) {
+          document.removeEventListener('keydown', win.__keyboardNavHandler);
+          win.__keyboardNavHandler = null;
         }
       });
     </script>
