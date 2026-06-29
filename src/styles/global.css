@@ -49,14 +49,14 @@
   --accent-400: #a78bfa;
   --amber-400: #ffca28;
 
-  /* Neutral dark palette */
-  --gray-950: #030303;
-  --gray-900: #0a0a0a;
-  --gray-850: #111111;
-  --gray-800: #1a1a1a;
-  --gray-750: #222222;
-  --gray-700: #252540;
-  --gray-600: #3a3a5c;
+  /* Neutral dark palette (Tuned for Reading Ergonomics) */
+  --gray-950: #0b0c10;
+  --gray-900: #13151a;
+  --gray-850: #1b1e24;
+  --gray-800: #252830;
+  --gray-750: #30343e;
+  --gray-700: #3c4250;
+  --gray-600: #4b5263;
   --gray-500: #5a5a80;
   --gray-400: #8080a8;
   --gray-300: #a8a8c8;
