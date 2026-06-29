@@ -92,22 +92,35 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
     <div class="bg-grid fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-10"></div>
     <a href="#article-content" class="skip-link">Skip to Content</a>
     <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
-    <div class="layout grid grid-cols-1 lg:grid-cols-[280px_1fr] xl:grid-cols-[280px_1fr_240px] grid-rows-[var(--header-height)_1fr] min-h-screen">
+    <div
+      class="layout grid grid-cols-1 lg:grid-cols-[280px_1fr] xl:grid-cols-[280px_1fr_240px] grid-rows-[var(--header-height)_1fr] min-h-screen"
+    >
       <!-- ═══ HEADER ═══════════════════════════════ -->
-      <header class="col-span-full sticky top-0 z-[100] bg-surface-base/85 backdrop-blur-xl border-b border-line-sub h-[var(--header-height)] flex items-center px-4 lg:px-6 gap-4">
+      <header
+        class="col-span-full sticky top-0 z-[100] bg-surface-base/85 backdrop-blur-xl border-b border-line-sub h-[var(--header-height)] flex items-center px-4 lg:px-6 gap-4"
+      >
         <a href="/" class="flex items-center gap-3 no-underline shrink-0" aria-label="Back to Home">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center shrink-0" aria-hidden="true">
+          <div
+            class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center shrink-0"
+            aria-hidden="true"
+          >
             <BookOpen class="w-5 h-5" />
           </div>
           <div class="flex flex-col">
-            <span class="text-[0.95rem] font-bold bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text whitespace-nowrap">UX/UI Masterclass</span>
+            <span
+              class="text-[0.95rem] font-bold bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text whitespace-nowrap"
+              >UX/UI Masterclass</span
+            >
             <span class="text-[0.7rem] text-content-mut font-normal hidden lg:block">Premium Edition</span>
           </div>
         </a>
 
         <div class="flex-1"></div>
 
-        <div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[0.7rem] font-bold text-content-acc uppercase tracking-wider" role="status">
+        <div
+          class="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[0.7rem] font-bold text-content-acc uppercase tracking-wider"
+          role="status"
+        >
           <BookOpen class="w-3.5 h-3.5 text-content-acc" />
           <span>Premium Template</span>
         </div>
@@ -138,7 +151,11 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
           >
         </button>
 
-        <a href="https://github.com" class="flex items-center justify-center w-9 h-9 rounded-md bg-surface-elev border border-line-def text-content-sec transition-all duration-200 hover:bg-surface-hover hover:text-content-main hover:-translate-y-0.5" aria-label="GitHub Repository">
+        <a
+          href="https://github.com"
+          class="flex items-center justify-center w-9 h-9 rounded-md bg-surface-elev border border-line-def text-content-sec transition-all duration-200 hover:bg-surface-hover hover:text-content-main hover:-translate-y-0.5"
+          aria-label="GitHub Repository"
+        >
           <svg
             viewBox="0 0 24 24"
             width="18"
@@ -161,7 +178,10 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
       </header>
 
       <!-- ═══ MOBILE OVERLAY MENU ════════════════════ -->
-      <div id="mobile-menu-overlay" class="mobile-menu-overlay fixed inset-0 bg-surface-base/95 backdrop-blur-xl z-[200] opacity-0 pointer-events-none transition-all duration-300 flex flex-col justify-center px-8 lg:hidden">
+      <div
+        id="mobile-menu-overlay"
+        class="mobile-menu-overlay fixed inset-0 bg-surface-base/95 backdrop-blur-xl z-[200] opacity-0 pointer-events-none transition-all duration-300 flex flex-col justify-center px-8 lg:hidden"
+      >
         <button
           id="mobile-close-btn"
           class="hamburger-btn absolute top-6 right-6 bg-surface-elev border border-line-def rounded-md p-2 cursor-pointer text-content-sec flex items-center justify-center z-[210]"
@@ -170,7 +190,9 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
           <X class="w-5 h-5" />
         </button>
         <div class="mb-6">
-          <div class="text-[0.7rem] font-bold uppercase tracking-wider text-content-mut mb-3 px-6">Table of Contents</div>
+          <div class="text-[0.7rem] font-bold uppercase tracking-wider text-content-mut mb-3 px-6">
+            Table of Contents
+          </div>
           {
             chapters.map((ch: any) => (
               <a
@@ -195,7 +217,11 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
       </div>
 
       <!-- ═══ SIDEBAR ══════════════════════════════ -->
-      <aside class="hidden lg:flex flex-col col-start-1 row-start-2 sticky top-[var(--header-height)] h-[calc(100vh-var(--header-height))] overflow-y-auto border-r border-line-sub bg-surface-base py-6" id="sidebar" aria-label="Book Navigation">
+      <aside
+        class="hidden lg:flex flex-col col-start-1 row-start-2 sticky top-[var(--header-height)] h-[calc(100vh-var(--header-height))] overflow-y-auto border-r border-line-sub bg-surface-base py-6"
+        id="sidebar"
+        aria-label="Book Navigation"
+      >
         <div class="px-6 mb-6">
           <div class="text-[0.65rem] font-bold uppercase tracking-wider text-content-mut mb-2 flex justify-between">
             <span>Progress</span>
@@ -208,12 +234,18 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
             aria-valuemin="0"
             aria-valuemax="100"
           >
-            <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500 ease-out" style={`width: ${progress}%`}></div>
+            <div
+              class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500 ease-out"
+              style={`width: ${progress}%`}
+            >
+            </div>
           </div>
         </div>
 
         <div class="mb-6">
-          <div class="text-[0.7rem] font-bold uppercase tracking-wider text-content-mut mb-3 px-6">Table of Contents</div>
+          <div class="text-[0.7rem] font-bold uppercase tracking-wider text-content-mut mb-3 px-6">
+            Table of Contents
+          </div>
           {
             chapters.map((ch: any) => (
               <a
@@ -238,7 +270,11 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
       </aside>
 
       <!-- ═══ MAIN CONTENT ═══════════════════════════ -->
-      <main class="col-start-1 lg:col-start-2 row-start-2 min-w-0 max-w-[100vw] overflow-x-hidden" id="main-content" data-pagefind-body>
+      <main
+        class="col-start-1 lg:col-start-2 row-start-2 min-w-0 max-w-[100vw] overflow-x-hidden"
+        id="main-content"
+        data-pagefind-body
+      >
         <div class="max-w-[800px] mx-auto px-6 py-12 lg:px-12 lg:py-16">
           <!-- Chapter Header -->
           <div class="mb-10">
@@ -270,19 +306,36 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
           <!-- Chapter Navigation -->
           {
             (prev || next) && (
-              <nav class={`grid gap-4 mt-16 pt-8 border-t border-line-sub ${prev && next ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`} aria-label="Chapter Navigation">
+              <nav
+                class={`grid gap-4 mt-16 pt-8 border-t border-line-sub ${prev && next ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}
+                aria-label="Chapter Navigation"
+              >
                 {prev && (
-                  <a href={prev.href} id="nav-prev-link" class="flex flex-col p-5 bg-surface-elev border border-line-def rounded-xl no-underline transition-all duration-200 hover:bg-surface-hover hover:border-indigo-500/30 hover:-translate-y-0.5 group">
+                  <a
+                    href={prev.href}
+                    id="nav-prev-link"
+                    class="flex flex-col p-5 bg-surface-elev border border-line-def rounded-xl no-underline transition-all duration-200 hover:bg-surface-hover hover:border-indigo-500/30 hover:-translate-y-0.5 group"
+                  >
                     <span class="text-[0.75rem] font-bold uppercase tracking-wider text-content-mut mb-1 transition-colors group-hover:text-content-acc flex items-center gap-1">
-                      <kbd class="font-code text-[0.6rem] px-1 py-0.5 border border-line-str rounded bg-surface-base text-content-mut hidden lg:inline-block">←</kbd> Previous
+                      <kbd class="font-code text-[0.6rem] px-1 py-0.5 border border-line-str rounded bg-surface-base text-content-mut hidden lg:inline-block">
+                        ←
+                      </kbd>{' '}
+                      Previous
                     </span>
                     <span class="font-semibold text-content-main text-lg transition-colors">{prev.title}</span>
                   </a>
                 )}
                 {next && (
-                  <a href={next.href} id="nav-next-link" class={`flex flex-col p-5 bg-surface-elev border border-line-def rounded-xl no-underline transition-all duration-200 hover:bg-surface-hover hover:border-indigo-500/30 hover:-translate-y-0.5 group ${!prev ? 'items-end text-right' : 'items-end text-right'}`}>
+                  <a
+                    href={next.href}
+                    id="nav-next-link"
+                    class={`flex flex-col p-5 bg-surface-elev border border-line-def rounded-xl no-underline transition-all duration-200 hover:bg-surface-hover hover:border-indigo-500/30 hover:-translate-y-0.5 group ${!prev ? 'items-end text-right' : 'items-end text-right'}`}
+                  >
                     <span class="text-[0.75rem] font-bold uppercase tracking-wider text-content-mut mb-1 transition-colors group-hover:text-content-acc flex items-center gap-1">
-                      Next <kbd class="font-code text-[0.6rem] px-1 py-0.5 border border-line-str rounded bg-surface-base text-content-mut hidden lg:inline-block">→</kbd>
+                      Next{' '}
+                      <kbd class="font-code text-[0.6rem] px-1 py-0.5 border border-line-str rounded bg-surface-base text-content-mut hidden lg:inline-block">
+                        →
+                      </kbd>
                     </span>
                     <span class="font-semibold text-content-main text-lg transition-colors">{next.title}</span>
                   </a>
@@ -294,7 +347,10 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
       </main>
 
       <!-- ═══ RIGHT TOC COLUMN ════════════════════════ -->
-      <aside class="hidden xl:flex flex-col col-start-3 row-start-2 pt-12 pr-6 pb-12 sticky top-[var(--header-height)] h-[calc(100vh-var(--header-height))] overflow-y-auto" aria-label="Table of Contents">
+      <aside
+        class="hidden xl:flex flex-col col-start-3 row-start-2 pt-12 pr-6 pb-12 sticky top-[var(--header-height)] h-[calc(100vh-var(--header-height))] overflow-y-auto"
+        aria-label="Table of Contents"
+      >
         <div class="px-4">
           <div class="text-[0.75rem] font-bold uppercase tracking-wider text-content-mut mb-4">On this page</div>
           <nav class="flex flex-col gap-2 border-l border-line-sub pl-4 text-[0.85rem]" id="toc-list">
@@ -306,7 +362,6 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
 
     <!-- Copy code button, Dynamic TOC & ScrollSpy script -->
     <script>
-
       document.addEventListener('astro:page-load', () => {
         // ─── 1. COPY CODE BUTTONS ───
         document.querySelectorAll('pre').forEach((pre) => {
@@ -445,7 +500,6 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
               iconWrapper.classList.add('theme-icon-animate');
             }
           });
-
         }
 
         // ─── 4. MOBILE MENU OVERLAY ───
@@ -528,7 +582,7 @@ const computedReadingTime = readingTime !== '10 min' ? readingTime : `${calculat
         window.__keyboardNavHandler = (e: KeyboardEvent) => {
           // Don't trigger if user is typing in an input or textarea
           if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
-          
+
           if (e.key === 'ArrowRight') {
             const nextLink = document.getElementById('nav-next-link') as HTMLAnchorElement;
             if (nextLink) nextLink.click();
