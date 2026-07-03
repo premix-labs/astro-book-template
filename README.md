@@ -2,6 +2,36 @@
 
 The ultimate template for authoring high-end, award-winning technical books and masterclasses. Built from the ground up with Astro, MDX, and pure Vanilla CSS.
 
+## Book Documentation Standard
+
+This template includes the shared `Book Documentation Standard v1` for technical books. Planning, quality control, release gates, and decision records live in `docs/internal`.
+
+```text
+docs/internal/
+  README.md
+  book-plan.md
+  api-contract.md
+  final-project-structure.md
+  manuscript-status.md
+  release-checklist.md
+  style-guide.md
+  teaching-principles.md
+  validation-report.md
+  decisions/
+  qa/
+```
+
+When starting a new book, update these internal docs before writing chapters. Keep book-specific notes inside `docs/internal` and explain them in this README.
+
+This template also includes a local workflow skill:
+
+```text
+AGENTS.md
+skills/tutorial-book-auditor/
+```
+
+When copying the template for a new book, keep the skill and then customize only the book-specific checks.
+
 ## 🚀 Features
 
 - **Blazing Fast**: Zero-JS baseline layout. 100% Vanilla CSS.
@@ -10,6 +40,12 @@ The ultimate template for authoring high-end, award-winning technical books and 
 - **MDX Support**: Author your content in Markdown/MDX with auto-styled components like Warnings, Tips, and interactive Code Blocks.
 
 ## 🧞 Commands
+
+Requires Node.js matching:
+
+```text
+^22.22.3 || ^24.16.0 || >=26.3.0
+```
 
 All commands are run from the root of the project, from a terminal:
 
