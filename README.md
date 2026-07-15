@@ -1,10 +1,123 @@
-# Premium UX/UI Book Template
+# Astro Technical Book Template
 
-The ultimate template for authoring high-end, award-winning technical books and masterclasses. Built from the ground up with Astro, MDX, and pure Vanilla CSS.
+A versioned Astro and MDX platform for technical tutorial books. It provides structured authoring, automatic chapter navigation, Pagefind search, reusable MDX components, conflict-aware template updates, cross-browser quality gates, security automation and GitHub Pages deployment.
+
+Current template version: **1.0.0**
+
+## Create A New Book
+
+Run this command from the template repository:
+
+```powershell
+npm run create-book -- --title "C# Fundamentals" --slug csharp-fundamentals-book --lang th --target ../csharp-fundamentals-book
+```
+
+The command works in PowerShell and Bash. It creates a clean copy without `.git`, `node_modules`, `.astro`, or `dist`; updates package/site identity; resets chapter content and validation evidence; and keeps the shared authoring standard.
+
+Then run:
+
+```powershell
+cd ../csharp-fundamentals-book
+npm install
+npm run verify
+```
+
+Required options:
+
+| Option    | Purpose                       |
+| --------- | ----------------------------- |
+| `--title` | Display title of the new book |
+| `--slug`  | Lowercase npm/repository name |
+
+Optional options:
+
+| Option          | Purpose                                                            |
+| --------------- | ------------------------------------------------------------------ |
+| `--lang`        | HTML/content language; defaults to `en`                            |
+| `--description` | Book description shown on the home page and in metadata            |
+| `--target`      | Output directory; defaults to a sibling folder named from `--slug` |
+
+## Requirements
+
+Use a Node.js version allowed by `package.json`. Do not assume a fixed development port; open the URL printed by Astro.
+
+## Commands
+
+| Command                          | Purpose                                                            |
+| -------------------------------- | ------------------------------------------------------------------ |
+| `npm install`                    | Install dependencies                                               |
+| `npm run dev`                    | Start the local authoring server                                   |
+| `npm run check`                  | Run Astro diagnostics                                              |
+| `npm run lint`                   | Lint Astro, TypeScript and JavaScript                              |
+| `npm run format:check`           | Verify formatting without changing files                           |
+| `npm run test`                   | Test template scripts, Unicode slugs and initialization            |
+| `npm run test:e2e`               | Test desktop browsers, mobile behavior and accessibility           |
+| `npm run test:visual`            | Compare desktop and mobile pages with reviewed snapshots           |
+| `npm run test:visual:update`     | Deliberately regenerate visual baselines after design review       |
+| `npm run test:performance`       | Enforce asset, DOM and navigation performance budgets              |
+| `npm run check:book`             | Validate required docs, chapters, frontmatter and plan/status sync |
+| `npm run build`                  | Build the site and Pagefind index                                  |
+| `npm run check:links`            | Validate links and assets in `dist`                                |
+| `npm run verify`                 | Run all local quality gates in release order                       |
+| `npm run verify:enterprise`      | Add browser, accessibility, performance and dependency gates       |
+| `npm run template:status`        | Show installed template version and managed-file drift             |
+| `npm run new-chapter -- "Title"` | Create the next chapter scaffold                                   |
+
+Install browser runtimes once before running the enterprise gate:
+
+```powershell
+npx playwright install chromium firefox webkit
+```
+
+Run `npm run security:audit` after dependency changes.
+
+## Add A Chapter
+
+```powershell
+npm run new-chapter -- "เริ่มต้นใช้งาน" --part "Part 1: Foundations"
+```
+
+Unicode titles, including Thai, produce valid Unicode slugs. Use an explicit ASCII URL slug when desired:
+
+```powershell
+npm run new-chapter -- "เริ่มต้นใช้งาน" --slug getting-started
+```
+
+The script assigns the next chapter number and writes valid frontmatter. Replace every scaffold placeholder before marking the chapter ready.
+
+## Content Model
+
+Chapters live in `src/content/chapters`. Astro Content Collections validate frontmatter at build time. Chapter numbers control ordering; filenames control URLs. Navigation, part grouping, previous/next links, reading time, table of contents and search are generated automatically.
+
+Every chapter records lifecycle metadata:
+
+```yaml
+difficulty: beginner
+prerequisites: []
+learningOutcomes: ['Complete one observable learner outcome.']
+testedWith: ['Runtime or tool version']
+lastVerified: 2026-07-15
+status: published
+```
+
+Published chapters fail validation when their verification date exceeds the configured age limit.
+
+Available MDX components require no per-chapter imports:
+
+| Component          | Purpose                                 |
+| ------------------ | --------------------------------------- |
+| `<Callout>`        | Note, tip, warning or danger context    |
+| `<Steps>`          | Numbered guided procedure               |
+| `<Tabs>` / `<Tab>` | Keyboard-accessible alternatives        |
+| `<Figure>`         | Image, caption and optional dark source |
+| `<Kbd>`            | Keyboard key label                      |
+| `<Badge>`          | Inline status label                     |
+
+See `src/content/chapters/04-components.mdx` for the rendered authoring reference.
 
 ## Book Documentation Standard
 
-This template includes the shared `Book Documentation Standard v1` for technical books. Planning, quality control, release gates, and decision records live in `docs/internal`.
+Read `AGENTS.md`, `skills/tutorial-book-auditor/SKILL.md`, and `docs/internal/README.md` before planning or reviewing a book. Every generated book includes:
 
 ```text
 docs/internal/
@@ -13,56 +126,40 @@ docs/internal/
   api-contract.md
   final-project-structure.md
   manuscript-status.md
+  operations-runbook.md
   release-checklist.md
   style-guide.md
   teaching-principles.md
+  template-lifecycle.md
   validation-report.md
   decisions/
   qa/
 ```
 
-When starting a new book, update these internal docs before writing chapters. Keep book-specific notes inside `docs/internal` and explain them in this README.
+Examples are verification sources and optional references. Chapters must remain self-contained for learners.
 
-This template also includes a local workflow skill:
+## Manual Customization
 
-```text
-AGENTS.md
-skills/tutorial-book-auditor/
+`create-book` is the recommended rebranding path. For later edits:
+
+- `src/site.config.ts`: visible title, short title, language, status and repository link
+- `astro.config.mjs`: canonical site/base behavior
+- `src/styles/global.css`: colors, typography, spacing and component styling
+- `public/`: favicon, social image and public assets
+- `docs/internal/`: curriculum, contracts, decisions and release evidence
+- `package.json`: package identity, scripts and supported Node.js versions
+
+Do not copy validation results from the template into a new book. Record only commands and checks run against that book.
+
+## Template Updates
+
+Generated books own chapters, curriculum, examples, `src/site.config.ts` and validation evidence. Shared platform files listed in `.template-manifest.json` are checksum-managed.
+
+```powershell
+npm run template:check -- --from ../astro-book-template
+npm run template:update -- --from ../astro-book-template
+npm install
+npm run verify:enterprise
 ```
 
-When copying the template for a new book, keep the skill and then customize only the book-specific checks.
-
-## 🚀 Features
-
-- **Blazing Fast**: Zero-JS baseline layout. 100% Vanilla CSS.
-- **Premium Aesthetics**: Curated typography using Inter, low-contrast dark mode, and meticulously calculated line-heights for maximum reading endurance.
-- **Micro-interactions**: Subtle spring animations and hover states that make the UI feel alive.
-- **MDX Support**: Author your content in Markdown/MDX with auto-styled components like Warnings, Tips, and interactive Code Blocks.
-
-## 🧞 Commands
-
-Requires Node.js matching:
-
-```text
-^22.22.3 || ^24.16.0 || >=26.3.0
-```
-
-All commands are run from the root of the project, from a terminal:
-
-| Command         | Action                                      |
-| :-------------- | :------------------------------------------ |
-| `npm install`   | Installs dependencies                       |
-| `npm run dev`   | Starts local dev server at `localhost:4321` |
-| `npm run build` | Build your production site to `./dist/`     |
-
-## 📖 Content Authoring
-
-All chapters are stored in `src/content/chapters/`.
-To add a new chapter:
-
-1. Create a new `.mdx` file.
-2. Register it in the `chapters` array inside `src/pages/[slug].astro` and `src/layouts/BookLayout.astro` for sidebar navigation.
-
-## 🎨 Theme & Styling
-
-The core design system is located in `src/styles/global.css`. You can customize the entire color palette by editing the `:root` CSS variables.
+The updater refuses to overwrite locally modified managed files unless a reviewed migration deliberately uses `--force`. See `docs/internal/template-lifecycle.md` for the version and release contract.

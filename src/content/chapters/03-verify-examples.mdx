@@ -1,0 +1,36 @@
+---
+title: Verify Chapters And Examples
+description: Turn build results, browser behavior, links and known limitations into repeatable release evidence.
+chapter: 3
+readingTime: '9 min'
+icon: badge-check
+tags: [verification, quality]
+difficulty: intermediate
+prerequisites: ["Write A Self-Contained Chapter"]
+learningOutcomes: ["Record repeatable build, browser and content evidence for a release decision."]
+testedWith: ["Node.js test runner 26.4.0", "Pagefind 1.5.2"]
+lastVerified: 2026-07-15
+status: published
+---
+
+Validation is evidence, not a confidence statement. Record the exact command, result, date, scope and remaining risk in `docs/internal/validation-report.md`.
+
+## Local Quality Gate
+
+```bash
+npm run verify
+```
+
+This template runs linting, Astro diagnostics, script tests, book-structure checks, the production build, Pagefind indexing and built-link validation.
+
+## Book-Specific Evidence
+
+The generated book must add checks for its own learner project. Examples include unit tests, integration tests, database migration checks, browser screenshots, accessibility checks or container configuration validation.
+
+<Callout type="warning" title="Do not inherit template evidence">
+  A command that passed in this template has not passed in a copied book. The initializer resets validation evidence so every book records its own results.
+</Callout>
+
+## Release Gate
+
+A book is not release-ready while required checklist items, progressive examples, final-project builds or critical browser flows remain unverified.

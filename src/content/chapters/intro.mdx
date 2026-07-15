@@ -1,25 +1,38 @@
 ---
-title: Introduction
-description: Welcome to the Premium UX/UI Book Template.
+title: Template Introduction
+description: Understand what the template provides and how to create a clean book repository from it.
 chapter: 0
-slug: intro
 readingTime: '5 min'
-icon: intro
+icon: book-open
+tags: [template, workflow]
+difficulty: beginner
+prerequisites: ["Node.js and npm installed"]
+learningOutcomes: ["Explain the template workflow and create a clean book repository."]
+testedWith: ["Node.js 26.4.0", "Astro 7.0.7"]
+lastVerified: 2026-07-15
+status: published
 ---
 
-# Introduction
+This repository is a reusable authoring template, not a finished learner-facing book. It demonstrates the reading experience and the workflow used to plan, write, verify, and publish technical tutorials.
 
-Welcome to your new Premium Tailwind 4 Book Template.
-This page serves as an introduction.
+<Callout type="tip" title="Recommended start">
+  Use <code>npm run create-book</code> instead of copying this folder manually. The initializer removes generated files and template history, resets validation evidence, and updates the new book identity.
+</Callout>
 
-<div class="callout callout--info">
-  <div class="callout-icon">💡</div>
-  <div class="callout-body">
-    <div class="callout-title">Pro Tip</div>
-    <div class="callout-content">
-      <p>
-        This template uses Tailwind 4. All standard markdown elements are automatically styled for maximum readability.
-      </p>
-    </div>
-  </div>
-</div>
+## What the Template Includes
+
+- Astro Content Collections with validated MDX frontmatter
+- automatic navigation, parts, previous/next links and reading-time estimates
+- reusable authoring components and syntax highlighting
+- Pagefind search in production output
+- light/dark reading themes and responsive navigation
+- curriculum, decision, QA and release documents under `docs/internal`
+- tests and validators for authoring scripts, chapters and built links
+
+## Before Writing A Real Book
+
+1. Create a new repository with `npm run create-book`.
+2. Define the reader, prerequisites, scope, chapter map and final project.
+3. Replace the generated introduction.
+4. Build the progressive/final examples before claiming a chapter is ready.
+5. Run `npm run verify` and update the validation report with real evidence.

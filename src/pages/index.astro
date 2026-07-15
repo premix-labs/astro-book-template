@@ -1,410 +1,179 @@
 ---
-// index.astro — Landing Page
 import '@fontsource/inter/latin.css';
+import '@fontsource-variable/noto-sans-thai/index.css';
+import '@fontsource-variable/noto-serif-thai/index.css';
 import '@fontsource/jetbrains-mono/latin.css';
-import '@fontsource/space-grotesk/500.css';
-import '@fontsource/space-grotesk/700.css';
 import '../styles/global.css';
+import { getCollection } from 'astro:content';
 import { ClientRouter } from 'astro:transitions';
+import EnterpriseHeader from '../components/EnterpriseHeader.astro';
 import SearchModal from '../components/SearchModal.astro';
-import { BookOpen, Settings, Package, LayoutDashboard, FileText, Rocket, Moon, Sun, Search } from '@lucide/astro';
+import ThemeHead from '../components/ThemeHead.astro';
+import { siteConfig } from '../site.config';
+import { calculateReadingTime } from '../utils/readingTime';
+import { absoluteUrl, absoluteUrlFromFullPath, withBase } from '../utils/url';
+import { ArrowRight, Blocks, BookOpen, CircleCheckBig, Clock3, House, Languages, Route } from '@lucide/astro';
 
-const iconMap = {
-  intro: BookOpen,
-  setup: Settings,
-  package: Package,
-  api: LayoutDashboard,
-};
-
-const mdxFiles = Object.values(import.meta.glob<Record<string, any>>('../content/chapters/*.mdx', { eager: true }));
-const chapters = mdxFiles
-  .map((file: any) => file.frontmatter)
-  .sort((a: any, b: any) => a.chapter - b.chapter)
-  .map((ch: any) => ({
-    num: ch.chapter.toString().padStart(2, '0'),
-    href: `/${ch.slug}`,
-    icon: ch.icon || 'intro',
-    level: ch.chapter === 0 ? 'Introduction' : 'Core',
-    title: ch.title,
-    desc: ch.description,
-    tags: [], // Simplification
+const allChapters = await getCollection('chapters', ({ data }) => !data.draft);
+const chapters = allChapters
+  .sort((a, b) => a.data.chapter - b.data.chapter)
+  .map((entry) => ({
+    num: String(entry.data.chapter).padStart(2, '0'),
+    href: withBase(entry.id),
+    title: entry.data.title,
+    description: entry.data.description,
+    part: entry.data.part,
+    readingTime: entry.data.readingTime ?? `${calculateReadingTime(entry.body ?? '')} min`,
   }));
+
+interface ChapterGroup {
+  label: string | null;
+  items: typeof chapters;
+}
+
+const chapterGroups: ChapterGroup[] = [];
+for (const chapter of chapters) {
+  const label = chapter.part ?? null;
+  const last = chapterGroups.at(-1);
+  if (last?.label === label) last.items.push(chapter);
+  else chapterGroups.push({ label, items: [chapter] });
+}
+
+const firstChapter = chapters[0];
+const lastChapter = chapters.at(-1);
+const languageName = siteConfig.lang.toLowerCase().startsWith('th') ? 'Thai' : 'English';
+const canonicalUrl = absoluteUrlFromFullPath(Astro.url.pathname, Astro.site);
+const ogImageUrl = siteConfig.ogImage ? absoluteUrl(siteConfig.ogImage, Astro.site) : '';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={siteConfig.lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="A premium UX/UI book template built with Tailwind 4 and Astro." />
-    <title>Premium UX/UI Masterclass</title>
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="Premium UX/UI Masterclass" />
-    <meta property="og:description" content="A premium UX/UI book template built with Tailwind 4 and Astro." />
+    <meta name="description" content={siteConfig.description} />
+    <title>{siteConfig.title}</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:title" content={siteConfig.title} />
+    <meta property="og:description" content={siteConfig.description} />
     <meta property="og:type" content="website" />
-
-    <script is:inline>
-      const applyTheme = () => {
-        const savedTheme = localStorage.getItem('site-theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-      };
-      applyTheme();
-      document.addEventListener('astro:after-swap', applyTheme);
-    </script>
-
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:url" content={canonicalUrl} />
+    {
+      ogImageUrl && (
+        <>
+          <meta property="og:image" content={ogImageUrl} />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:image" content={ogImageUrl} />
+        </>
+      )
+    }
+    <ThemeHead />
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
     <ClientRouter />
   </head>
   <body>
-    <!-- CSS Aurora Background -->
-    <div class="fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-40 overflow-hidden">
-      <div
-        class="absolute -top-[30%] -left-[10%] w-[70%] h-[70%] rounded-full bg-indigo-500/20 blur-[120px] mix-blend-screen animate-aurora"
-      >
-      </div>
-      <div
-        class="absolute top-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-purple-500/20 blur-[120px] mix-blend-screen animate-aurora animation-delay-2000"
-      >
-      </div>
-      <div
-        class="absolute -bottom-[20%] left-[20%] w-[80%] h-[80%] rounded-full bg-pink-500/20 blur-[120px] mix-blend-screen animate-aurora animation-delay-4000"
-      >
-      </div>
-    </div>
-    <div class="bg-grid fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-15"></div>
+    <a href="#learning-path" class="skip-link">Skip to learning path</a>
 
-    <!-- ═══ HEADER ══════════════════════════════════ -->
-    <header
-      class="bg-transparent border-none fixed w-full top-0 z-50 h-[var(--header-height)] flex items-center px-4 lg:px-6 gap-4"
-    >
-      <a
-        href="/"
-        class="flex items-center gap-2.5 no-underline text-content-main font-bold text-[1.1rem] shrink-0"
-        aria-label="Back to Home"
-      >
-        <div
-          class="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[var(--radius-md)] flex items-center justify-center text-[1.2rem] shadow-[var(--glow-primary)] shrink-0 text-white"
-          aria-hidden="true"
-        >
-          <BookOpen class="w-5 h-5" />
-        </div>
-        <div class="flex flex-col leading-[1.2]">
-          <span
-            class="text-[0.95rem] font-bold bg-gradient-to-br from-indigo-500 to-purple-600 text-transparent bg-clip-text"
-            >UX/UI Masterclass</span
-          >
-          <span class="text-[0.7rem] text-content-mut">Premium Edition</span>
-        </div>
-      </a>
-      <div class="flex-1"></div>
+    <EnterpriseHeader />
 
-      <!-- 🔍 SEARCH BUTTON ════════════════════════════ -->
-      <button
-        class="open-search-btn cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 hover:bg-surface-hover hover:border-line-str hover:text-content-main mr-3"
-        aria-label="Search Book"
-      >
-        <Search class="w-4 h-4" />
-        <span
-          >Search <kbd class="font-code text-[0.7rem] bg-surface-card px-1 py-0.5 rounded border border-line-sub ml-1"
-            >Ctrl+K</kbd
-          ></span
-        >
-      </button>
-
-      <!-- 🌓 THEME SWITCHER BUTTON ══════════════════ -->
-      <button
-        class="cursor-pointer px-3 py-2 bg-surface-elev border border-line-def rounded-md text-content-sec text-[0.82rem] flex items-center gap-[6px] transition-all duration-200 mr-3 hover:bg-surface-hover hover:border-line-str hover:text-content-main"
-        id="theme-switcher-btn"
-        aria-label="Toggle Theme"
-      >
-        <span class="theme-icon flex items-center" id="theme-btn-icon">
-          <Moon id="theme-icon-moon" class="w-4 h-4 block" />
-          <Sun id="theme-icon-sun" class="w-4 h-4 hidden" />
-        </span>
-        <span class="theme-label" id="theme-btn-label">Dark Mode</span>
-      </button>
-
-      <a
-        href="/intro"
-        class="inline-flex items-center gap-[6px] px-5 py-2.5 text-[0.9rem] font-bold text-white no-underline bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-[0_4px_16px_rgba(99,102,241,0.4)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(99,102,241,0.5)]"
-      >
-        <Rocket class="w-[14px] h-[14px]" />
-        <span>Start Reading</span>
-      </a>
-    </header>
-
-    <!-- ═══ HERO ══════════════════════════════════ -->
-    <section
-      class="min-h-screen flex flex-col items-center justify-center py-20 px-8 text-center relative overflow-hidden before:absolute before:inset-0 before:pointer-events-none before:bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(99,102,241,0.25)_0%,transparent_60%),radial-gradient(ellipse_60%_40%_at_80%_80%,rgba(139,92,246,0.1)_0%,transparent_50%)]"
-      aria-label="Introduction"
-    >
-      <!-- Floating Orbs -->
-      <div class="hero-orb hero-orb--1" aria-hidden="true"></div>
-      <div class="hero-orb hero-orb--2" aria-hidden="true"></div>
-      <div class="hero-orb hero-orb--3" aria-hidden="true"></div>
-
-      <div class="max-w-[800px] w-full relative z-10 flex flex-col items-center justify-center mx-auto">
-        <div
-          class="inline-flex items-center gap-2 py-1.5 px-4 bg-indigo-500/10 border border-indigo-500/30 rounded-full text-[0.82rem] font-semibold text-content-acc mb-8 tracking-wider uppercase"
-          style="animation: fadeInDown 0.6s var(--ease-smooth) both;"
-          aria-label="Category"
-        >
-          <span aria-hidden="true" class="flex items-center justify-center"><BookOpen class="w-[14px] h-[14px]" /></span
-          >
-          <span>Design · Engineering · Masterclass</span>
-        </div>
-
-        <h1
-          class="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight text-content-main mb-6"
-          style="animation: fadeInDown 0.6s var(--ease-smooth) 0.1s both;"
-          id="hero-title"
-        >
-          Premium <span
-            class="bg-clip-text text-transparent bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500"
-            style="animation: gradientShift 6s ease-in-out infinite; background-size: 300% 300%;">UX/UI</span
-          ><br />
-          Book Template
-        </h1>
-
-        <p
-          class="text-[1.2rem] text-content-sec leading-[1.8] max-w-[600px] mx-auto mb-12"
-          style="animation: fadeInDown 0.6s var(--ease-smooth) 0.2s both;"
-          id="hero-subtitle"
-        >
-          <span id="typewriter-target"></span><span
-            id="typewriter-cursor"
-            style="border-right:2px solid var(--primary-400);animation:fadeIn 0.8s ease-in-out infinite alternate;margin-left:2px;"
-            >&nbsp;</span
-          >
-        </p>
-
-        <div
-          class="flex gap-4 justify-center flex-wrap"
-          style="animation: fadeInDown 0.6s var(--ease-smooth) 0.3s both;"
-        >
-          <a
-            href="/intro"
-            class="inline-flex items-center gap-2 py-3.5 px-7 bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-base rounded-[var(--radius-lg)] no-underline transition-all duration-200 ease-out shadow-[0_4px_16px_rgba(99,102,241,0.4)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(99,102,241,0.5)] magnetic-btn"
-            id="start-reading-btn"
-          >
-            <FileText style="width:16px;height:16px;" />
-            <span>Start Reading</span>
+    <div class="home-shell">
+      <aside class="home-sidebar" aria-label="Book sections">
+        <nav>
+          <a href={withBase('')} class="home-nav-link is-active" aria-current="page">
+            <House class="size-4" />
+            <span>Home</span>
           </a>
-          <a
-            href="#chapters"
-            class="inline-flex items-center gap-2 py-3.5 px-7 bg-surface-elev border border-line-def text-content-sec font-semibold text-base rounded-[var(--radius-lg)] no-underline transition-all duration-200 ease-out hover:bg-surface-hover hover:border-line-str hover:text-content-main hover:-translate-y-0.5 magnetic-btn"
-            id="view-chapters-btn"
-          >
-            <LayoutDashboard class="w-4 h-4" />
-            <span>Table of Contents</span>
+          <a href="#learning-path" class="home-nav-link">
+            <Route class="size-4" />
+            <span>Learning path</span>
           </a>
-        </div>
-      </div>
+          {
+            lastChapter && (
+              <a href={lastChapter.href} class="home-nav-link">
+                <Blocks class="size-4" />
+                <span>Authoring components</span>
+              </a>
+            )
+          }
+        </nav>
+      </aside>
 
-      <div
-        class="flex gap-6 lg:gap-12 justify-center mt-16"
-        style="animation: fadeInDown 0.6s var(--ease-smooth) 0.4s both;"
-        aria-label="Book Stats"
-      >
-        <div>
-          <div
-            class="text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 to-purple-600"
-          >
-            4
-          </div>
-          <div class="text-[0.82rem] font-semibold uppercase tracking-wider text-content-mut mt-1.5">Chapters</div>
-        </div>
-        <div>
-          <div
-            class="text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 to-purple-600"
-          >
-            100%
-          </div>
-          <div class="text-[0.82rem] font-semibold uppercase tracking-wider text-content-mut mt-1.5">Tailwind 4</div>
-        </div>
-        <div>
-          <div
-            class="text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 to-purple-600"
-          >
-            Zero
-          </div>
-          <div class="text-[0.82rem] font-semibold uppercase tracking-wider text-content-mut mt-1.5">Dependencies</div>
-        </div>
-      </div>
-    </section>
+      <main class="home-main">
+        <section class="home-introduction" aria-labelledby="book-title">
+          <div class="section-label"><BookOpen class="size-4" /> Technical book</div>
+          <h1 id="book-title">{siteConfig.title}</h1>
+          <p>{siteConfig.description}</p>
+          {
+            firstChapter && (
+              <a href={firstChapter.href} class="primary-command">
+                <span>Continue with {firstChapter.title}</span>
+                <ArrowRight class="size-4" />
+              </a>
+            )
+          }
+        </section>
 
-    <!-- ═══ FEATURES STRIP ══════════════════════════ -->
-    <section class="p-8 border-y border-line-sub bg-surface-sec">
-      <div class="max-w-[1000px] mx-auto grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 text-center">
-        {
-          [
-            { icon: 'api', title: 'World-Class Typography', desc: 'Optimized line-heights and Inter font pairings' },
-            { icon: 'intro', title: 'Tailwind 4', desc: 'Modern utility-first styling for ultimate performance' },
-            { icon: 'test', title: 'Micro-interactions', desc: 'Smooth spring animations and hover states' },
-            { icon: 'package', title: 'Production Ready', desc: 'Built on top of Astro for blazing fast speeds' },
-          ].map((f) => (
+        <section class="learning-section" id="learning-path" aria-labelledby="learning-path-title">
+          <div class="section-heading">
             <div>
-              <div class="text-[2rem] mb-2 flex items-center justify-center text-content-acc">
-                {(() => {
-                  const IconComponent = iconMap[f.icon as keyof typeof iconMap] || BookOpen;
-                  return <IconComponent class="feather-icon w-8 h-8" />;
-                })()}
-              </div>
-              <div class="font-bold text-content-main mb-1">{f.title}</div>
-              <div class="text-[0.85rem] text-content-mut">{f.desc}</div>
+              <span class="section-label">Curriculum</span>
+              <h2 id="learning-path-title">Learning path</h2>
             </div>
-          ))
-        }
-      </div>
-    </section>
+            <span class="chapter-count">{chapters.length} chapters</span>
+          </div>
 
-    <!-- ═══ CHAPTERS GRID ════════════════════════════ -->
-    <section id="chapters" aria-labelledby="chapters-title">
-      <div class="text-center pt-16 px-8 pb-0">
-        <h2 id="chapters-title" class="text-[2rem] font-extrabold text-content-main mb-3">Table of Contents</h2>
-        <p class="text-content-mut text-base">Everything you need to master design.</p>
-      </div>
-
-      <div
-        class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-5 py-12 px-8 max-w-[1200px] mx-auto chapters-grid"
-      >
-        {
-          chapters.map((ch: any) => (
-            <a
-              href={ch.href}
-              class="group bg-surface-card border border-line-def rounded-xl p-7 flex flex-col gap-3 transition-all duration-300 relative overflow-hidden no-underline hover:bg-surface-elev hover:border-indigo-500/35 hover:-translate-y-1 hover:[box-shadow:0_12px_40px_rgba(0,0,0,0.4),var(--glow-primary)] chapter-card spotlight-card"
-              id={`chapter-${ch.num}`}
-            >
-              <div class="spotlight-content">
-                <div class="flex items-center justify-between mb-5">
-                  <span class="font-code text-[0.78rem] font-bold text-content-acc bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-1 rounded-full">
-                    Chapter {ch.num}
-                  </span>
-                  <span class="text-[0.72rem] font-semibold text-content-mut uppercase tracking-wider">{ch.level}</span>
-                </div>
-                <div
-                  class="w-11 h-11 flex items-center justify-center bg-indigo-500/10 rounded-md text-content-acc mb-2 border border-indigo-500/15 transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-indigo-500 group-hover:to-purple-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] group-hover:scale-110 chapter-card-icon"
-                  aria-hidden="true"
-                >
-                  {(() => {
-                    const IconComponent = iconMap[ch.icon as keyof typeof iconMap] || BookOpen;
-                    return <IconComponent class="w-[22px] h-[22px]" />;
-                  })()}
-                </div>
-                <div class="font-display text-[1.4rem] font-bold text-content-main leading-tight mb-1">{ch.title}</div>
-                <div class="text-[0.95rem] text-content-sec leading-relaxed">{ch.desc}</div>
-                <div class="flex flex-wrap gap-2 mt-4">
-                  {ch.tags.map((tag: any) => (
-                    <span class="text-[0.7rem] px-2 py-0.5 rounded font-medium text-content-mut border border-line-sub transition-colors duration-200">
-                      {tag}
-                    </span>
+          <div class="chapter-list">
+            {
+              chapterGroups.map((group) => (
+                <section class="chapter-group" aria-label={group.label ?? 'Chapters'}>
+                  {group.label && <h3 class="part-heading">{group.label}</h3>}
+                  {group.items.map((chapter) => (
+                    <a href={chapter.href} class="chapter-row">
+                      <span class="chapter-number" aria-hidden="true">
+                        {chapter.num}
+                      </span>
+                      <span class="chapter-copy">
+                        <strong>{chapter.title}</strong>
+                        {chapter.description && <span>{chapter.description}</span>}
+                      </span>
+                      <span class="chapter-time">
+                        <Clock3 class="size-3.5" /> {chapter.readingTime}
+                      </span>
+                      <ArrowRight class="chapter-arrow size-4" aria-hidden="true" />
+                    </a>
                   ))}
-                </div>
-              </div>
-            </a>
-          ))
-        }
-      </div>
-    </section>
+                </section>
+              ))
+            }
+          </div>
+        </section>
+      </main>
 
-    <!-- ═══ FOOTER ══════════════════════════════════ -->
-    <footer class="text-center py-12 px-8 border-t border-line-sub text-content-mut text-[0.85rem]">
-      <div class="mb-2 text-[1.5rem] flex items-center justify-center text-content-acc">
-        <BookOpen class="w-[22px] h-[22px]" />
-      </div>
-      <div>
-        Built with <a href="https://astro.build" class="text-content-acc no-underline">Astro</a> · Open Source
-      </div>
-      <div class="mt-2 opacity-60">Premium UX/UI Masterclass — 2024</div>
+      <aside class="book-info" aria-labelledby="book-info-title">
+        <h2 id="book-info-title">Book information</h2>
+        <dl>
+          <div>
+            <dt><BookOpen class="size-4" /> Chapters</dt>
+            <dd>{chapters.length}</dd>
+          </div>
+          <div>
+            <dt><Languages class="size-4" /> Language</dt>
+            <dd>{languageName}</dd>
+          </div>
+          <div>
+            <dt><CircleCheckBig class="size-4" /> Status</dt>
+            <dd class="status-value">{siteConfig.statusLabel}</dd>
+          </div>
+        </dl>
+        {siteConfig.lastReviewed && <p class="reviewed-date">Reviewed {siteConfig.lastReviewed}</p>}
+      </aside>
+    </div>
+
+    <footer class="enterprise-footer">
+      <span>{siteConfig.footer.text}</span>
+      <span>Built for focused technical reading</span>
     </footer>
 
-    <script>
-      document.addEventListener('astro:page-load', () => {
-        if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') return;
-
-        // ─── SCROLL REVEAL (IntersectionObserver) ───
-        const chapterCards = document.querySelectorAll('.chapter-card');
-        if (chapterCards.length > 0) {
-          const cardObserver = new IntersectionObserver(
-            (entries, observer) => {
-              entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                  // Staggered delay based on child index
-                  const el = entry.target as HTMLElement;
-                  el.style.transitionDelay = `${index * 100}ms`;
-                  el.classList.add('reveal-active');
-                  observer.unobserve(el);
-                }
-              });
-            },
-            { rootMargin: '0px 0px -10% 0px', threshold: 0 }
-          );
-
-          chapterCards.forEach((card) => {
-            card.classList.add('reveal-item');
-            cardObserver.observe(card);
-          });
-        }
-
-        // ─── THEME SWITCHER ───
-        const themeBtn = document.querySelector('#theme-switcher-btn') as HTMLElement | null;
-        const themeLabel = document.querySelector('#theme-btn-label');
-        const themeIconMoon = document.querySelector('#theme-icon-moon') as HTMLElement | null;
-        const themeIconSun = document.querySelector('#theme-icon-sun') as HTMLElement | null;
-
-        if (themeBtn) {
-          const themes = ['dark', 'light'];
-          const updateThemeButton = (currentTheme: string) => {
-            if (themeLabel) themeLabel.textContent = currentTheme === 'dark' ? 'Dark Mode' : 'Light Mode';
-            if (themeIconMoon && themeIconSun) {
-              themeIconMoon.style.display = currentTheme === 'dark' ? 'block' : 'none';
-              themeIconSun.style.display = currentTheme === 'light' ? 'block' : 'none';
-            }
-          };
-
-          let currentTheme = localStorage.getItem('site-theme') || 'dark';
-          updateThemeButton(currentTheme);
-
-          themeBtn.addEventListener('click', () => {
-            let nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
-            document.documentElement.setAttribute('data-theme', nextTheme);
-            localStorage.setItem('site-theme', nextTheme);
-            currentTheme = nextTheme;
-            updateThemeButton(nextTheme);
-
-            const iconWrapper = document.querySelector('#theme-btn-icon') as HTMLElement | null;
-            if (iconWrapper) {
-              iconWrapper.classList.remove('theme-icon-animate');
-              void iconWrapper.offsetWidth;
-              iconWrapper.classList.add('theme-icon-animate');
-            }
-          });
-        }
-
-        // ─── TYPEWRITER ───
-        const typewriterTarget = document.getElementById('typewriter-target');
-        const typewriterCursor = document.getElementById('typewriter-cursor');
-        if (typewriterTarget) {
-          typewriterTarget.textContent = '';
-          if (typewriterCursor) typewriterCursor.style.display = '';
-
-          const text =
-            'The ultimate template for technical books. Beautiful typography, low-contrast dark mode, and silky smooth micro-interactions built entirely with Vanilla CSS.';
-          let i = 0;
-          function typeWriter() {
-            if (i < text.length) {
-              typewriterTarget!.textContent += text.charAt(i);
-              i++;
-              setTimeout(typeWriter, 30);
-            } else {
-              if (typewriterCursor) typewriterCursor.style.display = 'none';
-            }
-          }
-          setTimeout(typeWriter, 800);
-        }
-      });
-    </script>
     <SearchModal />
   </body>
 </html>

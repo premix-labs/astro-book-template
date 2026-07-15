@@ -1,10 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ce422b"/>
-      <stop offset="100%" stop-color="#f57c00"/>
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="8" fill="url(#g)"/>
-  <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-size="20">🦀</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Book">
+  <rect width="32" height="32" rx="6" fill="#111827"/>
+  <path d="M7 7.5c3.3-.9 6.3-.3 9 1.5v16c-2.7-1.8-5.7-2.4-9-1.5v-16Z" fill="#f8fafc"/>
+  <path d="M25 7.5c-3.3-.9-6.3-.3-9 1.5v16c2.7-1.8 5.7-2.4 9-1.5v-16Z" fill="#38bdf8"/>
+  <path d="M16 9v16" stroke="#111827" stroke-width="1.5"/>
 </svg>

@@ -1,39 +1,44 @@
 ---
 // [slug].astro — Dynamic Route
+import { getCollection, render } from 'astro:content';
 import BookLayout from '../layouts/BookLayout.astro';
+import { calculateReadingTime } from '../utils/readingTime';
+import { mdxComponents } from '../components/mdxComponents';
+import { withBase } from '../utils/url';
 
 export async function getStaticPaths() {
-  const mdxFiles = Object.values(import.meta.glob<Record<string, any>>('../content/chapters/*.mdx', { eager: true }));
+  const allChapters = await getCollection('chapters', ({ data }) => !data.draft);
+  const chapters = allChapters.sort((a, b) => a.data.chapter - b.data.chapter);
 
-  // Map frontmatter into a clean chapters array and sort by chapter number
-  const chapters = mdxFiles.map((file: any) => file.frontmatter).sort((a: any, b: any) => a.chapter - b.chapter);
-
-  return chapters.map((ch: any, index: number) => {
-    const prev = index > 0 ? { href: `/${chapters[index - 1].slug}`, title: chapters[index - 1].title } : undefined;
+  return chapters.map((entry, index) => {
+    const prev =
+      index > 0 ? { href: withBase(chapters[index - 1].id), title: chapters[index - 1].data.title } : undefined;
     const next =
       index < chapters.length - 1
-        ? { href: `/${chapters[index + 1].slug}`, title: chapters[index + 1].title }
+        ? { href: withBase(chapters[index + 1].id), title: chapters[index + 1].data.title }
         : undefined;
 
     return {
-      params: { slug: ch.slug },
-      props: {
-        ...ch,
-        prev,
-        next,
-      },
+      params: { slug: entry.id },
+      props: { entry, prev, next },
     };
   });
 }
 
-const { slug, title, chapter, description, readingTime, prev, next } = Astro.props;
-
-// Import content components dynamically
-const modules = import.meta.glob<{ Content: any }>('../content/**/*.mdx');
-const mod = modules[`../content/chapters/${slug}.mdx`];
-const { Content } = mod ? await mod() : { Content: null };
+const { entry, prev, next } = Astro.props;
+const { title, description, chapter, readingTime } = entry.data;
+const { Content, headings } = await render(entry);
+const computedReadingTime = readingTime ?? `${calculateReadingTime(entry.body ?? '')} min`;
 ---
 
-<BookLayout title={title} chapter={chapter} description={description} readingTime={readingTime} prev={prev} next={next}>
-  {Content ? <Content /> : <p>Content coming soon...</p>}
+<BookLayout
+  title={title}
+  chapter={chapter}
+  description={description}
+  readingTime={computedReadingTime}
+  prev={prev}
+  next={next}
+  headings={headings}
+>
+  <Content components={mdxComponents} />
 </BookLayout>

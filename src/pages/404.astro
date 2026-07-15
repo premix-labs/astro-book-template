@@ -1,0 +1,60 @@
+---
+import '@fontsource/inter/latin.css';
+import '@fontsource-variable/noto-sans-thai/index.css';
+import '@fontsource-variable/noto-serif-thai/index.css';
+import '../styles/global.css';
+import { getCollection } from 'astro:content';
+import { ArrowRight, House } from '@lucide/astro';
+import { siteConfig } from '../site.config';
+import { withBase } from '../utils/url';
+
+const allChapters = await getCollection('chapters', ({ data }) => !data.draft);
+const firstChapter = allChapters.sort((a, b) => a.data.chapter - b.data.chapter)[0];
+const startHref = withBase(firstChapter ? firstChapter.id : '');
+---
+
+<!doctype html>
+<html lang={siteConfig.lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Page not found - {siteConfig.title}</title>
+    <script is:inline define:vars={{ defaultTheme: siteConfig.defaultTheme }}>
+      document.documentElement.setAttribute('data-theme', localStorage.getItem('site-theme') || defaultTheme);
+    </script>
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+  </head>
+  <body>
+    <header class="enterprise-header">
+      <a href={withBase('')} class="brand-link" aria-label={`${siteConfig.title} home`}>
+        <img src={withBase('favicon.svg')} width="32" height="32" alt="" class="brand-mark" />
+        <span class="brand-copy"><strong>{siteConfig.shortTitle}</strong><span>{siteConfig.tagline}</span></span>
+      </a>
+    </header>
+    <main class="min-h-[calc(100vh-var(--header-height))] grid place-items-center px-5 py-16">
+      <section
+        class="w-full max-w-[640px] border-t-4 border-[var(--teal-600)] bg-surface-sec px-6 py-10 sm:px-10"
+        aria-labelledby="not-found-title"
+      >
+        <div class="font-code text-sm font-bold text-content-acc">ERROR 404</div>
+        <h1
+          id="not-found-title"
+          class="font-display text-[2.4rem] leading-tight font-semibold text-content-main mt-3 mb-3"
+        >
+          Page not found
+        </h1>
+        <p class="text-content-sec leading-7 max-w-[520px] mb-7">
+          The requested page does not exist or its address has changed. Return to the book index or continue from the
+          first chapter.
+        </p>
+        <div class="flex gap-3 flex-wrap">
+          <a href={withBase('')} class="primary-command mt-0"><House class="size-4" /><span>Book home</span></a>
+          <a href={startHref} class="icon-command h-[42px] px-4 font-semibold"
+            ><span>Start reading</span><ArrowRight class="size-4" /></a
+          >
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

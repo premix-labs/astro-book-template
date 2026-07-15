@@ -1,37 +1,54 @@
 # Style Guide
 
-ใช้ไฟล์นี้ควบคุมภาษา รูปแบบบทเรียน และ code examples ให้สม่ำเสมอทั้งเล่ม
+มาตรฐานนี้ควบคุมภาษา โครงบท ตัวอย่าง และหลักฐานให้สม่ำเสมอทั้งเล่ม
 
 ## Language
 
-- เขียนให้มือใหม่ทำตามได้โดยไม่ต้องเดา
-- อธิบายเหตุผลก่อนสั่งให้ใช้ concept ใหม่
-- ใช้ประโยคตรง สั้น และตรวจได้
-- แยกคำว่า demo, local development และ production ให้ชัดเจน
+- เขียนให้ผู้อ่านตามได้โดยไม่ต้องเดา prerequisite หรือไฟล์ที่ต้องแก้
+- อธิบายปัญหาและเหตุผลก่อนแนะนำ syntax, package, annotation หรือ configuration ใหม่
+- ใช้ประโยคตรง กระชับ และนิยามศัพท์เมื่อปรากฏครั้งแรก
+- แยกให้ชัดว่าอะไรเป็น demo, local development, production practice และ deliberate simplification
+- หลีกเลี่ยงคำว่า "ง่าย", "แค่", "แน่นอน" และ "latest" เมื่อไม่มีเงื่อนไขหรือหลักฐาน
+- ใช้ชื่อเทคนิคตาม official documentation และคงรูปแบบเดียวกันทั้งเล่ม
 
 ## Chapter Shape
 
-บทลงมือทำควรมี:
+บทลงมือทำต้องมีตามลำดับ:
 
-1. บทนี้จะทำอะไร
-2. ก่อนเริ่มบทนี้
-3. สิ่งที่จะใช้ในบทนี้
-4. หลังจบบทนี้ ไฟล์ที่เปลี่ยน
-5. ขั้นตอนลงมือทำ
-6. ทดสอบ
-7. ผลลัพธ์ที่ควรเห็น
-8. ปัญหาที่พบบ่อย
-9. Checkpoint
+1. ผลลัพธ์ที่ผู้อ่านจะทำได้
+2. prerequisites และสถานะเริ่มต้น
+3. concept ใหม่พร้อมเหตุผล
+4. ไฟล์ที่จะสร้างหรือแก้
+5. ขั้นตอนเล็กที่มีตำแหน่ง code ชัดเจน
+6. command สำหรับ run/test/build
+7. expected result ที่สังเกตได้
+8. ปัญหาที่พบบ่อยและวิธีวินิจฉัย
+9. checkpoint ก่อนบทถัดไป
 
-## Code Blocks
+บทแนวคิดหรือ reference อาจปรับลำดับได้ แต่ต้องมี outcome และวิธีตรวจความเข้าใจ
 
-- แตกโค้ดเป็น block เล็ก
-- บอกชื่อไฟล์ก่อน code block
-- บอกตำแหน่งที่ต้องเพิ่มหรือแก้
-- หลีกเลี่ยงการแปะทั้งไฟล์ถ้าไม่จำเป็น
-- ถ้าคำสั่งต่างกันตาม OS ให้มีทั้ง Windows PowerShell และ macOS/Linux Bash
+## Code And Commands
 
-## Naming
+- ระบุ path และตำแหน่งก่อน code block ที่ไม่ชัดเจน
+- แสดงเฉพาะส่วนที่ต้องเปลี่ยน เว้นแต่ทั้งไฟล์จำเป็นต่อความเข้าใจ
+- อธิบายบรรทัดสำคัญหลัง code ไม่บังคับให้ผู้อ่านถอดความเอง
+- ใช้ PowerShell และ Bash เมื่อ syntax ต่างกัน
+- ห้ามฝัง secret หรือ credential จริง ใช้ placeholder ที่บอกความหมาย
+- ทุก command ต้องถูกทดสอบจาก working directory ที่บทระบุ
+- ตัวอย่างต้อง format, build และ test ตามมาตรฐานของ stack นั้น
 
-- ใช้ชื่อ project, route, port และ filename ให้ตรงกับ example project จริง
-- ถ้า rename สิ่งใด ต้องอัปเดต README, examples และ validation report พร้อมกัน
+## Naming And Versions
+
+- project, route, DTO, port policy และ filename ต้องตรงกับ implementation
+- ใช้เลขเวอร์ชันที่ตรวจสอบได้ และบันทึกวันที่/แหล่งอ้างอิงใน `book-plan.md`
+- เมื่อ rename ต้องอัปเดตบท examples contracts README และ validation report พร้อมกัน
+
+## Frontmatter
+
+- `title`: ไม่ซ้ำและอธิบายหัวข้อจริง
+- `description`: หนึ่งประโยคที่บอก learner outcome
+- `chapter`: จำนวนเต็มต่อเนื่อง เริ่ม introduction ที่ 0
+- `part`: ใช้ชื่อเดียวกันทุกบทในภาคเดียวกัน
+- `draft`: ใช้ซ่อนบทที่ยังไม่พร้อม ห้ามใช้แทน status tracking
+
+รัน `npm run check:book` หลังเพิ่ม ย้าย หรือเปลี่ยนเลขบท

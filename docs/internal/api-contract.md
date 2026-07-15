@@ -1,45 +1,53 @@
 # API Contract
 
-ใช้ไฟล์นี้บันทึก contract ที่บทเรียน ตัวอย่าง หรือ frontend ต้องพึ่งพา ถ้าหนังสือเล่มนี้ไม่ได้ใช้ API ให้เขียน `Not applicable` พร้อมเหตุผล
+Status: **Not decided**
 
-## Base URL
+ใช้เอกสารนี้เมื่อบทเรียน ตัวอย่าง หรือ frontend พึ่งพา API หากหนังสือไม่ใช้ API ให้เปลี่ยน Status เป็น **Not applicable** พร้อมเหตุผล และลบ section ที่ไม่เกี่ยวข้อง
 
-```text
-http://localhost:<port>
-```
+## Runtime Assumptions
+
+- API technology/version:
+- Base URL discovery method:
+- Development port policy:
+- API versioning policy:
+
+อย่า fix development port หาก framework เลือก port ให้เอง ให้ผู้อ่านใช้ URL ที่แสดงใน terminal หรือ configuration ของเครื่อง
 
 ## Authentication
 
-- Auth type:
-- Token/session location:
+- Authentication type:
+- Credential location:
 - Public endpoints:
 - Protected endpoints:
+- Authorization rules:
 
-## Error Shape
+## Error Contract
 
 ```json
 {
-  "message": "Describe the error",
-  "errors": {}
+  "type": "about:blank",
+  "title": "Describe the error category",
+  "status": 400,
+  "detail": "Describe this occurrence",
+  "traceId": "correlation-value"
 }
 ```
 
+ปรับ shape ให้ตรง implementation จริง ห้ามคัดลอกตัวอย่างนี้ไปอ้างว่าเป็น contract โดยไม่ตรวจสอบ
+
 ## Endpoints
 
-| Method | Path | Purpose | Auth | Chapter |
-| --- | --- | --- | --- | --- |
-| GET | `/health` | Health check | No | |
+| Method | Path | Purpose | Auth | Request | Success response | Introduced in |
+| ------ | ---- | ------- | ---- | ------- | ---------------- | ------------- |
 
-## DTOs
+## Shared DTOs
 
-บันทึก request/response shape ที่ใช้ซ้ำระหว่างบท:
-
-```json
-{}
-```
+| Name | Direction | Fields | Validation | Introduced in |
+| ---- | --------- | ------ | ---------- | ------------- |
 
 ## Compatibility Notes
 
 - Breaking changes:
 - Version assumptions:
 - Backend/frontend dependencies:
+- CORS requirements:
