@@ -2,7 +2,7 @@
 
 A versioned Astro and MDX platform for technical tutorial books. It provides structured authoring, automatic chapter navigation, Pagefind search, reusable MDX components, conflict-aware template updates, cross-browser quality gates, security automation and GitHub Pages deployment.
 
-Current template version: **1.0.1**
+Current template version: **1.1.0**
 
 ## Create A New Book
 
@@ -55,6 +55,7 @@ Use a Node.js version allowed by `package.json`. Do not assume a fixed developme
 | `npm run test:visual`            | Compare desktop and mobile pages with reviewed snapshots           |
 | `npm run test:visual:update`     | Deliberately regenerate visual baselines after design review       |
 | `npm run test:performance`       | Enforce asset, DOM and navigation performance budgets              |
+| `npm run audit:book`             | Detect objective teaching, safety and portability issues           |
 | `npm run check:book`             | Validate required docs, chapters, frontmatter and plan/status sync |
 | `npm run build`                  | Build the site and Pagefind index                                  |
 | `npm run check:links`            | Validate links and assets in `dist`                                |
@@ -74,13 +75,13 @@ Run `npm run security:audit` after dependency changes.
 ## Add A Chapter
 
 ```powershell
-npm run new-chapter -- "เริ่มต้นใช้งาน" --part "Part 1: Foundations"
+npm run new-chapter -- "Getting Started" --part "Part 1: Foundations"
 ```
 
-Unicode titles, including Thai, produce valid Unicode slugs. Use an explicit ASCII URL slug when desired:
+Unicode titles produce valid Unicode slugs. Use an explicit ASCII URL slug when desired:
 
 ```powershell
-npm run new-chapter -- "เริ่มต้นใช้งาน" --slug getting-started
+npm run new-chapter -- "Getting Started" --slug getting-started
 ```
 
 The script assigns the next chapter number and writes valid frontmatter. Replace every scaffold placeholder before marking the chapter ready.
@@ -117,7 +118,7 @@ See `src/content/chapters/04-components.mdx` for the rendered authoring referenc
 
 ## Book Documentation Standard
 
-Read `AGENTS.md`, `skills/tutorial-book-auditor/SKILL.md`, and `docs/internal/README.md` before planning or reviewing a book. Every generated book includes:
+Read `AGENTS.md`, `skills/tutorial-book-auditor/SKILL.md`, and `docs/internal/README.md` before planning or reviewing a book. The auditor combines a deterministic CLI gate with an evidence-based scoring and reporting policy. Every generated book includes:
 
 ```text
 docs/internal/

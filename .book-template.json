@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/book-template.schema.json",
   "schemaVersion": 1,
-  "templateVersion": "1.0.1",
+  "templateVersion": "1.1.0",
   "templateRepository": "https://github.com/premix-labs/astro-book-template",
   "generatedAt": "2026-07-15",
   "managedFiles": {}

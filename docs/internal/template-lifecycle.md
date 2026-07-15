@@ -4,7 +4,7 @@
 
 `package.json` and `.template-manifest.json` define the released template version. Generated books record the installed version and managed-file checksums in `.book-template.json`.
 
-Book-owned files include chapter content, `src/site.config.ts`, curriculum documents, examples and validation evidence. Template-managed files include the shared reader shell, components, validators, tests and workflows listed in `.template-manifest.json`.
+Book-owned files include chapter content, `src/site.config.ts`, curriculum documents, examples, validation evidence and reviewed visual-regression baselines. Template-managed files include the shared reader shell, components, validators, test logic and workflows listed in `.template-manifest.json`.
 
 ## Check An Installed Book
 

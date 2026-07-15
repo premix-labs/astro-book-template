@@ -1,7 +1,7 @@
 {
   "name": "astro-book-template",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Reusable Astro + Tailwind 4 template for technical books, rebrandable per book via src/site.config.ts",
   "engines": {
     "node": "^22.22.3 || ^24.16.0 || >=26.3.0"
@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
+    "audit:book": "node skills/tutorial-book-auditor/scripts/audit-book.mjs --root .",
     "check:book": "node scripts/validate-book.mjs",
     "check:links": "node scripts/check-links.mjs",
     "lint": "eslint .",
@@ -29,7 +30,7 @@
     "test:visual:update": "npm run test:visual -- --update-snapshots",
     "test:performance": "playwright test tests/performance --project=chromium-desktop",
     "security:audit": "npm audit --audit-level=moderate",
-    "verify": "npm run format:check && npm run lint && npm run check && npm run test && npm run check:book && npm run build && npm run check:links",
+    "verify": "npm run format:check && npm run lint && npm run check && npm run test && npm run check:book && npm run audit:book && npm run build && npm run check:links",
     "verify:enterprise": "npm run verify && npm run test:e2e:chromium && npm run test:visual && npm run test:performance && npm run security:audit"
   },
   "dependencies": {

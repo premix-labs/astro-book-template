@@ -2,10 +2,10 @@
 
 ## Summary
 
-- Status: Enterprise quality gates passed; version `1.0.1` is a maintenance release candidate
+- Status: Enterprise local quality gates passed; version `1.1.0` is a feature release candidate
 - Last validated: 2026-07-15
 - Validator: Codex
-- Scope: lifecycle tooling, content contracts, production build, cross-browser behavior, accessibility, performance and supply-chain controls
+- Scope: auditor policy and tooling, lifecycle metadata, content contracts, clean generation, production build, cross-browser behavior, accessibility, performance and supply-chain controls
 - Main remaining risk: assistive-technology and physical-device checks require manual release evidence
 
 ## Environment
@@ -18,16 +18,18 @@
 
 ## Automated Evidence
 
-| Command                    | Result | Evidence                                                                                                          |
-| -------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------- |
-| `npm run verify`           | Passed | Prettier, ESLint, 43-file Astro check, 6 script tests, 5 content files, 23 required files, 7-page build and links |
-| `npm run test:e2e`         | Passed | 22 passed; 3 desktop-only drawer skips across Chromium, Firefox, WebKit, Chromium tablet and Chromium mobile      |
-| `npm run test:performance` | Passed | 1 production performance-budget test passed                                                                       |
-| `npm run security:audit`   | Passed | 0 vulnerabilities at moderate severity or above                                                                   |
-| `npm run template:check`   | Passed | Source version 1.0.1 matches the release manifest; no update or drift detected                                    |
-| `npm sbom`                 | Passed | Valid CycloneDX 1.5 JSON generated; tagged releases create the equivalent artifact                                |
-| Generated-book clean gate  | Passed | `create-book`, `npm ci` and `npm run verify` passed; one source-only lifecycle test skipped by design             |
-| `npm run test:visual`      | Passed | 4 reviewed home/reader baselines passed locally; Windows and Ubuntu snapshots are versioned                       |
+| Command                    | Result | Evidence                                                                                                                                |
+| -------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run verify`           | Passed | Prettier, ESLint, 45-file Astro check, 11 script tests, 5 content files, 30 required files, zero audit findings, 7-page build and links |
+| `npm run test:e2e`         | Passed | 27 passed; 3 desktop-only drawer skips across Chromium, Firefox, WebKit, Chromium tablet and Chromium mobile                            |
+| `npm run test:performance` | Passed | 1 production performance-budget test passed                                                                                             |
+| `npm run security:audit`   | Passed | 0 vulnerabilities at moderate severity or above                                                                                         |
+| Skill `quick_validate.py`  | Passed | Skill metadata, naming and folder structure are valid                                                                                   |
+| `npm run audit:book`       | Passed | 5 chapters audited with 0 Critical, High, Medium or Low findings                                                                        |
+| `npm run template:check`   | Passed | Source version 1.1.0 matches the release manifest; no update or drift detected                                                          |
+| `npm sbom`                 | Passed | Valid CycloneDX 1.5 JSON generated; tagged releases create the equivalent artifact                                                      |
+| Generated-book clean gate  | Passed | Version 1.1.0 `create-book`, `npm ci` and `npm run verify` passed; one source-only lifecycle test skipped by design                     |
+| `npm run test:visual`      | Passed | 4 reviewed home/reader baselines passed locally; Windows and Ubuntu snapshots are versioned                                             |
 
 ## Remote Evidence
 
@@ -43,6 +45,7 @@
 | ------------------ | ------------------------------------------------------------------------------------------------------------- |
 | Architecture       | Shared header/head components, typed site configuration and explicit book-owned/template-owned boundaries     |
 | Content governance | Required outcomes, prerequisites, difficulty, tested versions, status and verification freshness              |
+| Audit governance   | Stable severity levels, rubric hard caps, report contract, deterministic CLI findings and regression fixtures |
 | Template lifecycle | Semantic template version, manifest, JSON schema, checksums and update conflict detection                     |
 | CI and deployment  | Pull-request quality/browser gates, SHA-pinned actions, least-privilege Pages deployment and concurrency      |
 | Security           | Dependabot, CodeQL, dependency review, npm audit, security policy and no-secret release checklist             |
@@ -54,21 +57,25 @@
 
 ## Findings Resolved
 
-| Severity | Finding                                                  | Resolution                                                                            |
-| -------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| High     | Generated books had no safe upgrade path                 | Added checksum-managed template updates that stop on local conflicts                  |
-| High     | Release confidence depended on one desktop browser       | Added cross-browser, tablet, mobile, Axe and performance automation                   |
-| High     | Third-party Actions could float to changed code          | Pinned every workflow action to a full commit SHA and added validator enforcement     |
-| Medium   | Content could become stale without a detectable signal   | Added tested-version and last-verified metadata with a published-content age gate     |
-| Medium   | Header behavior was duplicated between home and reader   | Consolidated brand, search, theme and mobile behavior into shared components          |
-| Medium   | Pagefind dialog duplicated an element ID in production   | Removed the duplicate ID and selected the production custom element directly          |
-| Medium   | Reader progress had no accessible name                   | Added an explicit accessible label to the progressbar                                 |
-| Medium   | Fresh generated books failed their first format gate     | Generator now emits Prettier-stable README, site config and internal evidence files   |
-| Medium   | UI changes had no image-level regression gate            | Added reviewed desktop/mobile baselines for both Windows and Ubuntu runners           |
-| Low      | Source-only lifecycle test ran inside generated books    | Limited the self-source assertion to the source template; conflict tests still run    |
-| Low      | Version and ownership contracts could silently diverge   | Validator now checks package/manifest versions, managed paths and workflow references |
-| Low      | Manual release output had no software inventory artifact | Release workflow now emits a CycloneDX SBOM alongside the built site                  |
+| Severity | Finding                                                  | Resolution                                                                               |
+| -------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| High     | Generated books had no safe upgrade path                 | Added checksum-managed template updates that stop on local conflicts                     |
+| High     | Release confidence depended on one desktop browser       | Added cross-browser, tablet, mobile, Axe and performance automation                      |
+| High     | Third-party Actions could float to changed code          | Pinned every workflow action to a full commit SHA and added validator enforcement        |
+| Medium   | Content could become stale without a detectable signal   | Added tested-version and last-verified metadata with a published-content age gate        |
+| Medium   | Header behavior was duplicated between home and reader   | Consolidated brand, search, theme and mobile behavior into shared components             |
+| Medium   | Pagefind dialog duplicated an element ID in production   | Removed the duplicate ID and selected the production custom element directly             |
+| Medium   | Reader progress had no accessible name                   | Added an explicit accessible label to the progressbar                                    |
+| Medium   | Fresh generated books failed their first format gate     | Generator now emits Prettier-stable README, site config and internal evidence files      |
+| Medium   | UI changes had no image-level regression gate            | Added reviewed desktop/mobile baselines for both Windows and Ubuntu runners              |
+| Low      | Source-only lifecycle test ran inside generated books    | Limited the self-source assertion to the source template; conflict tests still run       |
+| Low      | Version and ownership contracts could silently diverge   | Validator now checks package/manifest versions, managed paths and workflow references    |
+| Low      | Manual release output had no software inventory artifact | Release workflow now emits a CycloneDX SBOM alongside the built site                     |
+| High     | Tutorial scores could vary without enforceable evidence  | Added severity definitions, score caps, a report contract and deterministic audit rules  |
+| Medium   | Auditor behavior had no regression evaluation            | Added passing and high-risk fixtures with stable rule-ID and severity assertions         |
+| Medium   | Whitespace word counts could penalize Thai chapters      | Added Unicode word segmentation and a Thai regression case                               |
+| Medium   | Independently sticky book metadata could overlap         | Made the information panel one sticky unit and added scroll geometry regression coverage |
 
 ## Release Decision
 
-The enterprise template platform and recovery path are proven on GitHub. Version `1.0.1` must pass its protected pull request, Pages deployment and matching release workflow before it replaces `v1.0.0`. Generated books must still produce their own curriculum, example, contract and release evidence.
+The version `1.1.0` source and a clean generated book pass all local enterprise gates. The release still requires a protected pull request, GitHub Pages deployment and matching tagged release before it replaces `v1.0.1`. Generated books must still produce their own curriculum, example, contract and release evidence.

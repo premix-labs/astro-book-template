@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-หนังสือควรบอก deployment target เพื่อให้ final project มีเป้าหมายที่ตรวจได้
+The book should define deployment targets so the final project has verifiable completion criteria.
 
 ## Decision
 
@@ -17,6 +17,6 @@ Proposed
 
 ## Consequences
 
-- release checklist ต้องตรวจ deployment notes
-- README ต้องมีคำสั่ง build และ deploy
-- validation report ต้องระบุผล build ล่าสุด
+- The release checklist must verify deployment notes.
+- The README must include build and deployment commands.
+- The validation report must record the latest build result.

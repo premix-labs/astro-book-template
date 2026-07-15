@@ -2,7 +2,7 @@
 
 Status: **Not decided**
 
-ใช้เอกสารนี้เมื่อบทเรียน ตัวอย่าง หรือ frontend พึ่งพา API หากหนังสือไม่ใช้ API ให้เปลี่ยน Status เป็น **Not applicable** พร้อมเหตุผล และลบ section ที่ไม่เกี่ยวข้อง
+Use this document when chapters, examples, or a frontend depend on an API. If the book does not use an API, change the status to **Not applicable**, record the reason, and remove irrelevant sections.
 
 ## Runtime Assumptions
 
@@ -11,7 +11,7 @@ Status: **Not decided**
 - Development port policy:
 - API versioning policy:
 
-อย่า fix development port หาก framework เลือก port ให้เอง ให้ผู้อ่านใช้ URL ที่แสดงใน terminal หรือ configuration ของเครื่อง
+Do not hard-code a development port when the framework selects one. Tell readers to use the URL printed in the terminal or their local configuration.
 
 ## Authentication
 
@@ -33,7 +33,7 @@ Status: **Not decided**
 }
 ```
 
-ปรับ shape ให้ตรง implementation จริง ห้ามคัดลอกตัวอย่างนี้ไปอ้างว่าเป็น contract โดยไม่ตรวจสอบ
+Replace this shape with the actual implementation. Do not present this example as the contract without verifying it.
 
 ## Endpoints
 

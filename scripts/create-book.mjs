@@ -146,6 +146,7 @@ Requires a Node.js version allowed by \`package.json\`.
 | -------------------------------- | -------------------------------------------------------------------- |
 | \`npm install\`                    | Install dependencies and create the local workspace                  |
 | \`npm run dev\`                    | Start Astro and use the URL printed in the terminal                  |
+| \`npm run audit:book\`             | Detect objective teaching, safety and portability issues            |
 | \`npm run verify\`                 | Run lint, type checks, tests, book validation, build and link checks |
 | \`npm run verify:enterprise\`      | Add Chromium, accessibility, performance and dependency gates        |
 | \`npm run build\`                  | Build the static site and Pagefind index                             |
@@ -155,16 +156,16 @@ Requires a Node.js version allowed by \`package.json\`.
 
 ## Authoring Standard
 
-Read \`AGENTS.md\` and \`docs/internal/README.md\` before writing chapters. Plan the curriculum in \`docs/internal/book-plan.md\`, keep examples synchronized, and update \`docs/internal/validation-report.md\` with real evidence.
+Read \`AGENTS.md\`, \`skills/tutorial-book-auditor/SKILL.md\` and \`docs/internal/README.md\` before writing chapters. Plan the curriculum in \`docs/internal/book-plan.md\`, keep examples synchronized, and update \`docs/internal/validation-report.md\` with real evidence.
 `;
 }
 
 function resetPlanningDocs(targetRoot, { title, slug, lang }) {
   const planPath = join(targetRoot, 'docs', 'internal', 'book-plan.md');
   const plan = readFileSync(planPath, 'utf8')
-    .replace('- Working title:', `- Working title: ${title}`)
-    .replace('- Repository name:', `- Repository name: ${slug}`)
-    .replace('- Content language:', `- Content language: ${lang}`);
+    .replace(/^- Working title:.*$/m, `- Working title: ${title}`)
+    .replace(/^- Repository name:.*$/m, `- Repository name: ${slug}`)
+    .replace(/^- Content language:.*$/m, `- Content language: ${lang}`);
   writeFileSync(planPath, plan, 'utf8');
 
   writeFileSync(

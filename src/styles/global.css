@@ -464,12 +464,12 @@ a {
   background: var(--bg-secondary);
 }
 
-.book-info > * {
+.book-info-content {
   position: sticky;
+  top: calc(var(--header-height) + 38px);
 }
 
 .book-info h2 {
-  top: calc(var(--header-height) + 38px);
   margin: 0 0 22px;
   font-size: 0.78rem;
   font-weight: 750;
@@ -477,7 +477,6 @@ a {
 }
 
 .book-info dl {
-  top: calc(var(--header-height) + 80px);
   margin: 0;
 }
 
@@ -510,7 +509,6 @@ a {
 }
 
 .reviewed-date {
-  top: calc(var(--header-height) + 260px);
   margin-top: 18px;
   color: var(--text-muted);
   font-size: 0.72rem;
@@ -945,16 +943,16 @@ body.menu-open {
 
   .book-info {
     grid-column: 2;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 24px;
     padding: 28px 48px 36px;
     border-top: 1px solid var(--border-default);
     border-left: 0;
   }
 
-  .book-info > * {
+  .book-info-content {
     position: static;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 24px;
   }
 
   .book-info dl {
@@ -966,6 +964,10 @@ body.menu-open {
   .book-info h2,
   .reviewed-date {
     margin: 0;
+  }
+
+  .reviewed-date {
+    grid-column: 1;
   }
 }
 
@@ -997,8 +999,11 @@ body.menu-open {
   }
 
   .book-info {
-    display: block;
     padding: 30px 24px;
+  }
+
+  .book-info-content {
+    display: block;
   }
 
   .book-info dl {

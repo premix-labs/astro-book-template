@@ -1,10 +1,10 @@
 # Manuscript Status
 
-ใช้ติดตามสถานะต้นฉบับและหลักฐานของแต่ละบท ตารางนี้ต้องใช้เลขและชื่อบทเดียวกับ `book-plan.md`
+Track manuscript status and evidence for each chapter here. Chapter numbers and titles must match `book-plan.md`.
 
 ## Current Status
 
-- Stage: Template 1.0.1 maintenance release candidate
+- Stage: Template 1.1.0 feature release candidate
 - Last updated: 2026-07-15
 - Release target: Versioned reusable project template
 - Main blocker: Remote branch-protection, release and Pages checks require a pushed commit and tag
@@ -14,7 +14,7 @@
 | Chapter | Title | Status | Example synced | Verification |
 | ------: | ----- | ------ | -------------- | ------------ |
 
-ค่าที่ใช้ใน Status: `Not started`, `Draft`, `Needs review`, `Ready`, `Released`
+Allowed status values: `Not started`, `Draft`, `Needs review`, `Ready`, `Released`.
 
 ## Open Work
 
@@ -27,9 +27,10 @@
 - Added a versioned, conflict-aware update lifecycle for generated books.
 - Added cross-browser, accessibility, performance and security quality gates.
 - Added governed content metadata, shared reader architecture and tag-driven release artifacts.
+- Added evidence-backed auditor scoring, deterministic findings and regression evaluation fixtures.
 
 ## Status Rules
 
-- `Ready` ต้องมีเนื้อหาครบ ตัวอย่างตรงกับบท และมีผลตรวจที่บันทึกไว้
-- `Released` ใช้เมื่อบทถูกเผยแพร่จาก commit/release ที่ระบุได้
-- ห้ามใช้ `Example synced: Yes` หากไม่ได้ build/test สถานะตัวอย่างของบทนั้น
+- `Ready` requires complete content, synchronized examples, and recorded verification.
+- `Released` applies only after publication from an identifiable commit or release.
+- Do not set `Example synced: Yes` without building or testing that chapter's example state.

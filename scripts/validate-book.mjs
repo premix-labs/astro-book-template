@@ -36,6 +36,13 @@ const requiredFiles = [
   'docs/internal/qa/accessibility-checklist.md',
   'docs/internal/qa/browser-test-plan.md',
   'docs/internal/qa/security-review-checklist.md',
+  'skills/tutorial-book-auditor/SKILL.md',
+  'skills/tutorial-book-auditor/agents/openai.yaml',
+  'skills/tutorial-book-auditor/references/automated-rules.md',
+  'skills/tutorial-book-auditor/references/report-contract.md',
+  'skills/tutorial-book-auditor/references/scoring-policy.md',
+  'skills/tutorial-book-auditor/references/teaching-principles.md',
+  'skills/tutorial-book-auditor/scripts/audit-book.mjs',
 ];
 
 for (const file of requiredFiles) {

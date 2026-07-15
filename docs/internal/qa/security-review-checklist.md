@@ -1,18 +1,18 @@
 # Security Review Checklist
 
-ใช้กับ site, code examples, authentication, database, deployment และ configuration หากข้อใด N/A ให้บันทึกเหตุผล
+Apply this checklist to the site, code examples, authentication, databases, deployment, and configuration. Record a reason for every N/A item.
 
-- [ ] ไม่มี secret, token, password, private key หรือ connection string จริงใน repository/history ที่จะเผยแพร่
-- [ ] `.env` และ local user files ถูก ignore; มี `.env.example` เมื่อผู้อ่านต้องตั้งค่า
-- [ ] dependency audit ผ่านหรือมี documented risk acceptance
-- [ ] Dependabot, dependency review และ CodeQL ไม่มี unresolved high-risk finding
-- [ ] GitHub Actions ใช้ full commit SHA และตรวจ revision เมื่อ Dependabot เปิด pull request
-- [ ] external scripts/assets มาจากแหล่งที่เชื่อถือได้และถูกจำกัดเท่าที่ทำได้
-- [ ] code examples validate input และไม่เปิดเผย internal error/sensitive data
-- [ ] password hashing, token/session storage และ authorization ใช้ library/platform ที่เหมาะสม
-- [ ] CORS, cookies, CSRF และ security headers ถูกอธิบายตาม architecture จริง
-- [ ] logs ไม่บันทึก credential, token หรือ personal data เกินจำเป็น
-- [ ] database user/container/process ไม่ใช้สิทธิ์เกินจำเป็นใน production guidance
-- [ ] deployment examples ไม่ฝัง credential และแยก development defaults จาก production
-- [ ] destructive commands มี warning, scope และ recovery/backup guidance
-- [ ] security claims มี source และวันที่ตรวจสอบ
+- [ ] No real secrets, tokens, passwords, private keys, or connection strings exist in published repository history.
+- [ ] `.env` and local user files are ignored; provide `.env.example` when readers must configure values.
+- [ ] Dependency audits pass or have a documented risk acceptance.
+- [ ] Dependabot, dependency review, and CodeQL have no unresolved high-risk findings.
+- [ ] GitHub Actions use full commit SHAs, and revisions are reviewed when Dependabot opens a pull request.
+- [ ] External scripts and assets come from trusted sources and are restricted where practical.
+- [ ] Code examples validate input and do not expose internal errors or sensitive data.
+- [ ] Password hashing, token or session storage, and authorization use suitable platform libraries.
+- [ ] CORS, cookies, CSRF, and security headers match the documented architecture.
+- [ ] Logs do not record credentials, tokens, or unnecessary personal data.
+- [ ] Production guidance applies least privilege to database users, containers, and processes.
+- [ ] Deployment examples do not embed credentials and distinguish development defaults from production.
+- [ ] Destructive commands include warnings, scope, and recovery or backup guidance.
+- [ ] Security claims include a source and verification date.

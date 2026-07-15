@@ -1,10 +1,10 @@
 # Book Documentation Standard
 
-เอกสารนี้เป็นมาตรฐานโครง `docs/internal` สำหรับหนังสือเทคนิคทุกเล่มใน workspace นี้ ใช้เพื่อให้การวางแผน เขียน ตรวจ และ release หนังสือมี pattern เดียวกัน
+This directory defines the internal documentation standard for every technical book created from the template. It keeps planning, authoring, review, and release work consistent.
 
 ## Required Structure
 
-ทุกเล่มควรมีโครงขั้นต่ำแบบนี้:
+Every book should include this minimum structure:
 
 ```text
 docs/internal/
@@ -23,43 +23,43 @@ docs/internal/
   qa/
 ```
 
-โฟลเดอร์ `decisions/` ใช้เก็บ decision records แบบเลขลำดับ เช่น `0001-tech-stack.md` ส่วน `qa/` ใช้เก็บ checklist สำหรับ browser, accessibility และ security review
+Use `decisions/` for numbered decision records such as `0001-tech-stack.md`. Use `qa/` for browser, accessibility, and security review checklists.
 
 ## File Roles
 
-- `book-plan.md`: ขอบเขตหนังสือ กลุ่มผู้อ่าน ผลลัพธ์ปลายทาง และลำดับบท
-- `api-contract.md`: contract ที่ตัวอย่างหรือ frontend ต้องพึ่งพา เช่น route, DTO, auth และ error shape
-- `final-project-structure.md`: โครงสร้าง final project ที่หนังสือพาไปถึง
-- `manuscript-status.md`: สถานะบท งานค้าง และความพร้อม release
-- `operations-runbook.md`: ขั้นตอน deploy, ตรวจ incident, rollback และกู้คืน release
-- `release-checklist.md`: gate ก่อนเผยแพร่หนังสือ
-- `style-guide.md`: มาตรฐานภาษา โค้ด ตัวอย่างคำสั่ง และรูปแบบคำอธิบาย
-- `teaching-principles.md`: หลักการสอนทีละขั้นและ definition of done ของบทเรียน
-- `validation-report.md`: รายงานตรวจ build, examples, ลิงก์, navigation และข้อจำกัดที่เหลือ
-- `template-lifecycle.md`: เวอร์ชัน template, managed files, ขั้นตอน update, release และ repository settings
-- `design/`: มาตรฐาน UX/UI และภาพ concept ที่ใช้ควบคุม hierarchy, density และ responsive behavior
-- `decisions/`: เหตุผลของ technical choices ที่ไม่ควรกระจายอยู่ในบทเรียน
-- `qa/`: checklist สำหรับตรวจคุณภาพก่อนส่งงานหรือ release
+- `book-plan.md`: book scope, audience, target outcomes, and chapter sequence
+- `api-contract.md`: routes, DTOs, authentication, and error contracts required by examples or frontends
+- `final-project-structure.md`: the target structure of the final project
+- `manuscript-status.md`: chapter status, open work, and release readiness
+- `operations-runbook.md`: deployment, incident diagnosis, rollback, and release recovery procedures
+- `release-checklist.md`: mandatory gates before publication
+- `style-guide.md`: language, code, command, and explanation standards
+- `teaching-principles.md`: step-by-step teaching principles and the chapter definition of done
+- `validation-report.md`: build, example, link, navigation, and residual-risk evidence
+- `template-lifecycle.md`: template versions, managed files, updates, releases, and repository settings
+- `design/`: UX/UI standards and reference images governing hierarchy, density, and responsive behavior
+- `decisions/`: rationale for technical choices that should not be scattered across chapters
+- `qa/`: quality checklists used before delivery or release
 
 ## Optional Files
 
-ไฟล์เฉพาะเล่มเพิ่มได้ แต่ต้องตอบว่าไฟล์นั้นใช้ควบคุมคุณภาพหรือการพัฒนาหนังสือจริง ไม่ใช่โน้ตชั่วคราว เช่น frontend book อาจมี `cross-backend-compatibility.md` เพื่อควบคุม compatibility กับ backend หลายภาษา
+Book-specific files are allowed when they govern quality or book development rather than storing temporary notes. For example, a frontend book may add `cross-backend-compatibility.md` to define compatibility with multiple backend implementations.
 
-ถ้าจะเพิ่มไฟล์เฉพาะเล่ม ให้เก็บใน `docs/internal` และอธิบายใน README หน้าแรกของ repo ว่าไฟล์นั้นมีไว้เพื่ออะไร
+Keep book-specific governance files in `docs/internal` and explain their purpose in the repository README.
 
 ## Working Order
 
-ก่อนเริ่มเขียนหรือแก้บทเรียน:
+Before writing or revising chapters:
 
-1. อ่าน `book-plan.md`
-2. อ่าน `teaching-principles.md`
-3. อ่าน `style-guide.md`
-4. ตรวจ `api-contract.md` และ `final-project-structure.md` ถ้าบทนั้นแตะ behavior หรือ example project
-5. อัปเดต `manuscript-status.md` และ `validation-report.md` เมื่อสถานะเปลี่ยน
+1. Read `book-plan.md`.
+2. Read `teaching-principles.md`.
+3. Read `style-guide.md`.
+4. Check `api-contract.md` and `final-project-structure.md` when a chapter changes behavior or examples.
+5. Update `manuscript-status.md` and `validation-report.md` when status changes.
 
-ก่อน release:
+Before release:
 
-1. ตรวจ `release-checklist.md`
-2. ตรวจไฟล์ใน `qa/`
-3. รันคำสั่ง build/test ตาม scope
-4. อัปเดต `validation-report.md` ด้วยผลตรวจล่าสุด
+1. Complete `release-checklist.md`.
+2. Complete the relevant files in `qa/`.
+3. Run build and test commands appropriate to the change scope.
+4. Record current evidence in `validation-report.md`.

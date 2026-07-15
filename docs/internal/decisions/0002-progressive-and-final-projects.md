@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-หนังสือควรมีตัวอย่างที่ค่อย ๆ โตตามบท และ final project ที่รวมทุกอย่างเข้าด้วยกัน
+The book should include an example that grows chapter by chapter and a final project that integrates the complete workflow.
 
 ## Decision
 
@@ -16,6 +16,6 @@ Proposed
 
 ## Consequences
 
-- ผู้เรียนเห็น path จากพื้นฐานไปงานจริง
-- ผู้เขียนต้อง sync บทเรียนกับ examples เสมอ
-- การเปลี่ยน final project ต้องอัปเดตหลายไฟล์พร้อมกัน
+- Readers see a clear path from fundamentals to practical work.
+- Authors must keep chapters and examples synchronized.
+- Changing the final project requires coordinated updates across multiple files.

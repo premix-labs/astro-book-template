@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-หนังสือเล่มนี้ต้องเลือก stack ที่เหมาะกับผู้เรียนและ final project
+The book needs a stack appropriate for its readers and final project.
 
 ## Decision
 
