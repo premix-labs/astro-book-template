@@ -1,0 +1,35 @@
+---
+title: Write A Self-Contained Chapter
+description: Structure a lesson so a learner can understand, implement and verify it without reading the example source first.
+chapter: 2
+readingTime: '10 min'
+icon: file-pen-line
+tags: [writing, teaching]
+difficulty: beginner
+prerequisites: ["Plan A Technical Book"]
+learningOutcomes: ["Write a self-contained chapter with located edits, commands, expected results and a checkpoint."]
+testedWith: ["Astro MDX 7.0.2"]
+lastVerified: 2026-07-15
+status: published
+---
+
+A chapter is complete only when the learner can follow it from the prose. Example projects are verification sources and optional references, not hidden instructions.
+
+## Practical Chapter Shape
+
+<Steps>
+1. State the outcome and prerequisites.
+2. Explain the problem and each new concept before syntax.
+3. List files that will be created or changed.
+4. Build the solution in small, located code blocks.
+5. Run the relevant command and describe the expected result.
+6. Cover common failures and finish with a verifiable checkpoint.
+</Steps>
+
+## Code Blocks
+
+Name the file and location before every non-trivial block. Prefer a sequence of focused edits over pasting an entire file. Include PowerShell and Bash commands when operating-system syntax differs.
+
+<Callout type="tip" title="Definition of done">
+  The matching progressive example must build or test at this chapter state without files or abstractions from future lessons.
+</Callout>

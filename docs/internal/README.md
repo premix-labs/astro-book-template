@@ -13,10 +13,12 @@ docs/internal/
   api-contract.md
   final-project-structure.md
   manuscript-status.md
+  operations-runbook.md
   release-checklist.md
   style-guide.md
   teaching-principles.md
   validation-report.md
+  design/
   decisions/
   qa/
 ```
@@ -29,10 +31,13 @@ docs/internal/
 - `api-contract.md`: contract ที่ตัวอย่างหรือ frontend ต้องพึ่งพา เช่น route, DTO, auth และ error shape
 - `final-project-structure.md`: โครงสร้าง final project ที่หนังสือพาไปถึง
 - `manuscript-status.md`: สถานะบท งานค้าง และความพร้อม release
+- `operations-runbook.md`: ขั้นตอน deploy, ตรวจ incident, rollback และกู้คืน release
 - `release-checklist.md`: gate ก่อนเผยแพร่หนังสือ
 - `style-guide.md`: มาตรฐานภาษา โค้ด ตัวอย่างคำสั่ง และรูปแบบคำอธิบาย
 - `teaching-principles.md`: หลักการสอนทีละขั้นและ definition of done ของบทเรียน
 - `validation-report.md`: รายงานตรวจ build, examples, ลิงก์, navigation และข้อจำกัดที่เหลือ
+- `template-lifecycle.md`: เวอร์ชัน template, managed files, ขั้นตอน update, release และ repository settings
+- `design/`: มาตรฐาน UX/UI และภาพ concept ที่ใช้ควบคุม hierarchy, density และ responsive behavior
 - `decisions/`: เหตุผลของ technical choices ที่ไม่ควรกระจายอยู่ในบทเรียน
 - `qa/`: checklist สำหรับตรวจคุณภาพก่อนส่งงานหรือ release
 

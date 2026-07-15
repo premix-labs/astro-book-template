@@ -1,0 +1,65 @@
+---
+// Steps.astro — Numbered tutorial steps. Wrap a normal Markdown ordered list:
+//
+//   <Steps>
+//   1. Install the dependency.
+//   2. Import the component.
+//   3. Ship it.
+//   </Steps>
+//
+// The list is auto-numbered with badges and a connecting rail.
+---
+
+<div class="steps">
+  <slot />
+</div>
+
+<style>
+  .steps :global(ol) {
+    list-style: none;
+    counter-reset: step;
+    margin: 1.5rem 0;
+    padding: 0;
+  }
+
+  .steps :global(ol > li) {
+    counter-increment: step;
+    position: relative;
+    padding-left: 3rem;
+    padding-bottom: 1.5rem;
+    margin: 0;
+  }
+
+  .steps :global(ol > li:not(:last-child))::after {
+    content: '';
+    position: absolute;
+    left: 0.94rem;
+    top: 2rem;
+    bottom: 0;
+    width: 1px;
+    background: var(--border-default);
+  }
+
+  .steps :global(ol > li)::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.9rem;
+    height: 1.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--teal-600);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-accent);
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .steps :global(ol > li:last-child) {
+    padding-bottom: 0;
+  }
+</style>

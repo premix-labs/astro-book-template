@@ -1,33 +1,55 @@
 # Final Project Structure
 
-ใช้ไฟล์นี้กำหนดโครงสร้าง final project ที่หนังสือจะพาผู้เรียนสร้างจนจบ
+Status: **Not decided**
+
+เอกสารนี้กำหนดปลายทางที่หนังสือพาผู้อ่านสร้าง หากหนังสือไม่มี final project ให้ระบุ **Not applicable** และอธิบายรูปแบบแบบฝึกหัดที่ใช้แทน
+
+## Project Identity
+
+- Project name:
+- Purpose:
+- Entry point:
+- Runtime/version:
+- External services:
+
+## Target Structure
+
+แทนที่ placeholder ด้วย tree ที่ตรงกับ final example จริง
 
 ```text
 examples/
   final-project/
+    README.md
 ```
 
-## Rules
+## Progressive Strategy
 
-- โครงสร้างนี้ต้องตรงกับ final example จริง
-- ถ้าบทเรียนใช้ progressive example ต้องไม่ข้าม concept จากบทอนาคต
-- ถ้าโครงสร้างเปลี่ยน ต้องอัปเดตบทที่เกี่ยวข้องและ `validation-report.md`
+- Progressive example location:
+- Snapshot/branch policy:
+- How each chapter maps to a runnable state:
+- Rule for preventing future concepts from leaking into earlier chapters:
 
-## Target Structure
+## Commands
 
-```text
-final-project/
-  README.md
-```
+| Purpose | Command | Expected result |
+| ------- | ------- | --------------- |
+| Install |         |                 |
+| Run     |         |                 |
+| Test    |         |                 |
+| Build   |         |                 |
 
-## Build And Run
+## Configuration
 
-```powershell
-npm run build
-```
+| Setting | Source | Safe example value | Required for |
+| ------- | ------ | ------------------ | ------------ |
 
 ## Verification
 
-- Command:
-- Expected result:
+- Automated checks:
+- Manual workflows:
+- Supported environments:
 - Known limitations:
+
+## Synchronization Rule
+
+เมื่อโครงสร้าง ชื่อไฟล์ command route หรือ behavior เปลี่ยน ต้องอัปเดตบทที่เกี่ยวข้อง ตัวอย่าง README, contract และ `validation-report.md` ใน change เดียวกัน

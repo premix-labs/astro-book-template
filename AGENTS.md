@@ -25,11 +25,10 @@ These instructions apply to this repository.
 
 ## Verification
 
-- Run `npm run build` after docs, navigation, frontmatter, dependency, or template changes when a `package.json` exists.
+- Run `npm run verify` after docs, navigation, frontmatter, dependency, script, or template changes.
 - Run relevant example build/test commands when example behavior changes.
-- Run `npm run lint` when JavaScript/TypeScript/Astro code or lint configuration changes.
 - Run `npm audit --audit-level=moderate` after dependency changes.
-- Report commands that were run and any command that could not be run.
+- Record commands, results, dates, scope, and remaining risks in `docs/internal/validation-report.md`.
 
 ## Git
 
