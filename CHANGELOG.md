@@ -6,6 +6,13 @@ All notable template changes are documented here. This project follows Semantic 
 
 No changes yet.
 
+## [1.0.1] - 2026-07-15
+
+### Changed
+
+- upgraded GitHub Pages upload and deploy actions to Node 24-compatible major versions
+- verified production rollback from the immutable `v1.0.0` tag
+
 ## [1.0.0] - 2026-07-15
 
 ### Added

@@ -2,7 +2,7 @@
 
 A versioned Astro and MDX platform for technical tutorial books. It provides structured authoring, automatic chapter navigation, Pagefind search, reusable MDX components, conflict-aware template updates, cross-browser quality gates, security automation and GitHub Pages deployment.
 
-Current template version: **1.0.0**
+Current template version: **1.0.1**
 
 ## Create A New Book
 

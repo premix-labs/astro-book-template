@@ -2,7 +2,7 @@
 
 ## Summary
 
-- Status: Local enterprise quality gate passed for template version `1.0.0`
+- Status: Enterprise quality gates passed; version `1.0.1` is a maintenance release candidate
 - Last validated: 2026-07-15
 - Validator: Codex
 - Scope: lifecycle tooling, content contracts, production build, cross-browser behavior, accessibility, performance and supply-chain controls
@@ -24,10 +24,18 @@
 | `npm run test:e2e`         | Passed | 22 passed; 3 desktop-only drawer skips across Chromium, Firefox, WebKit, Chromium tablet and Chromium mobile      |
 | `npm run test:performance` | Passed | 1 production performance-budget test passed                                                                       |
 | `npm run security:audit`   | Passed | 0 vulnerabilities at moderate severity or above                                                                   |
-| `npm run template:check`   | Passed | Source version 1.0.0 matches the release manifest; no update or drift detected                                    |
+| `npm run template:check`   | Passed | Source version 1.0.1 matches the release manifest; no update or drift detected                                    |
 | `npm sbom`                 | Passed | Valid CycloneDX 1.5 JSON generated; tagged releases create the equivalent artifact                                |
 | Generated-book clean gate  | Passed | `create-book`, `npm ci` and `npm run verify` passed; one source-only lifecycle test skipped by design             |
 | `npm run test:visual`      | Passed | 4 reviewed home/reader baselines passed locally; Windows and Ubuntu snapshots are versioned                       |
+
+## Remote Evidence
+
+- Pull request 1 passed quality, browser, CodeQL policy, CodeQL analysis and dependency review before merge.
+- GitHub Pages deployed the protected `main` commit and returned HTTP 200 for home, a direct chapter and Pagefind.
+- Release `v1.0.0` published `site.tar.gz` and `sbom.cdx.json` after the enterprise gate passed on GitHub Actions.
+- Rollback run 29386489414 rebuilt, verified and redeployed immutable tag `v1.0.0` successfully.
+- Version `1.0.1` upgrades Pages actions to remove the Node 20 deprecation found during that rollback exercise.
 
 ## Enterprise Controls
 
@@ -63,4 +71,4 @@
 
 ## Release Decision
 
-Version `1.0.0` is ready as a local release candidate. Publishing still requires a reviewed commit, protected-branch checks, a matching tag and successful GitHub release/Pages workflows. Generated books must produce their own curriculum, example, contract and release evidence.
+The enterprise template platform and recovery path are proven on GitHub. Version `1.0.1` must pass its protected pull request, Pages deployment and matching release workflow before it replaces `v1.0.0`. Generated books must still produce their own curriculum, example, contract and release evidence.

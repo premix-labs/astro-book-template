@@ -24,7 +24,7 @@ test('createBook produces a clean localized scaffold', () => {
     const packageJson = JSON.parse(readFileSync(join(target, 'package.json'), 'utf8'));
     const templateMetadata = JSON.parse(readFileSync(join(target, '.book-template.json'), 'utf8'));
     assert.equal(packageJson.name, 'thai-test-book');
-    assert.equal(templateMetadata.templateVersion, '1.0.0');
+    assert.equal(templateMetadata.templateVersion, '1.0.1');
     assert.ok(Object.keys(templateMetadata.managedFiles).length > 20);
     assert.match(readFileSync(join(target, 'src', 'site.config.ts'), 'utf8'), /หนังสือทดสอบ/);
     assert.match(readFileSync(join(target, 'src', 'content', 'chapters', 'intro.mdx'), 'utf8'), /เริ่มต้นหนังสือ/);
