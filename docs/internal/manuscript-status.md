@@ -4,7 +4,7 @@
 
 ## Current Status
 
-- Stage: Template 1.0.0 release candidate
+- Stage: Template 1.0.1 maintenance release candidate
 - Last updated: 2026-07-15
 - Release target: Versioned reusable project template
 - Main blocker: Remote branch-protection, release and Pages checks require a pushed commit and tag
