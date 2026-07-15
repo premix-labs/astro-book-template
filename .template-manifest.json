@@ -111,6 +111,7 @@
     "eslint-plugin-astro",
     "mermaid",
     "pagefind",
+    "parse5",
     "prettier",
     "prettier-plugin-astro",
     "tailwindcss",

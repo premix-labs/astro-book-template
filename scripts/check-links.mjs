@@ -3,11 +3,13 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parse } from 'parse5';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
 const dist = join(root, 'dist');
 const errors = [];
+const excludedElements = new Set(['pre', 'script', 'style', 'textarea']);
 
 if (!existsSync(dist)) {
   console.error('dist/ does not exist. Run npm run build before npm run check:links.');
@@ -29,18 +31,28 @@ function candidatesFor(path) {
   return [path, `${path}.html`, join(path, 'index.html')];
 }
 
+function collectUrlAttributes(html) {
+  const values = [];
+
+  function visit(node) {
+    if (excludedElements.has(node.tagName)) return;
+    for (const attribute of node.attrs ?? []) {
+      if (attribute.name === 'href' || attribute.name === 'src') values.push(attribute.value);
+    }
+    for (const child of node.childNodes ?? []) visit(child);
+  }
+
+  visit(parse(html));
+  return values;
+}
+
 const basePath = (process.env.BASE_PATH ?? '').replace(/^\/+|\/+$/g, '');
 const htmlFiles = walk(dist, '.html');
 
 for (const htmlFile of htmlFiles) {
   const html = readFileSync(htmlFile, 'utf8');
-  const scannableHtml = html
-    .replace(/<!--[\s\S]*?-->/g, '')
-    .replace(/<(pre|script|style|textarea)\b[^>]*>[\s\S]*?<\/\1>/gi, '');
-  const attributes = scannableHtml.matchAll(/\b(?:href|src)=["']([^"']+)["']/g);
 
-  for (const match of attributes) {
-    const original = match[1];
+  for (const original of collectUrlAttributes(html)) {
     if (/^(?:https?:|mailto:|tel:|data:|blob:|javascript:|#)/.test(original)) continue;
 
     let value = original.split('#')[0].split('?')[0];
