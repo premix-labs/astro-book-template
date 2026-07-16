@@ -12,7 +12,10 @@ updates:
       astro-toolchain:
         patterns: ['astro', '@astrojs/*']
       quality-toolchain:
-        patterns: ['eslint*', 'prettier*', '@playwright/*', '@axe-core/*']
+        patterns: ['eslint*', 'prettier*', '@typescript-eslint/*', '@playwright/*', '@axe-core/*']
+    ignore:
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: github-actions
     directory: /
