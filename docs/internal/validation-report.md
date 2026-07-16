@@ -88,6 +88,7 @@
 | Medium   | Legal, conduct, support and merge policy were implicit     | Added license, code of conduct, support and governance contracts                           |
 | Medium   | Windows checkout converted text files and failed Prettier  | Added managed `.gitattributes` with LF text policy and explicit binary asset rules         |
 | High     | Deployment browser gate assumed the site was hosted at `/` | Made Playwright readiness and navigation relative to the configured GitHub Pages base path |
+| Medium   | Pull-request browser checks covered only root deployments  | Added a project-subpath Chromium gate before deployment                                    |
 
 ## Release Decision
 
