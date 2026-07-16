@@ -15,8 +15,8 @@ async function stabilizePage(page: import('@playwright/test').Page) {
 }
 
 for (const scenario of [
-  { name: 'home', path: '/' },
-  { name: 'reader', path: '/intro/' },
+  { name: 'home', path: './' },
+  { name: 'reader', path: 'intro/' },
 ]) {
   test(`${scenario.name} matches its reviewed visual baseline`, async ({ page }) => {
     await page.goto(scenario.path);

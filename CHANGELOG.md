@@ -4,6 +4,12 @@ All notable template changes are documented here. This project follows Semantic 
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-07-16
+
+### Fixed
+
+- made Playwright readiness and test routes work for both root sites and GitHub Pages project subpaths
+
 ## [1.2.0] - 2026-07-16
 
 ### Added

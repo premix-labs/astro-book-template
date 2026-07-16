@@ -10,7 +10,7 @@ const budgets = {
 };
 
 test('home stays within the production performance budget', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   await page.waitForLoadState('networkidle');
 
   const metrics = await page.evaluate(() => {

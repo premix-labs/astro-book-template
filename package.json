@@ -1,7 +1,7 @@
 {
   "name": "astro-book-template",
   "type": "module",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Reusable Astro + Tailwind 4 template for technical books, rebrandable per book via src/site.config.ts",
   "engines": {
     "node": "^22.22.3 || ^24.16.0 || >=26.3.0"
