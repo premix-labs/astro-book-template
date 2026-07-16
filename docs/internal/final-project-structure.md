@@ -2,7 +2,7 @@
 
 Status: **Not decided**
 
-เอกสารนี้กำหนดปลายทางที่หนังสือพาผู้อ่านสร้าง หากหนังสือไม่มี final project ให้ระบุ **Not applicable** และอธิบายรูปแบบแบบฝึกหัดที่ใช้แทน
+This document defines the project readers will build by the end of the book. If the book has no final project, set the status to **Not applicable** and describe the exercise model used instead.
 
 ## Project Identity
 
@@ -14,7 +14,7 @@ Status: **Not decided**
 
 ## Target Structure
 
-แทนที่ placeholder ด้วย tree ที่ตรงกับ final example จริง
+Replace this placeholder with a tree that matches the final example.
 
 ```text
 examples/
@@ -52,4 +52,4 @@ examples/
 
 ## Synchronization Rule
 
-เมื่อโครงสร้าง ชื่อไฟล์ command route หรือ behavior เปลี่ยน ต้องอัปเดตบทที่เกี่ยวข้อง ตัวอย่าง README, contract และ `validation-report.md` ใน change เดียวกัน
+When structure, filenames, commands, routes, or behavior change, update the affected chapters, examples, README, contracts, and `validation-report.md` in the same change.

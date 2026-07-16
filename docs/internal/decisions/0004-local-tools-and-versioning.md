@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-ผู้เรียนต้องใช้เครื่องมือและเวอร์ชันที่ตรงกันเพื่อทำตามหนังสือได้
+Readers need compatible tools and versions to complete the book reliably.
 
 ## Decision
 
@@ -18,6 +18,6 @@ Proposed
 
 ## Consequences
 
-- README ต้องบอก prerequisites ชัดเจน
-- บทเรียนต้องมีคำสั่งที่ copy ได้
-- เมื่อ version เปลี่ยน ต้องตรวจ examples และ validation report ใหม่
+- The README must state prerequisites clearly.
+- Chapters must provide copyable commands.
+- Version changes require renewed example verification and validation evidence.

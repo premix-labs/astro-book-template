@@ -1,13 +1,18 @@
 ---
 name: tutorial-book-auditor
-description: Audit and improve technical tutorial books and companion example projects using the shared Book Documentation Standard. Use when reviewing, scoring, or editing chapters, README/docs, validation reports, book plans, API contracts, final project structures, progressive/final examples, teaching quality, release readiness, production-readiness, browser/accessibility/security QA, or 10/10 tutorial content.
+description: Audit, score, and improve technical tutorial books and companion examples with evidence-backed teaching, implementation, and release checks. Use for chapter or full-book reviews, 10/10 scoring, curriculum and documentation audits, progressive/final example synchronization, production-readiness, validation reports, API contracts, and browser, accessibility, security, or release QA.
 ---
 
 # Tutorial Book Auditor
 
-## Required Reference
+## Required References
 
-Read `references/teaching-principles.md` before scoring or rewriting chapters. It contains the generic tutorial-book rubric, chapter checklist, common failure patterns, and verification gates.
+Read references according to the task:
+
+- `references/teaching-principles.md`: always read before reviewing or rewriting a chapter
+- `references/automated-rules.md`: read before interpreting CLI findings or changing audit thresholds
+- `references/scoring-policy.md`: read before assigning a score or release decision
+- `references/report-contract.md`: read before returning a scored audit or fix report
 
 When the task touches planning, structure, examples, behavior, compatibility, or release quality, also inspect the relevant files in `docs/internal/`:
 
@@ -25,10 +30,12 @@ When the task touches planning, structure, examples, behavior, compatibility, or
 2. Inspect source files with `rg`/file reads. Do not rely on memory when files are available.
 3. Compare the chapter against the progressive example at the same learning point and the final example when relevant.
 4. Check that the work follows `docs/internal/README.md` and the book-specific planning docs.
-5. Score with the 10-point rubric from the reference file when reviewing teaching quality.
-6. Lead with concrete blockers: missing explanation, skipped folder/file setup, hidden helper usage, long code blocks, wrong ports/routes, missing expected results, missing UI/API states, or unsynced examples.
-7. If the user asks to fix, edit the smallest set of files that makes the lesson clearer and correct.
-8. Verify with commands that match the touched scope.
+5. Run `node skills/tutorial-book-auditor/scripts/audit-book.mjs --root .` when the script exists. Treat its findings as evidence, not a substitute for manual review.
+6. Classify findings with the shared severity policy and lead with concrete blockers.
+7. Score each rubric category from direct evidence, then apply every relevant hard cap.
+8. If the user asks to fix, edit the smallest coherent set of files that resolves the behavior and documentation together.
+9. Verify with commands that match the touched scope and record commands that fail or cannot run.
+10. Return the report shape defined in `references/report-contract.md`.
 
 ## Editing Rules
 
@@ -41,6 +48,7 @@ When the task touches planning, structure, examples, behavior, compatibility, or
 - Make chapters self-contained. A learner should not need to open example source files to understand what to write, where to write it, or how to verify it.
 - Treat example projects as source of truth for verification and optional reference only.
 - Update docs, examples, README, validation report, API contract notes, QA notes, and release checklist together when behavior changes.
+- Never award `10/10` while a required command is unverified or a Critical, High, or Medium finding remains open.
 
 ## Book Standard Checks
 
@@ -56,6 +64,7 @@ When the task touches planning, structure, examples, behavior, compatibility, or
 
 Run only commands relevant to the files touched:
 
+- Automated book audit: `npm run audit:book` or the direct skill script.
 - Book/docs changes in a scaffolded site: `npm run build`.
 - Example project changes: run the build/test command defined by that example.
 - Browser/UI changes: run available browser/e2e checks, or inspect the rendered app when available.
@@ -64,6 +73,6 @@ Run only commands relevant to the files touched:
 
 If a command cannot be run because the copied book has not been scaffolded yet, report that directly instead of pretending validation happened.
 
-## Response Shape
+## Reporting
 
-For reviews, return score, findings by chapter/file, and the next edits needed. For fixes, return changed files and verification results. Keep the answer concise and grounded in file paths.
+Follow `references/report-contract.md`. Keep findings ordered by severity, cite file locations, distinguish automated findings from manual judgment, and state remaining risk. Do not average scores in a way that hides a blocking chapter or failed example.

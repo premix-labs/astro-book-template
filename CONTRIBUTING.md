@@ -4,6 +4,8 @@
 
 Every change must preserve a learner's ability to follow the book from prose, reproduce commands and verify an observable result. Internal examples are evidence, not hidden instructions.
 
+Participation follows `CODE_OF_CONDUCT.md`; ownership, approval and decision rules follow `GOVERNANCE.md`.
+
 ## Before Editing
 
 1. Read `AGENTS.md` and `docs/internal/README.md`.
@@ -22,8 +24,9 @@ npm run verify
 For shared UI, navigation, dependencies or release changes, also run:
 
 ```bash
-npx playwright install chromium
+npx playwright install chromium firefox webkit
 npm run verify:enterprise
+npm run test:e2e
 ```
 
 Update `docs/internal/validation-report.md` with commands actually run, results and residual risk. Do not copy evidence from another book or release.
@@ -37,4 +40,4 @@ Update `docs/internal/validation-report.md` with commands actually run, results 
 
 ## Releases
 
-Releases use semantic versioning. A tag must match `package.json`, `.template-manifest.json` and the top unreleased entry in `CHANGELOG.md`.
+Releases use semantic versioning. A tag must match `package.json`, `package-lock.json`, `.template-manifest.json` and the corresponding entry in `CHANGELOG.md`. The release workflow must publish checksums, an SBOM and build-provenance attestations from the verified tag.

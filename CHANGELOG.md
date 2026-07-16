@@ -4,7 +4,47 @@ All notable template changes are documented here. This project follows Semantic 
 
 ## [Unreleased]
 
-No changes yet.
+## [1.2.0] - 2026-07-16
+
+### Added
+
+- Linux visual-baseline generation workflow and an actionable baseline preflight check
+- Windows, macOS and Linux portability jobs for authoring, tests and production builds
+- project governance, support, conduct and MIT license policies
+- SHA-256 release checksums and GitHub build-provenance attestations
+- incident severity, recovery targets, ownership and quarterly recovery-drill requirements
+
+### Changed
+
+- made `create-book` source-only and removed inherited curriculum, changelog history, generated output, reports and visual snapshots from new books
+- made deployment and rollback execute the full enterprise gate
+- made tagged releases execute the full Chromium, Firefox and WebKit suite
+- synchronized package, lockfile, template metadata and managed lifecycle at version 1.2.0
+- standardized text files on LF across Windows, macOS and Linux checkouts
+
+### Fixed
+
+- kept book status and review metadata in one sticky container so localized text cannot overlap while scrolling
+
+## [1.1.0] - 2026-07-15
+
+### Added
+
+- evidence-backed tutorial scoring with severity definitions and hard score caps
+- a stable audit report contract for chapter, part and full-book reviews
+- deterministic `audit:book` checks with text and JSON output
+- regression fixtures for enterprise-ready and high-risk tutorial chapters
+- Unicode-aware audit heuristics and a documented stable rule registry
+
+### Changed
+
+- standardized template-owned authoring and QA documentation in English
+- expanded auditor metadata and managed-file lifecycle coverage
+- added learner checkpoints to every hands-on template chapter
+- completed managed lifecycle coverage for the book creator and visual-baseline update command
+- made generated-book tests independent of template chapter count, titles, and localized search labels
+- classified visual regression baselines as book-owned evidence to prevent template update conflicts
+- replaced complete identity lines when deriving a new book from an already customized source
 
 ## [1.0.1] - 2026-07-15
 

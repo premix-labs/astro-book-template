@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-ถ้าหนังสือมี auth หรือข้อมูลผู้ใช้ ต้องกำหนด security model ให้ชัดตั้งแต่เอกสารวางแผน
+If the book includes authentication or user data, define the security model clearly during curriculum planning.
 
 ## Decision
 
@@ -18,6 +18,6 @@ Proposed
 
 ## Consequences
 
-- บทเรียนต้องแยก local demo กับ production ให้ชัด
-- security checklist ต้องตรวจตาม model นี้
-- breaking changes ต้องอัปเดต `api-contract.md`
+- Chapters must distinguish local demonstrations from production guidance.
+- The security checklist must be evaluated against this model.
+- Breaking changes must update `api-contract.md`.

@@ -15,7 +15,7 @@ Include:
 - minimal proof of concept using non-sensitive data
 - suggested mitigation when known
 
-The maintainer will acknowledge a valid report, assess severity and coordinate remediation before public disclosure.
+The maintainer targets acknowledgement within two business days, severity assessment within five business days and coordinated status updates at least weekly until resolution. These are open-source response targets, not a contractual SLA.
 
 ## Repository Rules
 

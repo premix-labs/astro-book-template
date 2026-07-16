@@ -22,7 +22,7 @@ test(
   }
 );
 
-test('syncTemplate refuses to overwrite a locally modified managed file', () => {
+test('syncTemplate refuses to overwrite a locally modified managed file', { skip: !isSourceTemplate }, () => {
   const directory = mkdtempSync(join(tmpdir(), 'astro-book-sync-'));
   const target = join(directory, 'managed-book');
   try {

@@ -1,44 +1,44 @@
 # Teaching Principles
 
-หนังสือสอนเขียนโปรแกรมที่ดีต้องทำให้ผู้เรียนสร้างของที่รันได้จริง และเข้าใจเหตุผลของแต่ละขั้น ไม่ใช่พิมพ์ตามโดยไม่รู้ว่ากำลังแก้อะไร
+A strong programming tutorial enables learners to build something that runs and understand the reason for each step, instead of copying code without context.
 
 ## Definition Of Done
 
-บทหนึ่งจะถือว่าพร้อมสอนเมื่อผ่านทุกข้อ:
+A chapter is ready to teach only when it meets every requirement:
 
-- มีเป้าหมายบทที่ชัดเจน
-- บอก prerequisites ก่อนเริ่ม
-- บอกไฟล์ที่จะเปลี่ยนหลังจบบท
-- อธิบาย concept ใหม่ก่อนใช้
-- ถ้าสร้าง folder หรือ file ต้องมีคำสั่งที่ copy ได้
-- โค้ดถูกแบ่งเป็นขั้น
-- มีคำสั่ง run, test หรือ build สำหรับตรวจผล
-- มี expected result
-- มี common errors หรือคำแนะนำเมื่อผลไม่ตรง
-- มี checkpoint ก่อนอ่านบทต่อไป
-- เนื้อหาตรงกับ example project ณ จุดนั้นของหนังสือ
+- It has a clear chapter outcome.
+- It states prerequisites before the first step.
+- It lists files that will change.
+- It explains each new concept before use.
+- It provides copyable commands when creating folders or files.
+- It divides code into teachable steps.
+- It provides a run, test, or build command for verification.
+- It states an observable expected result.
+- It covers common failures or diagnostic guidance.
+- It includes a checkpoint before the next chapter.
+- It matches the example project at that point in the book.
 
 ## Teaching Method
 
-สอนโค้ดเป็นชั้น:
+Teach code in layers:
 
-1. สร้าง folder
-2. สร้าง file
-3. เพิ่ม import หรือ using
-4. เพิ่ม class, function, component หรือ module
-5. เพิ่ม dependency
-6. เพิ่ม behavior ทีละส่วน
-7. ต่อเข้ากับ route, UI, service หรือ configuration
-8. ทดสอบผลลัพธ์
+1. Create the folder.
+2. Create the file.
+3. Add imports or using directives.
+4. Add the class, function, component, or module.
+5. Add the dependency.
+6. Add behavior incrementally.
+7. Connect it to a route, UI, service, or configuration.
+8. Verify the result.
 
 ## Review Rubric
 
-| หมวด                                          | คะแนน |
-| --------------------------------------------- | ----: |
-| เป้าหมายและบริบทชัด                           |     1 |
-| อธิบาย concept ก่อนใช้                        |     2 |
-| ขั้นตอนละเอียดและไม่กระโดด                    |     2 |
-| โค้ดแตกเป็นส่วนอ่านง่าย                       |     1 |
-| คำสั่งตรวจและ expected result ชัด             |   1.5 |
-| common errors/checkpoint ช่วยตรวจตัวเองได้    |     1 |
-| ตรงกับ example project และ build/test ได้จริง |   1.5 |
+| Category                                                | Score |
+| ------------------------------------------------------- | ----: |
+| Clear outcome and context                               |     1 |
+| Concepts are explained before use                       |     2 |
+| Detailed steps without unexplained jumps                |     2 |
+| Code is divided into readable sections                  |     1 |
+| Verification commands and expected results are explicit |   1.5 |
+| Common failures and checkpoints support self-diagnosis  |     1 |
+| Examples match the chapter and genuinely build or test  |   1.5 |

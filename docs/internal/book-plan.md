@@ -1,6 +1,6 @@
 # Book Plan
 
-เอกสารนี้เป็น source of truth ของขอบเขตและลำดับการสอน ต้องตัดสินใจหัวข้อที่จำเป็นก่อนเริ่มเขียนบทจริง และอัปเดตเมื่อ scope เปลี่ยน
+This document is the source of truth for scope and teaching sequence. Decide the required topics before drafting chapters, and update it whenever scope changes.
 
 ## Book Identity
 
@@ -21,17 +21,17 @@
 | Astro               | See `package.json`         | Official documentation          |              |
 | Book-specific stack |                            |                                 |              |
 
-ไม่ใช้คำว่า "latest" โดยไม่มีหมายเลขเวอร์ชันและวันที่ตรวจสอบ หากสอนหลายเวอร์ชันให้ระบุ compatibility boundary ชัดเจน
+Do not use "latest" without a version number and verification date. When teaching multiple versions, define the compatibility boundary explicitly.
 
 ## Reader Promise
 
-หลังจบเล่ม ผู้อ่านจะสามารถ:
+After completing the book, readers will be able to:
 
 1.
 2.
 3.
 
-หลักฐานที่ใช้ยืนยันผลลัพธ์ปลายทาง:
+Evidence used to verify the target outcomes:
 
 -
 
@@ -59,7 +59,7 @@
 
 ## Chapter Map
 
-เพิ่มหนึ่งแถวต่อหนึ่งบท และใช้ชื่อเดียวกันใน `manuscript-status.md`
+Add one row per chapter and use the same title in `manuscript-status.md`.
 
 | Chapter | Title | Learner outcome | Example milestone | Verification |
 | ------: | ----- | --------------- | ----------------- | ------------ |
@@ -72,15 +72,15 @@
 - Deliberate simplifications:
 - Known limitations:
 
-รายละเอียดโครงสร้างไฟล์และคำสั่งต้องตรงกับ `final-project-structure.md` และ implementation จริง
+File structure and command details must match `final-project-structure.md` and the working implementation.
 
 ## Planning Gate
 
-เริ่มเขียนบทได้เมื่อ:
+Begin chapter authoring only when:
 
-- [ ] กลุ่มผู้อ่าน prerequisite และผลลัพธ์ปลายทางชัดเจน
-- [ ] ขอบเขตที่สอน/ไม่สอนแยกจากกัน
-- [ ] ทุกบทมี learner outcome และ milestone ที่ตรวจได้
-- [ ] ลำดับบทไม่ใช้ concept ก่อนอธิบาย
-- [ ] version baseline อ้างอิงแหล่งข้อมูลหลัก
-- [ ] progressive example, final project และ contract ตรงกัน
+- [ ] The audience, prerequisites, and target outcomes are explicit.
+- [ ] Included and excluded scope are separated.
+- [ ] Every chapter has a verifiable learner outcome and milestone.
+- [ ] The sequence does not use a concept before introducing it.
+- [ ] The version baseline cites primary sources.
+- [ ] The progressive example, final project, and contracts agree.

@@ -150,22 +150,24 @@ const ogImageUrl = siteConfig.ogImage ? absoluteUrl(siteConfig.ogImage, Astro.si
       </main>
 
       <aside class="book-info" aria-labelledby="book-info-title">
-        <h2 id="book-info-title">Book information</h2>
-        <dl>
-          <div>
-            <dt><BookOpen class="size-4" /> Chapters</dt>
-            <dd>{chapters.length}</dd>
-          </div>
-          <div>
-            <dt><Languages class="size-4" /> Language</dt>
-            <dd>{languageName}</dd>
-          </div>
-          <div>
-            <dt><CircleCheckBig class="size-4" /> Status</dt>
-            <dd class="status-value">{siteConfig.statusLabel}</dd>
-          </div>
-        </dl>
-        {siteConfig.lastReviewed && <p class="reviewed-date">Reviewed {siteConfig.lastReviewed}</p>}
+        <div class="book-info-content">
+          <h2 id="book-info-title">Book information</h2>
+          <dl>
+            <div>
+              <dt><BookOpen class="size-4" /> Chapters</dt>
+              <dd>{chapters.length}</dd>
+            </div>
+            <div>
+              <dt><Languages class="size-4" /> Language</dt>
+              <dd>{languageName}</dd>
+            </div>
+            <div>
+              <dt><CircleCheckBig class="size-4" /> Status</dt>
+              <dd class="status-value">{siteConfig.statusLabel}</dd>
+            </div>
+          </dl>
+          {siteConfig.lastReviewed && <p class="reviewed-date">Reviewed {siteConfig.lastReviewed}</p>}
+        </div>
       </aside>
     </div>
 

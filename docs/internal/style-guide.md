@@ -1,54 +1,54 @@
 # Style Guide
 
-มาตรฐานนี้ควบคุมภาษา โครงบท ตัวอย่าง และหลักฐานให้สม่ำเสมอทั้งเล่ม
+This standard keeps language, chapter structure, examples, and evidence consistent across the book.
 
 ## Language
 
-- เขียนให้ผู้อ่านตามได้โดยไม่ต้องเดา prerequisite หรือไฟล์ที่ต้องแก้
-- อธิบายปัญหาและเหตุผลก่อนแนะนำ syntax, package, annotation หรือ configuration ใหม่
-- ใช้ประโยคตรง กระชับ และนิยามศัพท์เมื่อปรากฏครั้งแรก
-- แยกให้ชัดว่าอะไรเป็น demo, local development, production practice และ deliberate simplification
-- หลีกเลี่ยงคำว่า "ง่าย", "แค่", "แน่นอน" และ "latest" เมื่อไม่มีเงื่อนไขหรือหลักฐาน
-- ใช้ชื่อเทคนิคตาม official documentation และคงรูปแบบเดียวกันทั้งเล่ม
+- Write so readers do not have to infer prerequisites or which files to edit.
+- Explain the problem and rationale before introducing new syntax, packages, annotations, or configuration.
+- Use direct, concise sentences and define terminology on first use.
+- Distinguish demonstrations, local development, production practice, and deliberate simplifications.
+- Avoid unsupported claims such as "easy", "just", "obvious", and "latest".
+- Use terminology from official documentation consistently throughout the book.
 
 ## Chapter Shape
 
-บทลงมือทำต้องมีตามลำดับ:
+Hands-on chapters should follow this sequence:
 
-1. ผลลัพธ์ที่ผู้อ่านจะทำได้
-2. prerequisites และสถานะเริ่มต้น
-3. concept ใหม่พร้อมเหตุผล
-4. ไฟล์ที่จะสร้างหรือแก้
-5. ขั้นตอนเล็กที่มีตำแหน่ง code ชัดเจน
-6. command สำหรับ run/test/build
-7. expected result ที่สังเกตได้
-8. ปัญหาที่พบบ่อยและวิธีวินิจฉัย
-9. checkpoint ก่อนบทถัดไป
+1. Observable learner outcome
+2. Prerequisites and starting state
+3. New concept and rationale
+4. Files to create or edit
+5. Small steps with precise code locations
+6. Run, test, or build commands
+7. Observable expected result
+8. Common failures and diagnosis
+9. Checkpoint before the next chapter
 
-บทแนวคิดหรือ reference อาจปรับลำดับได้ แต่ต้องมี outcome และวิธีตรวจความเข้าใจ
+Conceptual or reference chapters may adjust the sequence but still need an outcome and a way to verify understanding.
 
 ## Code And Commands
 
-- ระบุ path และตำแหน่งก่อน code block ที่ไม่ชัดเจน
-- แสดงเฉพาะส่วนที่ต้องเปลี่ยน เว้นแต่ทั้งไฟล์จำเป็นต่อความเข้าใจ
-- อธิบายบรรทัดสำคัญหลัง code ไม่บังคับให้ผู้อ่านถอดความเอง
-- ใช้ PowerShell และ Bash เมื่อ syntax ต่างกัน
-- ห้ามฝัง secret หรือ credential จริง ใช้ placeholder ที่บอกความหมาย
-- ทุก command ต้องถูกทดสอบจาก working directory ที่บทระบุ
-- ตัวอย่างต้อง format, build และ test ตามมาตรฐานของ stack นั้น
+- State the path and insertion point before an ambiguous code block.
+- Show only the changed section unless the complete file is necessary for understanding.
+- Explain important lines after the code instead of requiring readers to reverse-engineer them.
+- Show PowerShell and Bash variants when syntax differs.
+- Never embed real secrets or credentials; use descriptive placeholders.
+- Test every command from the working directory stated by the chapter.
+- Format, build, and test examples according to the stack's standards.
 
 ## Naming And Versions
 
-- project, route, DTO, port policy และ filename ต้องตรงกับ implementation
-- ใช้เลขเวอร์ชันที่ตรวจสอบได้ และบันทึกวันที่/แหล่งอ้างอิงใน `book-plan.md`
-- เมื่อ rename ต้องอัปเดตบท examples contracts README และ validation report พร้อมกัน
+- Project names, routes, DTOs, port policy, and filenames must match the implementation.
+- Use verifiable version numbers and record dates and sources in `book-plan.md`.
+- Renames must update chapters, examples, contracts, the README, and the validation report together.
 
 ## Frontmatter
 
-- `title`: ไม่ซ้ำและอธิบายหัวข้อจริง
-- `description`: หนึ่งประโยคที่บอก learner outcome
-- `chapter`: จำนวนเต็มต่อเนื่อง เริ่ม introduction ที่ 0
-- `part`: ใช้ชื่อเดียวกันทุกบทในภาคเดียวกัน
-- `draft`: ใช้ซ่อนบทที่ยังไม่พร้อม ห้ามใช้แทน status tracking
+- `title`: unique and accurately describes the topic
+- `description`: one sentence stating the learner outcome
+- `chapter`: sequential integer, with the introduction starting at 0
+- `part`: identical for every chapter in the same part
+- `draft`: hides unfinished chapters and does not replace status tracking
 
-รัน `npm run check:book` หลังเพิ่ม ย้าย หรือเปลี่ยนเลขบท
+Run `npm run check:book` after adding, moving, or renumbering chapters.

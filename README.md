@@ -2,7 +2,7 @@
 
 A versioned Astro and MDX platform for technical tutorial books. It provides structured authoring, automatic chapter navigation, Pagefind search, reusable MDX components, conflict-aware template updates, cross-browser quality gates, security automation and GitHub Pages deployment.
 
-Current template version: **1.0.1**
+Current template version: **1.2.0**
 
 ## Create A New Book
 
@@ -12,7 +12,7 @@ Run this command from the template repository:
 npm run create-book -- --title "C# Fundamentals" --slug csharp-fundamentals-book --lang th --target ../csharp-fundamentals-book
 ```
 
-The command works in PowerShell and Bash. It creates a clean copy without `.git`, `node_modules`, `.astro`, or `dist`; updates package/site identity; resets chapter content and validation evidence; and keeps the shared authoring standard.
+The command works in PowerShell and Bash. It creates a clean copy without repository state, generated output, reports, inherited curriculum or visual baselines; updates package/site identity; resets chapter content and validation evidence; and keeps the shared authoring standard. Only this source repository can create a book, so an already generated book cannot silently become a template.
 
 Then run:
 
@@ -55,15 +55,17 @@ Use a Node.js version allowed by `package.json`. Do not assume a fixed developme
 | `npm run test:visual`            | Compare desktop and mobile pages with reviewed snapshots           |
 | `npm run test:visual:update`     | Deliberately regenerate visual baselines after design review       |
 | `npm run test:performance`       | Enforce asset, DOM and navigation performance budgets              |
+| `npm run audit:book`             | Detect objective teaching, safety and portability issues           |
 | `npm run check:book`             | Validate required docs, chapters, frontmatter and plan/status sync |
 | `npm run build`                  | Build the site and Pagefind index                                  |
 | `npm run check:links`            | Validate links and assets in `dist`                                |
+| `npm run check:visual-baselines` | Require reviewed snapshots for the current operating system        |
 | `npm run verify`                 | Run all local quality gates in release order                       |
 | `npm run verify:enterprise`      | Add browser, accessibility, performance and dependency gates       |
 | `npm run template:status`        | Show installed template version and managed-file drift             |
 | `npm run new-chapter -- "Title"` | Create the next chapter scaffold                                   |
 
-Install browser runtimes once before running the enterprise gate:
+Install browser runtimes once before running the full cross-browser gate:
 
 ```powershell
 npx playwright install chromium firefox webkit
@@ -74,13 +76,13 @@ Run `npm run security:audit` after dependency changes.
 ## Add A Chapter
 
 ```powershell
-npm run new-chapter -- "เริ่มต้นใช้งาน" --part "Part 1: Foundations"
+npm run new-chapter -- "Getting Started" --part "Part 1: Foundations"
 ```
 
-Unicode titles, including Thai, produce valid Unicode slugs. Use an explicit ASCII URL slug when desired:
+Unicode titles produce valid Unicode slugs. Use an explicit ASCII URL slug when desired:
 
 ```powershell
-npm run new-chapter -- "เริ่มต้นใช้งาน" --slug getting-started
+npm run new-chapter -- "Getting Started" --slug getting-started
 ```
 
 The script assigns the next chapter number and writes valid frontmatter. Replace every scaffold placeholder before marking the chapter ready.
@@ -117,7 +119,7 @@ See `src/content/chapters/04-components.mdx` for the rendered authoring referenc
 
 ## Book Documentation Standard
 
-Read `AGENTS.md`, `skills/tutorial-book-auditor/SKILL.md`, and `docs/internal/README.md` before planning or reviewing a book. Every generated book includes:
+Read `AGENTS.md`, `skills/tutorial-book-auditor/SKILL.md`, and `docs/internal/README.md` before planning or reviewing a book. The auditor combines a deterministic CLI gate with an evidence-based scoring and reporting policy. Every generated book includes:
 
 ```text
 docs/internal/
@@ -163,3 +165,7 @@ npm run verify:enterprise
 ```
 
 The updater refuses to overwrite locally modified managed files unless a reviewed migration deliberately uses `--force`. See `docs/internal/template-lifecycle.md` for the version and release contract.
+
+## Project Policy
+
+Contributions follow [CONTRIBUTING.md](CONTRIBUTING.md), [GOVERNANCE.md](GOVERNANCE.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Support boundaries are documented in [SUPPORT.md](SUPPORT.md), security reports follow [SECURITY.md](SECURITY.md), and the template is distributed under the [MIT License](LICENSE).

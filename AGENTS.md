@@ -8,6 +8,8 @@ These instructions apply to this repository.
 
 - Use `skills/tutorial-book-auditor` for any request that reviews or edits tutorial content, example projects, README files, validation reports, internal planning docs, QA checklists, or teaching quality.
 - Read `skills/tutorial-book-auditor/SKILL.md` first. Load `skills/tutorial-book-auditor/references/teaching-principles.md` before scoring or rewriting chapters.
+- Load `scoring-policy.md` and `report-contract.md` before assigning a score or release decision.
+- Run `npm run audit:book` for chapter or full-book reviews and treat automated findings as evidence requiring human review.
 - Keep lessons step by step: explain new concepts, commands, packages, configuration, project structure, and verification steps before using them.
 - Keep progressive examples aligned with the chapter state and final examples aligned with the final project structure.
 - Keep book chapters self-contained. Learners should be able to understand and complete a chapter from the book without opening example source files.
@@ -25,7 +27,7 @@ These instructions apply to this repository.
 
 ## Verification
 
-- Run `npm run verify` after docs, navigation, frontmatter, dependency, script, or template changes.
+- Run `npm run verify` after docs, navigation, frontmatter, dependency, script, skill, or template changes.
 - Run relevant example build/test commands when example behavior changes.
 - Run `npm audit --audit-level=moderate` after dependency changes.
 - Record commands, results, dates, scope, and remaining risks in `docs/internal/validation-report.md`.
