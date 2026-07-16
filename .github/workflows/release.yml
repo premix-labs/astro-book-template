@@ -6,6 +6,8 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   release:
@@ -27,19 +29,31 @@ jobs:
         shell: bash
         run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
 
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Install browser runtimes
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Run enterprise release gate
         run: npm run verify:enterprise
+
+      - name: Run full cross-browser release gate
+        run: npm run test:e2e
 
       - name: Build release artifacts
         shell: bash
         run: |
           tar -czf site.tar.gz -C dist .
           npm sbom --sbom-format cyclonedx > sbom.cdx.json
+          sha256sum site.tar.gz sbom.cdx.json > checksums.sha256
+
+      - name: Attest release artifacts
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v3
+        with:
+          subject-path: |
+            site.tar.gz
+            sbom.cdx.json
+            checksums.sha256
 
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" site.tar.gz sbom.cdx.json --verify-tag --generate-notes
+        run: gh release create "$GITHUB_REF_NAME" site.tar.gz sbom.cdx.json checksums.sha256 --verify-tag --generate-notes

@@ -28,6 +28,16 @@ function assertPackageName(value) {
   }
 }
 
+function assertSourceTemplate(sourceRoot) {
+  const metadataPath = join(sourceRoot, '.book-template.json');
+  if (!existsSync(metadataPath)) throw new Error('Missing .book-template.json in the template source.');
+
+  const metadata = JSON.parse(readFileSync(metadataPath, 'utf8'));
+  if (Object.keys(metadata.managedFiles ?? {}).length > 0) {
+    throw new Error('create-book must be run from the astro-book-template source repository, not a generated book.');
+  }
+}
+
 function quoteTypeScript(value) {
   const singleQuotes = value.match(/'/g)?.length ?? 0;
   const doubleQuotes = value.match(/"/g)?.length ?? 0;
@@ -146,7 +156,7 @@ Requires a Node.js version allowed by \`package.json\`.
 | -------------------------------- | -------------------------------------------------------------------- |
 | \`npm install\`                    | Install dependencies and create the local workspace                  |
 | \`npm run dev\`                    | Start Astro and use the URL printed in the terminal                  |
-| \`npm run audit:book\`             | Detect objective teaching, safety and portability issues            |
+| \`npm run audit:book\`             | Detect objective teaching, safety and portability issues             |
 | \`npm run verify\`                 | Run lint, type checks, tests, book validation, build and link checks |
 | \`npm run verify:enterprise\`      | Add Chromium, accessibility, performance and dependency gates        |
 | \`npm run build\`                  | Build the static site and Pagefind index                             |
@@ -157,16 +167,84 @@ Requires a Node.js version allowed by \`package.json\`.
 ## Authoring Standard
 
 Read \`AGENTS.md\`, \`skills/tutorial-book-auditor/SKILL.md\` and \`docs/internal/README.md\` before writing chapters. Plan the curriculum in \`docs/internal/book-plan.md\`, keep examples synchronized, and update \`docs/internal/validation-report.md\` with real evidence.
+
+## Visual Baselines
+
+Visual baselines are intentionally not inherited from the template because this book has its own title, content and branding. After the first design review, generate local baselines with \`npm run test:visual:update\`. Use the **Generate Linux Visual Baselines** workflow to create the Linux files required by CI, review the artifact and commit the approved snapshots.
+`;
+}
+
+function renderBookPlan({ title, slug, lang }) {
+  return `# Book Plan
+
+## Book Identity
+
+- Working title: ${title}
+- Repository name: ${slug}
+- Content language: ${lang}
+- Stage: Planning
+
+## Audience And Outcome
+
+- Target reader: Not decided
+- Starting level: Not decided
+- Final observable outcome: Not decided
+- Progressive or final project: Not decided
+- Version baseline: Not decided
+
+## Scope
+
+### Included
+
+- Not decided
+
+### Excluded
+
+- Not decided
+
+## Curriculum Rules
+
+- Introduce every prerequisite before it is used.
+- Keep each chapter focused on one primary learner outcome.
+- Require an observable checkpoint and reproducible verification for code-changing chapters.
+- Keep examples synchronized without making them hidden required instructions.
+
+## Chapter Plan
+
+| Chapter | Title | Learner outcome | Project milestone |
+| ------: | ----- | --------------- | ----------------- |
+
+## Definition Of Ready
+
+1. audience, prerequisites and scope are approved
+2. the final outcome and project strategy are testable
+3. the chapter sequence has no prerequisite gaps
+4. runtime, tooling and support baselines are recorded
+
+## Definition Of Done
+
+1. chapters, examples and contracts agree
+2. automated and manual release gates pass
+3. validation evidence records commands, environment and residual risk
+`;
+}
+
+function renderChangelog() {
+  return `# Changelog
+
+All notable changes to this book are documented here. This project follows Semantic Versioning.
+
+## [Unreleased]
+
+### Added
+
+- initial book scaffold generated from \`astro-book-template\`
 `;
 }
 
 function resetPlanningDocs(targetRoot, { title, slug, lang }) {
   const planPath = join(targetRoot, 'docs', 'internal', 'book-plan.md');
-  const plan = readFileSync(planPath, 'utf8')
-    .replace(/^- Working title:.*$/m, `- Working title: ${title}`)
-    .replace(/^- Repository name:.*$/m, `- Repository name: ${slug}`)
-    .replace(/^- Content language:.*$/m, `- Content language: ${lang}`);
-  writeFileSync(planPath, plan, 'utf8');
+  writeFileSync(planPath, renderBookPlan({ title, slug, lang }), 'utf8');
 
   writeFileSync(
     join(targetRoot, 'docs', 'internal', 'manuscript-status.md'),
@@ -232,12 +310,21 @@ export function createBook({ sourceRoot = templateRoot, target, title, slug, des
   if (!title) throw new Error('--title is required.');
   if (!slug) throw new Error('--slug is required.');
   assertPackageName(slug);
+  assertSourceTemplate(sourceRoot);
 
   const targetRoot = resolve(target ?? join(dirname(sourceRoot), slug));
   if (targetRoot === resolve(sourceRoot)) throw new Error('Target must not be the template directory.');
   if (existsSync(targetRoot)) throw new Error(`Target already exists: ${targetRoot}`);
 
-  const excludedRoots = new Set(['.astro', '.git', 'dist', 'node_modules']);
+  const excludedRoots = new Set([
+    '.astro',
+    '.git',
+    'coverage',
+    'dist',
+    'node_modules',
+    'playwright-report',
+    'test-results',
+  ]);
   cpSync(sourceRoot, targetRoot, {
     recursive: true,
     filter(source) {
@@ -268,6 +355,7 @@ export function createBook({ sourceRoot = templateRoot, target, title, slug, des
     'utf8'
   );
   writeFileSync(join(targetRoot, 'README.md'), renderReadme({ title, description: finalDescription }), 'utf8');
+  writeFileSync(join(targetRoot, 'CHANGELOG.md'), renderChangelog(), 'utf8');
 
   const chaptersDir = join(targetRoot, 'src', 'content', 'chapters');
   for (const file of readdirSync(chaptersDir)) {
@@ -278,6 +366,7 @@ export function createBook({ sourceRoot = templateRoot, target, title, slug, des
     renderIntroduction({ title, description: finalDescription, lang }),
     'utf8'
   );
+  rmSync(join(targetRoot, 'tests', 'visual', 'visual.spec.ts-snapshots'), { recursive: true, force: true });
   resetPlanningDocs(targetRoot, { title, slug, lang });
   writeTemplateMetadata(targetRoot, sourceRoot);
 

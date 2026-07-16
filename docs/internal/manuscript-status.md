@@ -4,10 +4,10 @@ Track manuscript status and evidence for each chapter here. Chapter numbers and 
 
 ## Current Status
 
-- Stage: Template 1.1.0 feature release candidate
-- Last updated: 2026-07-15
+- Stage: Template 1.2.0 release candidate
+- Last updated: 2026-07-16
 - Release target: Versioned reusable project template
-- Main blocker: Remote branch-protection, release and Pages checks require a pushed commit and tag
+- Main blocker: Remote portability, branch protection, release attestation and Pages checks require a pushed commit and tag
 
 ## Chapter Status
 
@@ -28,6 +28,9 @@ Allowed status values: `Not started`, `Draft`, `Needs review`, `Ready`, `Release
 - Added cross-browser, accessibility, performance and security quality gates.
 - Added governed content metadata, shared reader architecture and tag-driven release artifacts.
 - Added evidence-backed auditor scoring, deterministic findings and regression evaluation fixtures.
+- Added clean source-only book generation and per-book visual-baseline bootstrap.
+- Added three-OS portability, release checksums, provenance attestations and measurable recovery controls.
+- Added license, conduct, support and governance contracts.
 
 ## Status Rules
 

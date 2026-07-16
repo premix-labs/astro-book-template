@@ -26,6 +26,8 @@ Treat this checklist as a release gate, not optional guidance. Mark irrelevant i
 - [ ] `npm run test:e2e` passes Chromium, Firefox, WebKit, and mobile projects.
 - [ ] `npm run test:performance` passes the performance budget.
 - [ ] `npm run test:visual` passes reviewed desktop and mobile snapshots.
+- [ ] Windows and Linux visual baselines were reviewed after intentional UI changes.
+- [ ] CI passes authoring, tests and builds on Ubuntu, Windows and macOS.
 - [ ] Axe reports no critical or serious accessibility violations.
 - [ ] `npm run security:audit` reports no moderate-or-higher vulnerabilities.
 - [ ] Navigation, search, theme, code copy, and the mobile menu work.
@@ -41,6 +43,8 @@ Treat this checklist as a release gate, not optional guidance. Mark irrelevant i
 - [ ] The security review checklist passes for applicable content.
 - [ ] GitHub Actions use full commit SHAs and no Dependabot security update is outstanding.
 - [ ] CodeQL and dependency review pass.
+- [ ] Branch protection requires review, CODEOWNER approval, resolved conversations and all documented checks.
+- [ ] Private vulnerability reporting is enabled and repository ownership is current.
 
 ## Release Evidence
 
@@ -49,5 +53,7 @@ Treat this checklist as a release gate, not optional guidance. Mark irrelevant i
 - [ ] README and deployment instructions match the repository.
 - [ ] Known limitations and breaking changes are explicit.
 - [ ] `package.json`, `.template-manifest.json`, `CHANGELOG.md`, and the release tag use one version.
-- [ ] Release artifacts and the SBOM come from the verified commit.
+- [ ] Release artifacts, the SBOM and SHA-256 checksums come from the verified commit.
+- [ ] GitHub build-provenance attestations verify for every published artifact.
+- [ ] A recovery drill was completed within the last quarter or a dated exception is recorded.
 - [ ] GitHub Pages deployment passes for the commit being published.

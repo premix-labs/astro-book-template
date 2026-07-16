@@ -4,6 +4,23 @@ All notable template changes are documented here. This project follows Semantic 
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-07-16
+
+### Added
+
+- Linux visual-baseline generation workflow and an actionable baseline preflight check
+- Windows, macOS and Linux portability jobs for authoring, tests and production builds
+- project governance, support, conduct and MIT license policies
+- SHA-256 release checksums and GitHub build-provenance attestations
+- incident severity, recovery targets, ownership and quarterly recovery-drill requirements
+
+### Changed
+
+- made `create-book` source-only and removed inherited curriculum, changelog history, generated output, reports and visual snapshots from new books
+- made deployment and rollback execute the full enterprise gate
+- made tagged releases execute the full Chromium, Firefox and WebKit suite
+- synchronized package, lockfile, template metadata and managed lifecycle at version 1.2.0
+
 ### Fixed
 
 - kept book status and review metadata in one sticky container so localized text cannot overlap while scrolling
