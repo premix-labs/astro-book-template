@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "templateVersion": "1.2.0",
+  "templateVersion": "1.2.1",
   "managedFiles": [
     ".gitattributes",
     ".github/CODEOWNERS",

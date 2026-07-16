@@ -1,6 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:4329';
+const serverOrigin = 'http://127.0.0.1:4329';
+const basePath = process.env.BASE_PATH?.replace(/^\/+|\/+$/g, '');
+const localBaseURL = `${serverOrigin}/${basePath ? `${basePath}/` : ''}`;
+const externalBaseURL = process.env.PLAYWRIGHT_BASE_URL;
+const baseURL = externalBaseURL
+  ? externalBaseURL.endsWith('/')
+    ? externalBaseURL
+    : `${externalBaseURL}/`
+  : localBaseURL;
 
 export default defineConfig({
   testDir: './tests',
@@ -15,11 +23,11 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
-  webServer: process.env.PLAYWRIGHT_BASE_URL
+  webServer: externalBaseURL
     ? undefined
     : {
         command: 'npm run build && npm run preview -- --host 127.0.0.1 --port 4329',
-        url: baseURL,
+        url: localBaseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
       },

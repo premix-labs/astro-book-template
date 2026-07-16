@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('home exposes a stable learning path without horizontal overflow', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   const chapterRows = page.locator('.chapter-row');
@@ -15,7 +15,7 @@ test('home exposes a stable learning path without horizontal overflow', async ({
 });
 
 test('book information keeps status and review metadata separated while scrolling', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const reviewedDate = page.locator('.reviewed-date');
   if ((await reviewedDate.count()) === 0) return;
@@ -33,7 +33,7 @@ test('book information keeps status and review metadata separated while scrollin
 });
 
 test('reader navigation, theme and search remain operational', async ({ page }) => {
-  await page.goto('/intro/');
+  await page.goto('intro/');
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   await expect(page.getByRole('navigation', { name: 'Chapter Navigation' })).toBeVisible();
@@ -51,7 +51,7 @@ test('reader navigation, theme and search remain operational', async ({ page }) 
 
 test('mobile drawer manages visibility, focus and overflow', async ({ page }, testInfo) => {
   test.skip(!/(mobile|tablet)/.test(testInfo.project.name), 'Collapsed-navigation interaction');
-  await page.goto('/intro/');
+  await page.goto('intro/');
 
   const drawer = page.locator('#mobile-menu-overlay');
   await expect(drawer).toHaveAttribute('aria-hidden', 'true');
