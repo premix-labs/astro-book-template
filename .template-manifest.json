@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "templateVersion": "1.2.0",
   "managedFiles": [
+    ".gitattributes",
     ".github/CODEOWNERS",
     ".github/dependabot.yml",
     ".github/ISSUE_TEMPLATE/bug-report.yml",

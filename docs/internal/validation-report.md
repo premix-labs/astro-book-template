@@ -20,7 +20,7 @@
 
 | Command                     | Result | Evidence                                                                                                                                |
 | --------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run verify`            | Passed | Prettier, ESLint, 46-file Astro check, 12 script tests, 5 content files, 35 required files, zero audit findings, 7-page build and links |
+| `npm run verify`            | Passed | Prettier, ESLint, 46-file Astro check, 12 script tests, 5 content files, 36 required files, zero audit findings, 7-page build and links |
 | `npm run test:e2e`          | Passed | 27 passed; 3 desktop-only drawer skips across Chromium, Firefox, WebKit, Chromium tablet and Chromium mobile                            |
 | `npm run test:performance`  | Passed | 1 production performance-budget test passed                                                                                             |
 | `npm run security:audit`    | Passed | 0 vulnerabilities at moderate severity or above                                                                                         |
@@ -84,6 +84,7 @@
 | Medium   | Missing visual baselines failed deep inside Playwright    | Added a platform-aware preflight and Linux baseline artifact workflow                      |
 | Medium   | Incident guidance had no measurable recovery objectives   | Added severity, RTO/RPO, named roles, update cadence, incident records and recovery drills |
 | Medium   | Legal, conduct, support and merge policy were implicit    | Added license, code of conduct, support and governance contracts                           |
+| Medium   | Windows checkout converted text files and failed Prettier | Added managed `.gitattributes` with LF text policy and explicit binary asset rules         |
 
 ## Release Decision
 

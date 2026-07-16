@@ -13,6 +13,7 @@ const maximumVerificationAgeDays = Number(process.env.MAX_VERIFICATION_AGE_DAYS 
 const today = new Date();
 
 const requiredFiles = [
+  '.gitattributes',
   'README.md',
   'AGENTS.md',
   'CHANGELOG.md',

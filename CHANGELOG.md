@@ -20,6 +20,7 @@ All notable template changes are documented here. This project follows Semantic 
 - made deployment and rollback execute the full enterprise gate
 - made tagged releases execute the full Chromium, Firefox and WebKit suite
 - synchronized package, lockfile, template metadata and managed lifecycle at version 1.2.0
+- standardized text files on LF across Windows, macOS and Linux checkouts
 
 ### Fixed
 
