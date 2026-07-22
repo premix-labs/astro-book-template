@@ -4,7 +4,7 @@ Track manuscript status and evidence for each chapter here. Chapter numbers and 
 
 ## Current Status
 
-- Stage: Template 1.2.1 patch release candidate
+- Stage: Template 1.2.2 dependency-refresh release candidate
 - Last updated: 2026-07-16
 - Release target: Versioned reusable project template
 - Main blocker: Remote portability, branch protection, release attestation and Pages checks require a pushed commit and tag

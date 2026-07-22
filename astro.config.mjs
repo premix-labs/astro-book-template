@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
+import { fileURLToPath } from 'node:url';
 
 // `site`/`base` are read from env vars so the same config works whether this deploys to a
 // GitHub Pages *user/org* site (root domain, no base) or a *project* site (subpath, needs
@@ -11,6 +12,7 @@ import tailwindcss from '@tailwindcss/vite';
 //   BASE_PATH=/<repo-name>   (omit entirely for a user/org root site)
 const site = process.env.SITE ?? 'https://example.com';
 const base = process.env.BASE_PATH;
+const picomatchShim = fileURLToPath(new URL('./scripts/shims/picomatch.mjs', import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
@@ -24,6 +26,9 @@ export default defineConfig({
     },
   },
   vite: {
+    resolve: {
+      alias: { picomatch: picomatchShim },
+    },
     plugins: [tailwindcss()],
     build: {
       chunkSizeWarningLimit: 800,
