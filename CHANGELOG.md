@@ -4,6 +4,19 @@ All notable template changes are documented here. This project follows Semantic 
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-07-22
+
+### Changed
+
+- updated Astro, Tailwind CSS, fonts, Lucide, TypeScript ESLint and Prettier to their latest compatible releases
+- refreshed transitive dependencies to remove all reported npm vulnerabilities
+
+### Compatibility
+
+- retained TypeScript 6 because Astro Check and TypeScript ESLint do not yet support TypeScript 7
+- retained Node 24 type definitions so generated books cannot accidentally depend on APIs newer than the compatibility baseline
+- added a managed ESM bridge for reliable Astro/Vite content synchronization with the CommonJS picomatch package
+
 ## [1.2.1] - 2026-07-16
 
 ### Fixed

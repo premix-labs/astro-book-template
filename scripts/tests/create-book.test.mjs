@@ -28,7 +28,7 @@ test('createBook produces a clean localized scaffold', { skip: !isSourceTemplate
     const packageJson = JSON.parse(readFileSync(join(target, 'package.json'), 'utf8'));
     const templateMetadata = JSON.parse(readFileSync(join(target, '.book-template.json'), 'utf8'));
     assert.equal(packageJson.name, 'thai-test-book');
-    assert.equal(templateMetadata.templateVersion, '1.2.1');
+    assert.equal(templateMetadata.templateVersion, sourceTemplateMetadata.templateVersion);
     assert.ok(Object.keys(templateMetadata.managedFiles).length > 20);
     assert.match(readFileSync(join(target, 'src', 'site.config.ts'), 'utf8'), /หนังสือทดสอบ/);
     assert.match(readFileSync(join(target, 'src', 'content', 'chapters', 'intro.mdx'), 'utf8'), /เริ่มต้นหนังสือ/);
@@ -43,6 +43,7 @@ test('createBook produces a clean localized scaffold', { skip: !isSourceTemplate
     assert.match(plan, /Target reader: Not decided/);
     assert.doesNotMatch(plan, /Astro Technical Book Template/);
     assert.equal(existsSync(join(target, 'tests', 'visual', 'visual.spec.ts-snapshots')), false);
+    assert.equal(existsSync(join(target, 'scripts', 'shims', 'picomatch.mjs')), true);
     assert.equal(existsSync(join(target, 'node_modules')), false);
     assert.equal(existsSync(join(target, '.git')), false);
     assert.equal(existsSync(join(target, 'dist')), false);

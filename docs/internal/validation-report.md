@@ -2,19 +2,33 @@
 
 ## Summary
 
-- Status: Enterprise local quality gates passed; version `1.2.1` is a patch release candidate
-- Last validated: 2026-07-16
+- Status: Dependency refresh and clean-sync gates passed; version `1.2.2` requires CI confirmation
+- Last validated: 2026-07-22
 - Validator: Codex
 - Scope: clean generation, managed lifecycle, governance, operations, production build, cross-browser behavior, accessibility, visual regression, performance, portability and supply-chain controls
-- Main remaining risk: version 1.2.1 deployment and repository-policy controls require evidence from the pushed commit and tag
+- Main remaining risk: version 1.2.2 deployment and repository-policy controls require evidence from the pushed commit and tag
 
 ## Environment
 
 - Local runtime: Node.js `v26.4.0`, npm `11.7.0`
+- Compatibility runtime: Node.js `v24.18.0`
 - CI runtime: Node.js 24
 - Supported runtime: `package.json#engines`
 - Browser automation: Playwright 1.61.1 with Chromium, Firefox and WebKit
 - Production search: Pagefind Component UI 1.5.2
+
+## Dependency Refresh
+
+- Astro 7.0.9 to 7.1.3
+- Tailwind CSS and Vite integration 4.3.2 to 4.3.3
+- Fontsource packages 5.2.x to 5.3.0
+- Lucide Astro 1.24.0 to 1.25.0
+- TypeScript ESLint 8.64.0 to 8.65.0
+- Prettier 3.9.5 to 3.9.6
+- TypeScript remains at 6.0.3 because current Astro Check and TypeScript ESLint peer ranges exclude TypeScript 7
+- Node type definitions remain on major 24 to preserve the minimum supported runtime contract
+- a managed ESM bridge makes clean and forced Astro/Vite content synchronization deterministic when loading CommonJS `picomatch`
+- transitive security fixes include brace-expansion 5.0.7, DOMPurify 3.4.12, fast-uri 3.1.4, Sharp 0.35.3 and SVGO 4.0.2
 
 ## Automated Evidence
 
@@ -26,11 +40,18 @@
 | `npm run security:audit`    | Passed | 0 vulnerabilities at moderate severity or above                                                                                         |
 | Skill `quick_validate.py`   | Passed | Skill metadata, naming and folder structure are valid                                                                                   |
 | `npm run audit:book`        | Passed | 5 chapters audited with 0 Critical, High, Medium or Low findings                                                                        |
-| `npm run template:check`    | Passed | Source version 1.2.1 matches the release manifest; no update or drift detected                                                          |
+| `npm run template:check`    | Passed | Source version 1.2.2 matches package and release manifests; no update or drift detected                                                 |
 | `npm sbom`                  | Passed | Valid CycloneDX 1.5 JSON generated; tagged releases create the equivalent artifact                                                      |
-| Generated-book clean gate   | Passed | Version 1.2.0 `create-book`, `npm ci` and `npm run verify` passed; four source-only lifecycle tests skipped by design                   |
+| Generated-book clean gate   | Passed | Version 1.2.2 `create-book`, `npm ci` and `npm run verify` passed with 0 vulnerabilities; four source-only tests skipped by design      |
 | `npm run test:visual`       | Passed | 4 reviewed home/reader baselines passed locally; Windows and Ubuntu snapshots are versioned                                             |
 | `npm run verify:enterprise` | Passed | Deterministic gate, 17 Chromium desktop/tablet/mobile checks, 4 visual checks, 1 performance budget and npm audit passed                |
+
+## Current Sandbox Rerun
+
+- Forced content synchronization passed with Node 24.18.0 and Node 26.4.0 after adding the managed `picomatch` ESM bridge.
+- Astro Check reports 0 errors, 0 warnings and 0 hints; book validation, tutorial audit and template drift checks pass.
+- The complete enterprise gate passed after the dependency tree refresh and before the bridge was added.
+- A post-bridge rerun cannot complete in the current managed sandbox because Node test workers and esbuild receive `spawn EPERM`; normal-shell CI must repeat the full gate before release.
 
 ## Remote Evidence
 
@@ -92,4 +113,4 @@
 
 ## Release Decision
 
-The version `1.2.1` source and a clean generated book pass all applicable local gates, including the enterprise suite with the production GitHub Pages subpath configured. Release approval remains conditional on passing the remote three-OS matrix, protected pull request, provenance-producing tagged release and GitHub Pages deployment. Generated books must still define and validate their own curriculum, examples, contracts, branding, visual baselines and release evidence.
+The version `1.2.2` dependency tree, clean generated book and forced content synchronization pass locally. Release approval remains conditional on a post-bridge full enterprise gate in normal-shell CI, followed by the remote three-OS matrix, protected pull request, provenance-producing tagged release and GitHub Pages deployment. Generated books must still define and validate their own curriculum, examples, contracts, branding, visual baselines and release evidence.
